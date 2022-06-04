@@ -1,0 +1,194 @@
+import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2'
+import { Router } from '@angular/router';
+import { ModalService } from 'src/app/_modal';
+//Repuesto
+import { Repuesto } from 'src/app/models/repuesto';
+import { RepuestoService } from 'src/app/services/repuesto.service';
+
+//Tipo repuesto
+import { TipoRepuesto } from 'src/app/models/tiporepuesto';
+import { TipoRepuestoService } from 'src/app/services/tiporepuesto.service';
+
+
+@Component({
+  selector: 'app-menurepuesto',
+  templateUrl: './menurepuesto.component.html',
+  styleUrls: ['./menurepuesto.component.css']
+})
+export class MenurepuestoComponent implements OnInit {
+
+  repuesto: Repuesto = {
+    PkRepuesto: 0,
+    Nombre: "",
+    PrecioCosto: 0,
+    PrecioVenta: 0,
+    CantidadStock: 0,
+    Observacion: "",
+    NroSerie: 0,
+    FkTipoRepuesto: 0,
+    Activo:null   
+  };
+
+  listRepuesto: Repuesto[] = [];
+  listTipoRep: TipoRepuesto[] = [];
+  idTipoRepuesto: 0
+  pageActual: number = 1;
+
+  //Valor que toma el input de buscar
+  repuestoBuscar: string;
+
+  constructor(
+    private modalService: ModalService,
+    private repuestoService: RepuestoService,
+    private tipoRepuestoService: TipoRepuestoService,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    //valido si existe la sesion
+    let valido = localStorage.getItem('ingreso');
+    if (valido != "true") {
+      this.router.navigate(['/login'])
+    }
+    this.ObtenerTipoRepuesto();
+    this.ObtenerRepuestos();
+  }
+
+  ObtenerRepuestos() {
+    this.listRepuesto = [];
+    this.repuestoService.ObtenerRepuestos(this.idTipoRepuesto).subscribe(
+      (res: any) => {
+        this.listRepuesto = res;
+      },
+      err => console.error(err)
+    );
+  }
+
+  RepuestoSegunNombre(valor: string) {
+    this.listRepuesto = [];
+    if (valor != "") {
+      this.repuestoService.ObtenerRepPorNombre(valor).subscribe((data: Repuesto[]) => {
+        this.listRepuesto = data;
+      },
+        err => console.error(err)
+      );
+    } else {
+      this.ObtenerRepuestos();
+    }
+  }
+
+  RepuestoSegunTipo() {
+    this.listRepuesto = [];
+    this.repuestoService.ObtenerRepuestos(0).subscribe(
+      (res: any) => {
+        this.listRepuesto = res;
+      },
+      err => console.error(err)
+    );
+  }
+
+  EliminarRepuesto(id: number) {
+    Swal.fire({
+      title: '¿Desea eliminar el repuesto Nro. ' + id + ' ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'No, cancelar'
+    }).then((result) => {
+      if (result.value) {
+
+        this.repuestoService.EliminarRepuesto(id).subscribe(res => {
+          //Recarga los repuestos       
+          this.ObtenerRepuestos();
+        },
+          err => console.error(err)
+        );
+        //Mensaje informando el eliminado             
+        Swal.fire({ icon: 'success', title: "Repuesto Nro. " + id + " eliminado correctamente." })
+
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({ title: "Cancelado", icon: "error" });
+      }
+    })
+  }
+
+  ObtenerTipoRepuesto() {
+    this.listTipoRep = [];
+    this.tipoRepuestoService.ObtenerTipoRepuesto().subscribe(
+      (res: any) => {
+        this.listTipoRep = res;
+        this.idTipoRepuesto = 0;
+      },
+      err => console.error(err)
+    );
+  }
+
+  GuardarRepuesto() {
+    if (this.repuesto.Nombre == "" || this.repuesto.Nombre == null) {
+      Swal.fire({ title: "El nombre del repuesto no puede estar vacio.", icon: "warning" });
+      return;
+    }
+    //Almacena repuesto   
+    this.repuestoService.GuardarRepuesto(this.repuesto)
+      .subscribe(
+        res => {
+          var result = Object.values(res);
+          if (result[0] == "OK") {
+            //Mensaje informando el almacenado
+            this.closeModal('ModalNuevoRepuesto');
+            Swal.fire({ title: "Repuesto guardado correctamente.", icon: "success" });
+            this.ObtenerRepuestos();
+          }    
+        },
+        err => console.error(err)
+      )
+  }
+
+  //Obtiene el repuesto de la fila y la asigna al objeto que despues actualiza
+  SetValores(repuesto: Repuesto) {
+    this.repuesto = repuesto;
+    this.repuesto.FkTipoRepuesto = repuesto.FkTipoRepuesto;
+  }
+
+  ModificarRepuesto() {
+    if (this.repuesto.Nombre == "" || this.repuesto.Nombre == null) {
+      Swal.fire({ title: "El nombre del repuesto no puede estar vacio.", icon: "warning" });
+      return;
+    }
+    //Almacena repuesto   
+    this.repuestoService.ActualizarRepuesto(this.repuesto.PkRepuesto, this.repuesto).subscribe(
+      res => {       
+        var result = Object.values(res);
+        if (result[0] == "OK") {
+          //Mensaje informando el almacenado
+          this.closeModal('ModalNuevoRepuesto');
+          Swal.fire({ title: "Repuesto modificado correctamente.", icon: "success" });
+          this.ObtenerRepuestos();
+        }
+      },
+      err => console.error(err)
+    )
+  }
+
+  SetNull() {
+    this.repuesto.PkRepuesto= 0,
+    this.repuesto.Nombre = null,
+    this.repuesto.PrecioCosto = null,
+    this.repuesto.PrecioVenta= 0,
+    this.repuesto.CantidadStock= 0,
+    this.repuesto.Observacion= "",
+    this.repuesto.NroSerie= 0,
+    this.repuesto.FkTipoRepuesto= 0,
+    this.repuesto.Activo=null   
+  }
+
+  openModal(id: string) {
+    this.modalService.open(id);
+  }
+
+  closeModal(id: string) {
+    this.modalService.close(id);
+  }
+
+}

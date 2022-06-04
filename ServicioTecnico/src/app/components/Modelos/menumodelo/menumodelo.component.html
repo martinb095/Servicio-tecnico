@@ -1,0 +1,140 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu modelos</h4>
+</div>
+
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-8">
+            <div class="dt-buttons">
+                <button type="button" aria-controls="example23" class="btn waves-effect waves-light btn-success" (click)="SetNull();openModal('ModalNuevoModelo');">Nuevo modelo</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <h4 class="h4-per">Buscar:</h4>
+                    <input type="text" class="form-control" (keyup)="ModeloSegunNombre(modeloBuscar);" placeholder="Buscar por nombre..." [(ngModel)]="modeloBuscar" [ngModelOptions]="{standalone:true}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="6%">Nro. modelo</th>
+            <th width="29%">Nombre</th>
+            <th width="29%">Marca</th>
+            <th width="6%">Acción</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="listModelo">
+        <tr *ngFor="let modelo of listModelo | paginate: {itemsPerPage: 7, currentPage: modPageActual}; let i = index">
+            <td>{{modelo.PkModelo}}</td>
+            <td>{{modelo.Nombre}}</td>
+            <td>{{modelo.Marca}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="SetValores(modelo);openModal('ModalEditarModelo');" data-original-title="Editar"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Close"> <i (click)="EliminarModelo(modelo.PkModelo)" class="fa fa-close text-danger"></i> </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                        <pagination-controls 
+                        previousLabel="Anterior"
+                        nextLabel="Siguiente"
+                        (pageChange)="modPageActual = $event"></pagination-controls>
+                    </span>
+</div>
+
+<!-----------------/MODAL------------------->
+
+<jw-modal id="ModalNuevoModelo">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nuevo modelo</h4>
+                <button type="button" class="close" (click)="closeModal('ModalNuevoModelo');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="modelo.Nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <label class="control-label">Marca:</label>
+                        <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="modelo.FkMarca"> 
+                            <option *ngFor="let marca of listMarca" [value]="marca.PkMarca">{{marca.Nombre}}</option>       
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observación:</label>
+                            <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="modelo.Observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarModelo($event.target.value);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalNuevoModelo');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalEditarModelo">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modificar modelo</h4>
+                <button type="button" class="close" (click)="closeModal('ModalEditarModelo');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="modelo.Nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <label class="control-label">Marca:</label>
+                        <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="modelo.FkMarca"> 
+                            <option *ngFor="let marca of listMarca" [value]="marca.PkMarca">{{marca.Nombre}}</option>       
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observación:</label>
+                            <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="modelo.Observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarModelo(modelo.PkModelo, modelo);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalEditarModelo');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->

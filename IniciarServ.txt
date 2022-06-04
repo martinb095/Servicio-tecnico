@@ -1,0 +1,18 @@
+-Ejecutar el servidor
+Abrir consola.
+Ir a a la carpeta server.
+Ejecutar npm run build.
+Nueva consola
+Ir a a la carpeta server.
+Ejecutar npm run dev.
+
+-Usuario y pass bd: admin 
+
+-Ejecutar y compilar aplicacion cliente npm run ng serve
+
+-Iniciar server en sql para ver las bases.
+server->Startup- Shutdown
+
+-Indentar: Shift + Alt + F.
+
+-Nuevo componente: ng g c menutiporepuesto

@@ -1,0 +1,141 @@
+/*
+Template Name: Admin pro Admin
+Author: Wrappixel
+Email: niravjoshi87@gmail.com
+File: scss
+*/
+
+
+/*
+Template Name: Admin Pro Admin
+Author: Wrappixel
+Email: niravjoshi87@gmail.com
+File: scss
+*/
+
+
+/*Theme Colors*/
+
+
+/*bootstrap Color*/
+
+
+/*Light colors*/
+
+
+/*Normal Color*/
+
+
+/*Extra Variable*/
+
+
+/*******************
+Login register and recover password Page
+******************/
+
+.login-register {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    position: static;
+    padding-top: 5%;
+    padding-bottom: 10%;
+}
+
+.login-box {
+    position: Relative;
+    width: 810px;
+    margin: 0 auto;
+}
+
+.login-box .footer {
+    width: 100%;
+    left: 0px;
+    right: 0px;
+}
+
+.login-box .social {
+    display: block;
+    margin-bottom: 30px;
+}
+
+#recoverform {
+    display: none;
+}
+
+.login-sidebar {
+    padding: 0px;
+    margin-top: 0px;
+}
+
+.login-sidebar .login-box {
+    right: 0px;
+    position: absolute;
+    height: 100%;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+.button {
+    position: absolute;
+    top: 50%;
+}
+
+.btn-ordenrep {
+    font-size: 27px;
+    border-radius: 5px;
+}
+
+
+/*******************
+Form-control
+******************/
+
+.form-control {
+    color: #030303;
+    min-height: 27px;
+    display: initial;
+}
+
+.form-control-sm {
+    min-height: 20px;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    opacity: 0.7;
+}
+
+.custom-control-input:focus~.custom-control-indicator {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.custom-control-input:checked~.custom-control-indicator {
+    background-color: #06d79c;
+}
+
+form label {
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-horizontal label {
+    margin-bottom: 0px;
+}
+
+.form-control-static {
+    padding-top: 0px;
+}
+
+.form-bordered .form-group {
+    border-bottom: 1px solid rgba(120, 130, 140, 0.13);
+    padding-bottom: 30x;
+}

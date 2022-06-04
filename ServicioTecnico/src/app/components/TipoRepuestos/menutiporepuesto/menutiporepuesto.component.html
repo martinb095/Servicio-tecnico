@@ -1,0 +1,100 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu tipo repuestos</h4>
+</div>
+
+<!--/row-->
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-4 ">
+            <div class="dt-buttons">
+                <button type="button" aria-controls="example23" class="btn waves-effect waves-light btn-success" (click)="SetNull();openModal('ModalNuevoTipoRep');">Nuevo tipo repuesto</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="20%">Número</th>
+            <th width="80%">Nombre</th>
+        </tr>
+    </thead>
+    <!-- <tbody *ngIf="listOrdenRep.length"> -->
+    <tbody *ngIf="listTiposRepuestos">
+        <tr *ngFor="let tiporepuesto of listTiposRepuestos | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+            <td>{{tiporepuesto.PkTipoRepuesto}} </td>
+            <td>{{tiporepuesto.Nombre}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="SetValores(tiporepuesto);openModal('ModalEditarTipoRep');"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarTipoRepuesto(tiporepuesto.PkTipoRepuesto)" class="fa fa-close text-danger"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                    <pagination-controls
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente" (pageChange)="pageActual = $event"></pagination-controls>
+                </span>
+</div>
+<!-- </div> -->
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalNuevoTipoRep">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nuevo tipo repuesto</h4>
+                <button type="button" class="close" (click)="closeModal('ModalNuevoTipoRep');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="tipoRepuesto.Nombre">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarTipoRepuesto($event.target.value);">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalNuevoTipoRep');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->
+<jw-modal id="ModalEditarTipoRep">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modifcar tipo repuesto</h4>
+                <button type="button" class="close" (click)="closeModal('ModalEditarTipoRep');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="tipoRepuesto.Nombre">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarTipoRepuesto(tipoRepuesto.PkTipoRepuesto, tipoRepuesto);">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalEditarTipoRep');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->

@@ -1,0 +1,121 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu marcas</h4>
+</div>
+
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-8">
+            <div class="dt-buttons">
+                <button type="button" aria-controls="example23" class="btn waves-effect waves-light btn-success" (click)="SetNull();openModal('ModalNuevaMarca');">Nueva marca</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <h4 class="h4-per">Buscar:</h4>
+                    <input type="text" class="form-control" (keyup)="MarcaSegunNombre(marcaBuscar);" placeholder="Buscar por nombre..." [(ngModel)]="marcaBuscar" [ngModelOptions]="{standalone:true}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="6%">Nro. marca</th>
+            <th width="29%">Nombre</th>
+            <th width="6%">Acción</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="listMarca">
+        <tr *ngFor="let marca of listMarca | paginate: {itemsPerPage: 7, currentPage: marPageActual}; let i = index">
+            <td>{{marca.PkMarca}}</td>
+            <td>{{marca.Nombre}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="openModal('ModalEditarMarca');SetValores(marca)" data-original-title="Editar"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Close"> <i (click)="EliminarMarca(marca.PkMarca)" class="fa fa-close text-danger"></i> </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+        <pagination-controls
+        previousLabel="Anterior"
+        nextLabel="Siguiente" (pageChange)="marPageActual = $event"></pagination-controls>
+    </span>
+</div>
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalNuevaMarca">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nueva marca</h4>
+                <button type="button" class="close" (click)="closeModal('ModalNuevaMarca')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="marca.Nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observación:</label>
+                            <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="marca.Observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarMarca($event.target.value);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalNuevaMarca')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalEditarMarca">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modificar marca</h4>
+                <button type="button" class="close" (click)="closeModal('ModalEditarMarca')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="marca.Nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observación:</label>
+                            <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="marca.Observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarMarca(marca.PkMarca, marca);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalEditarMarca')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->

@@ -1,0 +1,139 @@
+<!-- <div class="card"> -->
+
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu tareas</h4>
+</div>
+
+<!--/row-->
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-4 ">
+            <div class="dt-buttons">
+                <button type="button" aria-controls="example23" class="btn waves-effect waves-light btn-success" (click)="SetNull();openModal('ModalNuevaTarea');">Nueva tarea</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="12%">Nro. tarea</th>
+            <th width="38%">Nombre</th>
+            <th width="8%">Costo $</th>
+            <th width="30%">Observación</th>
+            <th width="5%">Acción</th>
+        </tr>
+    </thead>
+    <!-- <tbody *ngIf="listOrdenRep.length"> -->
+    <tbody *ngIf="listTarea">
+        <tr *ngFor="let tarea of listTarea | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+            <td>{{tarea.PkTarea}} </td>
+            <td>{{tarea.Nombre}}</td>
+            <td>{{tarea.Costo}}</td>
+            <td>{{tarea.Observacion}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="SetValores(tarea);openModal('ModalEditarTarea');"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarTarea(tarea.PkTarea)" class="fa fa-close text-danger"></i> </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                <pagination-controls
+                previousLabel="Anterior"
+                nextLabel="Siguiente" (pageChange)="pageActual = $event"></pagination-controls>
+            </span>
+</div>
+<!-- </div> -->
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalNuevaTarea">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nueva tarea</h4>
+                <button type="button" class="close" (click)="closeModal('ModalNuevaTarea');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="tarea.Nombre">
+                        </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Costo:</label>
+                            <input type="number" class="form-control" [(ngModel)]="tarea.Costo">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observación:</label>
+                            <!-- <input type="text" class="form-control" required [(ngModel)]="tarea.Observacion"> -->
+                            <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="tarea.Observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarTarea($event.target.value);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalNuevaTarea');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalEditarTarea">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modificar tarea</h4>
+                <button type="button" class="close" (click)="closeModal('ModalEditarTarea');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="tarea.Nombre">
+                        </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Costo:</label>
+                            <input type="number" class="form-control" [(ngModel)]="tarea.Costo">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observación:</label>
+                            <!-- <input type="text" class="form-control" required [(ngModel)]="tarea.Observacion"> -->
+                            <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="tarea.Observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarTarea(tarea.PkTarea, tarea);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalEditarTarea');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->

@@ -1,0 +1,211 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu proveedores</h4>
+</div>
+
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-8">
+            <div class="dt-buttons">
+                <button type="button" (click)="SetNull();openModal('ModalNuevoProveedor');" aria-controls="example23" class="btn waves-effect waves-light btn-success">Nuevo Proveedor</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <h4 class="h4-per">Buscar:</h4>
+                    <input type="text" class="form-control" (keyup)="ProveedorSegunNombre(proveedorBuscar);" placeholder="Buscar por nombre..." [(ngModel)]="proveedorBuscar" [ngModelOptions]="{standalone:true}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="10%">Nro. Proveedor</th>
+            <th width="40%">Nombre</th>
+            <th width="18%">Telefono</th>
+            <th width="15%">Mail</th>
+            <th width="10%">Acción</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="listProveedor">
+        <tr *ngFor="let proveedor of listProveedor | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+            <td>{{proveedor.PkProveedor}} </td>
+            <td>{{proveedor.Nombre}}</td>
+            <td>{{proveedor.Telefono}}</td>
+            <td>{{proveedor.Mail}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="SetValores(proveedor);openModal('ModalEditarProveedor');"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarProveedor(proveedor.PkProveedor)" class="fa fa-close text-danger"></i> </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                <pagination-controls 
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+                (pageChange)="pageActual = $event"></pagination-controls>
+            </span>
+</div>
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalNuevoProveedor">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nuevo Proveedor</h4>
+                <button type="button" class="close" (click)="closeModal('ModalNuevoProveedor');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="proveedor.Nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Firma:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="proveedor.Firma">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Telefono:</label>
+                            <input type="number" class="form-control" [(ngModel)]="proveedor.Telefono">
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Mail:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Mail">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group ">
+                            <label class="control-label ">Cuit:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Cuit">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Provincia:</label>
+                            <select class="form-control" (change)="onSelectProv(idProvincia);" [ngModelOptions]="{standalone:true}" [(ngModel)]="idProvincia">  
+                                <option ngValue="null "></option>   
+                                <option *ngFor="let provincia of listProvincias" value={{provincia.PkProvincia}}>{{provincia.Nombre}}</option>                            
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Ciudad:</label>
+                            <select [(ngModel)]="proveedor.FkCiudad" class="form-control ">  
+                                    <option ngValue="null "></option>   
+                                    <option *ngFor="let ciudad of listCiudades " value={{ciudad.PkCiudad}}>{{ciudad.Nombre}}</option>           
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between ">
+                <button type="button" class="btn waves-effect waves-light btn-success " (click)="GuardarProveedor($event.target.value);" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger " (click)="closeModal('ModalNuevoProveedor');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!----------------------- FIN MODAL -------------------------------------->
+
+<jw-modal id="ModalEditarProveedor">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modificar proveedor</h4>
+                <button type="button" class="close" (click)="closeModal('ModalEditarProveedor');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="proveedor.Nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Firma:</label>
+                            <input type="text" class="form-control" required [(ngModel)]="proveedor.Firma">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Telefono:</label>
+                            <input type="number" class="form-control" [(ngModel)]="proveedor.Telefono">
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Mail:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Mail">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group ">
+                            <label class="control-label ">Cuit:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Cuit">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Provincia:</label>
+                            <select class="form-control" (change)="onSelectProv(idProvincia);" [ngModelOptions]="{standalone:true}" [(ngModel)]="idProvincia">  
+                                <option ngValue="null "></option>   
+                                <option *ngFor="let provincia of listProvincias" value={{provincia.PkProvincia}}>{{provincia.Nombre}}</option>                            
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Ciudad:</label>
+                            <select [(ngModel)]="proveedor.FkCiudad" class="form-control ">  
+                                    <option ngValue="null "></option>   
+                                    <option *ngFor="let ciudad of listCiudades " value={{ciudad.PkCiudad}}>{{ciudad.Nombre}}</option>           
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between ">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarProveedor($event.target.value); " data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalEditarProveedor');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <jw-modal>
+
+        <!----------------------- FIN MODAL -------------------------------------->
