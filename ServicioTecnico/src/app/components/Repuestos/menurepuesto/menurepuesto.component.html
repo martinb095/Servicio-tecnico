@@ -122,14 +122,21 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 ">
-                        <label class="control-label">Tipo repuesto:</label>
-                        <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
-                            <option *ngFor="let tiporepuesto of listTipoRep" [value]="tiporepuesto.PkTipoRepuesto">{{tiporepuesto.Nombre}}</option>       
-                        </select>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label">Tipo repuesto:</label>
+                            <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
+                                <option *ngFor="let tiporepuesto of listTipoRep" [value]="tiporepuesto.PkTipoRepuesto">{{tiporepuesto.Nombre}}</option>       
+                            </select></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label class="control-label">Marca:</label>
+                            <select required class="form-control custom-select" data-placeholder="Marca" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkMarca"> 
+                                <option *ngFor="let marca of listMarca" [value]="marca.PkMarca">{{marca.Nombre}}</option>       
+                            </select></div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-12 ">
                         <label class="control-label">Observación</label>
@@ -197,12 +204,29 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-12 ">
                         <label class="control-label">Tipo repuesto:</label>
                         <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
                             <option *ngFor="let tiporepuesto of listTipoRep" [value]="tiporepuesto.PkTipoRepuesto">{{tiporepuesto.Nombre}}</option>       
                         </select>
+                    </div>
+                </div> -->
+
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label">Tipo repuesto:</label>
+                            <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
+                                <option *ngFor="let tiporepuesto of listTipoRep" [value]="tiporepuesto.PkTipoRepuesto">{{tiporepuesto.Nombre}}</option>       
+                            </select></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label class="control-label">Marca:</label>
+                            <select required class="form-control custom-select" data-placeholder="Marca" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkMarca"> 
+                                <option *ngFor="let marca of listMarca" [value]="marca.PkMarca">{{marca.Nombre}}</option>       
+                            </select></div>
                     </div>
                 </div>
 

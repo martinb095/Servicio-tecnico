@@ -37,8 +37,7 @@ import { MenurepuestoComponent } from './components/repuestos/menurepuesto/menur
 import { MenutareasComponent } from './components/Tareas/menutareas/menutareas.component';
 //modelos
 import { MenumodeloComponent } from './components/Modelos/menumodelo/menumodelo.component';
-//productos
-import { MenuproductoComponent } from './components/Producto/menuproducto/menuproducto.component';
+
 //marcas
 import { MenumarcaComponent } from './components/Marcas/menumarca/menumarca.component';
 //tipo repuesto
@@ -63,8 +62,7 @@ import { MenuproveedorComponent } from './components/Proveedores/menuproveedor/m
     MenurepuestoComponent,
     DetalleestadoordenComponent,
     MenutareasComponent,
-    MenumodeloComponent,
-    MenuproductoComponent,
+    MenumodeloComponent,  
     MenumarcaComponent,
     MenutiporepuestoComponent,
     MenutiporepuestoComponent,

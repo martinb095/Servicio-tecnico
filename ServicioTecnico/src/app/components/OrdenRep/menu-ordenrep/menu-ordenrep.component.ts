@@ -12,14 +12,13 @@ import { Estado } from '../../../models/estado';
 import { TareaService } from '../../../services/tarea.service';
 import { Tarea } from 'src/app/models/tarea';
 
-import { DetalleTareaService } from 'src/app/services/detalletarea.service';
-import { DetalleTarea } from 'src/app/models/detalletarea';
+import { DetalleOrdenService } from 'src/app/services/detalleorden.service';
+import { DetalleOrden } from 'src/app/models/detalleorden';
 
 import { Repuesto } from 'src/app/models/repuesto';
 import { RepuestoService } from 'src/app/services/repuesto.service';
 
-import { DetalleRepuesto } from 'src/app/models/detallerepuesto';
-import { DetalleRepuestoService } from 'src/app/services/detallerepuesto.service';
+
 
 import { ClienteService } from '../../../services/cliente.service'
 import { Cliente } from '../../../models/cliente';
@@ -56,13 +55,11 @@ export class MenuOrdenrepComponent implements OnInit {
 
   listTarea: Tarea[] = [];
   listTareaTemp: Tarea[] = [];
-  listDetalleTareaTemp: DetalleTarea[] = [];
-  detalletarea: DetalleTarea;
+
 
   listRepuesto: any[] = [];
   listRepuestoTemp: Repuesto[] = [];
-  listDetalleRepuestoTemp: DetalleRepuesto[] = [];
-  detallerepuesto: DetalleRepuesto;
+  detalleorden: DetalleOrden;
 
   PkOrden = 0;
   idEstado = 2;
@@ -74,12 +71,11 @@ export class MenuOrdenrepComponent implements OnInit {
   constructor(
     private ordenesRepService: OrdenesReparacionService,
     private estadoService: EstadoService,
-    private tareasService: TareaService,
-    private detalletareaService: DetalleTareaService,
+    private tareasService: TareaService,    
     private repuestoService: RepuestoService,
     private mailService: MailService,
     private datePipe: DatePipe,
-    private detallerepuestoService: DetalleRepuestoService,
+    private detalleordenService: DetalleOrdenService,
     private clienteService: ClienteService,   
     private router: Router
   ) { }
@@ -218,31 +214,6 @@ export class MenuOrdenrepComponent implements OnInit {
     );
   }
 
-  AgregarTareas(listTarea) {
-    var length = listTarea.length;
-    for (let i = 0; i < length; i++) {
-      if (listTarea[i].checked) {
-        //arma detalletarea
-        this.detalletarea = {
-          'PkDetalleTarea': null,
-          'FkTarea': listTarea[i].PkTarea,
-          'Costo': listTarea[i].Costo,
-          'FkOrdenrep': this.PkOrden
-        }
-
-        //Almacena datos orden
-        this.detalletareaService.GuardarDetalleTarea(this.detalletarea)
-          .subscribe(
-            res => {
-            },
-            err => console.error(err)
-          )
-      }
-    }
-    //Mensaje informando el almacenado      
-    Swal.fire({ icon: 'success', title: "Tarea agregada a la orden Nro. " + this.PkOrden, })
-  }
-
   // RepuestoSinAsignar(idOrden: number) {
   //   this.PkOrden = idOrden
   //   this.listRepuesto = [];
@@ -253,34 +224,34 @@ export class MenuOrdenrepComponent implements OnInit {
   //   );
   // }
 
-  AgregarRepuesto(listRepuesto) {
-    // console.log(listRepuesto[0].CantidadActual, "CantidadActual")
-    var length = listRepuesto.length;
-    for (let i = 0; i < length; i++) {
-      if (listRepuesto[i].checked) {
-        //arma detallerepuesto
-        this.detallerepuesto = {
-          'PkDetalleRepuesto': null,
-          'FkRepuesto': listRepuesto[i].PkRepuesto,
-          'Precio': listRepuesto[i].PrecioVenta,
-          'Cantidad': listRepuesto[i].CantidadActual,
-          'FkOrdenrep': this.PkOrden,
-          'Repuesto': null,
-        }
+  // AgregarRepuesto(listRepuesto) {
+  //   // console.log(listRepuesto[0].CantidadActual, "CantidadActual")
+  //   var length = listRepuesto.length;
+  //   for (let i = 0; i < length; i++) {
+  //     if (listRepuesto[i].checked) {
+  //       //arma detallerepuesto
+  //       this.detallerepuesto = {
+  //         'PkDetalleRepuesto': null,
+  //         'FkRepuesto': listRepuesto[i].PkRepuesto,
+  //         'Precio': listRepuesto[i].PrecioVenta,
+  //         'Cantidad': listRepuesto[i].CantidadActual,
+  //         'FkOrdenrep': this.PkOrden,
+  //         'Repuesto': null,
+  //       }
 
-        //   console.log(this.detallerepuesto, "    this.detallerepuesto");
-        //Almacena datos orden
-        this.detallerepuestoService.GuardarDetalleRepuesto(this.detallerepuesto)
-          .subscribe(
-            res => {
-            },
-            err => console.error(err)
-          )
-      }
-    }
+  //       //   console.log(this.detallerepuesto, "    this.detallerepuesto");
+  //       //Almacena datos orden
+  //       this.detallerepuestoService.GuardarDetalleRepuesto(this.detallerepuesto)
+  //         .subscribe(
+  //           res => {
+  //           },
+  //           err => console.error(err)
+  //         )
+  //     }
+  //   }
     //Mensaje informando el almacenado     
-    Swal.fire({ title: "Repuesto agregado a la orden Nro. " + this.PkOrden, icon: "success" });
-  }
+   // Swal.fire({ title: "Repuesto agregado a la orden Nro. " + this.PkOrden, icon: "success" });
+  //}
 
   NotificarCliente(idOrden: number) {
 

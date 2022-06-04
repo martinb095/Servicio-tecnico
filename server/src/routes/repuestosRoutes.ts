@@ -16,8 +16,8 @@ class RepuestosRoutes {
         this.router.get('/:PkRepuesto', repuestosControllers.GetOne);
         //Lista  repuesto sin asignar
         this.router.get('/sinasignar/:PkOrdenRep', repuestosControllers.getRepuestosSinAsignar);
-            //Lista repuestos filtrados por nombre
-            this.router.get('/filtro/:Valor', repuestosControllers.getRepuestosFindByNombre);
+        //Lista repuestos filtrados por nombre
+        this.router.get('/filtro/:Valor', repuestosControllers.getRepuestosFindByNombre);
         //crear
         this.router.post('/nuevorepuesto', repuestosControllers.create);
         //Eliminar

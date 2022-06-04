@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 import { OrdenesReparacionService } from '../../services/ordenesreparacion.service'
-import { DetalleRepuestoService } from '../../services/detallerepuesto.service'
-import { DetalleTareaService } from '../../services/detalletarea.service'
+import { DetalleOrdenService } from '../../services/detalleorden.service'
 
 
 @Component({
@@ -28,8 +27,8 @@ export class DetalleestadoordenComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     private ordenesrepService: OrdenesReparacionService,
-    private detallerepuestoservice: DetalleRepuestoService,
-    private detalletareaservice: DetalleTareaService,
+    private detalleordenservice: DetalleOrdenService,
+
     private route: ActivatedRoute) { }
 
 
@@ -37,7 +36,7 @@ export class DetalleestadoordenComponent implements OnInit {
     this.idOrden = +this.route.snapshot.paramMap.get('idOrden');
     this.GetDetalleOrden(this.idOrden);
     this.GetDetalleRepOrden(this.idOrden);
-    this.GetDetalleTareaOrden(this.idOrden);
+    //this.GetDetalleTareaOrden(this.idOrden);
   }
 
 
@@ -73,7 +72,7 @@ export class DetalleestadoordenComponent implements OnInit {
   }
 
   GetDetalleRepOrden(nroOrden: number) {
-    this.detallerepuestoservice.ObtenerDetalleMostrar(nroOrden).subscribe(
+    this.detalleordenservice.ObtenerDetalleMostrar(nroOrden).subscribe(
       (res: any) => {
         this.listDetalleRepuestos = res;
         //Calcula el costo de los repuestos
@@ -86,20 +85,20 @@ export class DetalleestadoordenComponent implements OnInit {
     );
   }
 
-  GetDetalleTareaOrden(nroOrden: number) {
-    this.detalletareaservice.ObtenerDetalleMostrar(nroOrden).subscribe(
-      (res: any) => {
-        this.listDetalleTareas = res;
+  // GetDetalleTareaOrden(nroOrden: number) {
+  //   this.detalletareaservice.ObtenerDetalleMostrar(nroOrden).subscribe(
+  //     (res: any) => {
+  //       this.listDetalleTareas = res;
 
-        //Calcula el costo de las tareas
-        var length = this.listDetalleTareas.length;
-        for (let i = 0; i < length; i++) {
-          this.totalTareas = this.totalTareas + this.listDetalleTareas[i].Costo;
-        }
-      },
-      err => console.error(err)
-    );
-  }
+  //       //Calcula el costo de las tareas
+  //       var length = this.listDetalleTareas.length;
+  //       for (let i = 0; i < length; i++) {
+  //         this.totalTareas = this.totalTareas + this.listDetalleTareas[i].Costo;
+  //       }
+  //     },
+  //     err => console.error(err)
+  //   );
+  // }
 
 
 

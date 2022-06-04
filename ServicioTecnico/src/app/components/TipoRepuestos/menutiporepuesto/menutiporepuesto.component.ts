@@ -108,7 +108,7 @@ export class MenutiporepuestoComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-        this.tiporepuestoService.EliminarTipoRepuesto(id).subscribe(res => {
+          this.tiporepuestoService.EliminarTipoRepuesto(id).subscribe(res => {
           this.ObtenerTiposRepuesto();
         },
           err => console.error(err)

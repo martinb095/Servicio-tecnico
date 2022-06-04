@@ -9,8 +9,6 @@ import { OrdenReparacion } from 'src/app/models/ordenRep';
 import { MarcaService } from '../../../services/marca.service';
 import { Marca } from '../../../models/marca';
 
-import { ProductoService } from '../../../services/producto.service';
-import { Producto } from '../../../models/producto';
 
 import { ModeloService } from '../../../services/modelo.service';
 import { Modelo } from '../../../models/modelo';
@@ -18,11 +16,8 @@ import { Modelo } from '../../../models/modelo';
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../../models/estado';
 
-import { DetalleTareaService } from '../../../services/detalletarea.service';
-import { DetalleTarea } from 'src/app/models/detalletarea';
-
-import { DetalleRepuestoService } from '../../../services/detallerepuesto.service';
-import { DetalleRepuesto } from 'src/app/models/detallerepuesto';
+import { DetalleOrdenService } from '../../../services/detalleorden.service';
+import { DetalleOrden } from 'src/app/models/detalleorden';
 
 import { ClienteService } from '../../../services/cliente.service';
 import { Cliente } from 'src/app/models/cliente';
@@ -50,21 +45,19 @@ export class ModificarOrdenComponent implements OnInit {
   };
 
   listMarca: Marca[] = [];
-  listProducto: Producto[] = [];
   listModelo: Modelo[] = [];
 
   listEstado: Estado[] = [];
 
   listTarea: any[] = [];
   listTareaTemp: Tarea[] = [];
-  listDetalleTareaTemp: DetalleTarea[] = [];
+
 
   listRepuesto: Repuesto[] = [];
   listRepuestoTemp: Repuesto[] = [];
-  listDetalleRepTemp: DetalleRepuesto[] = [];
+ 
 
-  listDetTareaBd: DetalleTarea[] = [];
-  listDetRepBd: DetalleRepuesto[] = [];
+  listDetOrden: DetalleOrden[] = []; 
 
   selectedMarca = 0;
   selectedProducto = 0;
@@ -82,21 +75,16 @@ export class ModificarOrdenComponent implements OnInit {
     FkEstado: null,
     FkUsuario: null,
   };
-
-  detalleTarea: DetalleTarea = {
-    PkDetalleTarea: 0,
-    FkTarea: 0,
-    Costo: null,
-    FkOrdenrep: 0,
-  };
-
-  detalleRepuesto: DetalleRepuesto = {
-    PkDetalleRepuesto: 0,
+ 
+  detalleOrden: DetalleOrden = {
+    PkDetalleOrden: 0,
     Cantidad: 0,
     FkRepuesto: 0,
     Precio: 0,
-    FkOrdenrep: 0,
-    Repuesto: null,
+    Observacion:"",
+    FkTarea: 0,
+    FechaCreacion: null,
+    FkOrden: 0
   };
 
   repuesto: Repuesto = {
@@ -108,6 +96,7 @@ export class ModificarOrdenComponent implements OnInit {
     Observacion: null,
     NroSerie: null,
     FkTipoRepuesto: null,
+    FkMarca: null,
     Activo: true,
   };
 
@@ -126,14 +115,12 @@ export class ModificarOrdenComponent implements OnInit {
     private datepipe: DatePipe,
     private estadoService: EstadoService,
     private ordenesService: OrdenesReparacionService,
-    private marcaService: MarcaService,
-    private productoService: ProductoService,
+    private marcaService: MarcaService,    
     private modeloService: ModeloService,
     private clientesService: ClienteService,
     private tareaService: TareaService,
     private repuestoService: RepuestoService,
-    private detalletareaService: DetalleTareaService,
-    private detallerepuestoService: DetalleRepuestoService,
+    private detalleOrdenService: DetalleOrdenService,   
     private router: Router
   ) { }
 
@@ -158,12 +145,12 @@ export class ModificarOrdenComponent implements OnInit {
     );
 
     //Carga los productos
-    this.productoService.ObtenerProductos().subscribe(
-      (res: any) => {
-        this.listProducto = res;
-      },
-      err => console.error(err)
-    );
+    //this.productoService.ObtenerProductos().subscribe(
+    //  (res: any) => {
+    //    this.listProducto = res;
+    //  },
+    //  err => console.error(err)
+    //);
 
     //Carga las marcas
     this.marcaService.ObtenerMarcas().subscribe(
@@ -181,97 +168,98 @@ export class ModificarOrdenComponent implements OnInit {
       err => console.error(err)
     );
 
-    this.detalletareaService.ObtenerDetalleTareasDeOR(this.idOrdeRep).subscribe(
-      (res: any) => {
-        this.listDetTareaBd = res;
-        var lengthBD = this.listDetTareaBd.length;
-        var length = this.listTarea.length;
+    // this.detalletareaService.ObtenerDetalleTareasDeOR(this.idOrdeRep).subscribe(
+    //   (res: any) => {
+    //     this.listDetTareaBd = res;
+    //     var lengthBD = this.listDetTareaBd.length;
+    //     var length = this.listTarea.length;
 
-        //2 for para obtener el nombre
-        for (let iiBD = 0; iiBD < lengthBD; iiBD++) {
-          for (let i = 0; i < length; i++) {
-            if (this.listDetTareaBd[iiBD].FkTarea == this.listTarea[i].PkTarea) {
-              this.tarea = {
-                PkTarea: 0,
-                Nombre: "",
-                Costo: null,
-                Observacion: ""
-              };
+    //     //2 for para obtener el nombre
+    //     for (let iiBD = 0; iiBD < lengthBD; iiBD++) {
+    //       for (let i = 0; i < length; i++) {
+    //         if (this.listDetTareaBd[iiBD].FkTarea == this.listTarea[i].PkTarea) {
+    //           this.tarea = {
+    //             PkTarea: 0,
+    //             Nombre: "",
+    //             Costo: null,
+    //             Observacion: ""
+    //           };
 
-              this.tarea.PkTarea = this.listTarea[i].PkTarea;
-              this.tarea.Nombre = this.listTarea[i].Nombre;
-              this.tarea.Costo = this.listDetTareaBd[iiBD].Costo;
-              //Llena la lista que muestra
-              this.listTareaTemp.push(this.tarea);
+    //           this.tarea.PkTarea = this.listTarea[i].PkTarea;
+    //           this.tarea.Nombre = this.listTarea[i].Nombre;
+    //           this.tarea.Costo = this.listDetTareaBd[iiBD].Costo;
+    //           //Llena la lista que muestra
+    //           this.listTareaTemp.push(this.tarea);
 
-              //Llena la lista de detalle para el almacenado
-              this.detalleTarea = {
-                PkDetalleTarea: 0,
-                FkOrdenrep: 0,
-                FkTarea: 0,
-                Costo: 0
-              };
-              this.detalleTarea.FkOrdenrep = this.idOrdeRep,
-                this.detalleTarea.FkTarea = this.listTarea[i].PkTarea,
-                this.detalleTarea.Costo = this.listDetTareaBd[iiBD].Costo,
-                this.listDetalleTareaTemp.push(this.detalleTarea);
-            }
-          }
-        }
-      },
-      err => console.error(err)
-    );
+    //           //Llena la lista de detalle para el almacenado
+    //           this.detalleTarea = {
+    //             PkDetalleTarea: 0,
+    //             FkOrdenrep: 0,
+    //             FkTarea: 0,
+    //             Costo: 0
+    //           };
+    //           this.detalleTarea.FkOrdenrep = this.idOrdeRep,
+    //             this.detalleTarea.FkTarea = this.listTarea[i].PkTarea,
+    //             this.detalleTarea.Costo = this.listDetTareaBd[iiBD].Costo,
+    //             this.listDetalleTareaTemp.push(this.detalleTarea);
+    //         }
+    //       }
+    //     }
+    //   },
+    //   err => console.error(err)
+    // );
 
-    this.detallerepuestoService.ObtenerDetalleRepuestosDeOR(this.idOrdeRep).subscribe(
-      (res: any) => {
-        this.listDetRepBd = res;
-        var lengthBD = this.listDetRepBd.length;
-        var length = this.listRepuesto.length;
+    // this.detallerepuestoService.ObtenerDetalleRepuestosDeOR(this.idOrdeRep).subscribe(
+    //   (res: any) => {
+    //     this.listDetRepBd = res;
+    //     var lengthBD = this.listDetRepBd.length;
+    //     var length = this.listRepuesto.length;
 
-        //2 for para obtener el nombre
-        for (let iiBD = 0; iiBD < lengthBD; iiBD++) {
-          for (let i = 0; i < length; i++) {
-            if (this.listDetRepBd[iiBD].FkRepuesto == this.listRepuesto[i].PkRepuesto) {
-              this.repuesto = {
-                PkRepuesto: 0,
-                Nombre: "",
-                PrecioVenta: null,
-                PrecioCosto: null,
-                CantidadStock: null,
-                Observacion: null,
-                NroSerie: null,
-                Activo: true,
-                FkTipoRepuesto: null
-              };
+    //     //2 for para obtener el nombre
+    //     for (let iiBD = 0; iiBD < lengthBD; iiBD++) {
+    //       for (let i = 0; i < length; i++) {
+    //         if (this.listDetRepBd[iiBD].FkRepuesto == this.listRepuesto[i].PkRepuesto) {
+    //           this.repuesto = {
+    //             PkRepuesto: 0,
+    //             Nombre: "",
+    //             PrecioVenta: null,
+    //             PrecioCosto: null,
+    //             CantidadStock: null,
+    //             Observacion: null,
+    //             NroSerie: null,
+    //             Activo: true,
+    //             FkTipoRepuesto: null,
+    //             FkMarca: null
+    //           };
 
-              this.repuesto.PkRepuesto = this.listRepuesto[i].PkRepuesto;
-              this.repuesto.Nombre = this.listRepuesto[i].Nombre;
-              this.repuesto.PrecioVenta = this.listDetRepBd[iiBD].Precio;
-              //No es el stock pero lo uso para mostrar la cantidad que se almaceno
-              this.repuesto.CantidadStock = this.listDetRepBd[iiBD].Cantidad;
-              //Llena la lista que muestra
-              this.listRepuestoTemp.push(this.repuesto);
+    //           this.repuesto.PkRepuesto = this.listRepuesto[i].PkRepuesto;
+    //           this.repuesto.Nombre = this.listRepuesto[i].Nombre;
+    //           this.repuesto.PrecioVenta = this.listDetRepBd[iiBD].Precio;
+    //           //No es el stock pero lo uso para mostrar la cantidad que se almaceno
+    //           this.repuesto.CantidadStock = this.listDetRepBd[iiBD].Cantidad;
+    //           //Llena la lista que muestra
+    //           this.listRepuestoTemp.push(this.repuesto);
 
-              //Llena la lista de detalle para el almacenado
-              this.detalleRepuesto = {
-                PkDetalleRepuesto: 0,
-                FkOrdenrep: 0,
-                FkRepuesto: 0,
-                Precio: 0,
-                Cantidad: 0,
-                Repuesto: null
-              };
-              this.detalleRepuesto.FkOrdenrep = this.idOrdeRep,
-                this.detalleRepuesto.FkRepuesto = this.listRepuesto[i].PkRepuesto,
-                this.detalleRepuesto.Precio = this.listDetRepBd[iiBD].Precio;
-              this.detalleRepuesto.Cantidad = this.listDetRepBd[iiBD].Cantidad;
-              this.listDetalleRepTemp.push(this.detalleRepuesto);
-            }
-          }
-        }
-      },
-      err => console.error(err)
-    );
+    //           //Llena la lista de detalle para el almacenado
+    //           this.detalleRepuesto = {
+    //             PkDetalleRepuesto: 0,
+    //             FkOrdenrep: 0,
+    //             FkRepuesto: 0,
+    //             Precio: 0,
+    //             Cantidad: 0,
+    //             Repuesto: null
+    //           };
+    //           this.detalleRepuesto.FkOrdenrep = this.idOrdeRep,
+    //             this.detalleRepuesto.FkRepuesto = this.listRepuesto[i].PkRepuesto,
+    //             this.detalleRepuesto.Precio = this.listDetRepBd[iiBD].Precio;
+    //           this.detalleRepuesto.Cantidad = this.listDetRepBd[iiBD].Cantidad;
+    //           this.listDetalleRepTemp.push(this.detalleRepuesto);
+    //         }
+    //       }
+    //     }
+    //   },
+    //   err => console.error(err)
+    // );
 
 
     //Trae los datos del cliente
@@ -350,26 +338,26 @@ export class ModificarOrdenComponent implements OnInit {
     );
   }
 
-  getTareas(listTarea) {
-    //Vacia la lista    
-    this.listTareaTemp = [];
-    this.listDetalleTareaTemp = [];
-    //Recorre el listado y va agregando los checkeados 
-    var length = listTarea.length;
-    for (let i = 0; i < length; i++) {
-      if (listTarea[i].checked) {
-        this.listTareaTemp.push(listTarea[i]);
-        //arma detalletarea
-        this.detalleTarea = {
-          'PkDetalleTarea': null,
-          'FkTarea': listTarea[i].PkTarea,
-          'Costo': listTarea[i].Costo,
-          'FkOrdenrep': this.idOrdeRep,
-        }
-        this.listDetalleTareaTemp.push(this.detalleTarea);
-      }
-    }
-  }
+  // getTareas(listTarea) {
+  //   //Vacia la lista    
+  //   this.listTareaTemp = [];
+  //   this.listDetalleTareaTemp = [];
+  //   //Recorre el listado y va agregando los checkeados 
+  //   var length = listTarea.length;
+  //   for (let i = 0; i < length; i++) {
+  //     if (listTarea[i].checked) {
+  //       this.listTareaTemp.push(listTarea[i]);
+  //       //arma detalletarea
+  //       this.detalleTarea = {
+  //         'PkDetalleTarea': null,
+  //         'FkTarea': listTarea[i].PkTarea,
+  //         'Costo': listTarea[i].Costo,
+  //         'FkOrdenrep': this.idOrdeRep,
+  //       }
+  //       this.listDetalleTareaTemp.push(this.detalleTarea);
+  //     }
+  //   }
+  // }
 
   getRepuestos(listRepuesto) {
     //Vacia la lista    
@@ -387,10 +375,10 @@ export class ModificarOrdenComponent implements OnInit {
   ModificarOrden() {
 
     //Llena el atributo del listado de las tareas de la orden con la tabla de las tareas select
-    this.ordenRep.detalleTareas = this.listDetalleTareaTemp;
+    //this.ordenRep.detalleTareas = this.listDetalleTareaTemp;
 
     //Llena el atributo del listado de los repuestos de la orden con la tabla de los repuestos select
-    this.ordenRep.detalleRepuestos = this.listDetalleRepTemp;
+    //this.ordenRep.detalleRepuestos = this.listDetalleRepTemp;
 
 
     //Almacena datos orden

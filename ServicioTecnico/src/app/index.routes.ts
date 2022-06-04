@@ -23,8 +23,7 @@ import { MenutareasComponent } from './components/Tareas/menutareas/menutareas.c
 import { MenumodeloComponent } from './components/Modelos/menumodelo/menumodelo.component';
 //marca
 import { MenumarcaComponent } from './components/Marcas/menumarca/menumarca.component';
-//producto
-import { MenuproductoComponent } from './components/Producto/menuproducto/menuproducto.component';
+
 //tipo productos
 import { MenutiporepuestoComponent } from './components/TipoRepuestos/menutiporepuesto/menutiporepuesto.component';
 //proveedores
@@ -60,9 +59,7 @@ export const appRoutes: Routes = [
       //Modelos
       { path: 'menumodelo', component: MenumodeloComponent },
       //Marcas
-      { path: 'menumarca', component: MenumarcaComponent },
-      //Productos
-      { path: 'menuproducto', component: MenuproductoComponent },
+      { path: 'menumarca', component: MenumarcaComponent },      
       //Tipo productos
       { path: 'menutiporepuesto', component: MenutiporepuestoComponent },
       //Usuarios

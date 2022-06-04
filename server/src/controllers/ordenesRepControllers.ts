@@ -2,16 +2,12 @@ import { Request, Response, Router } from 'express';
 import pool from '../database';
 import { any } from 'bluebird';
 
-
 import express = require('express');
 import usuariosController from './usuariosControllers';
-//repuestos
-import { DetalleRepuesto } from '../Models/detallerepuesto';
-import detalleRepuestosControllers from '../controllers/detalleRepuestosControllers';
 
-//tareas
-import detalleTareasController from '../controllers/detalleTareasControllers';
-import { DetalleTarea } from '../Models/detalletarea';
+import { DetalleOrden } from '../Models/detalleorden';
+import detalleOrdenControllers from '../controllers/detalleOrdenControllers';
+
 
 
 class OrdenesRepController {
@@ -169,33 +165,11 @@ class OrdenesRepController {
             'FkUsuario': req.body.FkUsuario,
         }
 
-        let tareas = req.body.detalleTareas;
-        let repuestos = req.body.detalleRepuestos;
-
-
-        //Registro la orden    
-        //    await pool.query('INSERT INTO ordenreparacion set ?', [ordenRep] );
+        //Registro la orden          
         await pool.query('INSERT INTO ordenreparacion SET ?', [ordenRep], function (err: any, resultInserOrd: any) {
             if (err) throw err;
             const ultimaOrden = resultInserOrd.insertId;
-            res.json({ message: 'OR guardado' });
-
-            //recorre repuesto y guarda
-            repuestos.forEach(function (item: DetalleRepuesto) {
-                //Asignar valores a detalle para guardar          
-                item.FkOrdenrep = ultimaOrden;
-                //Guarda detalle
-                detalleRepuestosControllers.createServ(item);
-            });
-
-            //recorre tarea y guarda
-            tareas.forEach(function (item: DetalleTarea) {
-                //Asignar valores a detalle para guardar 
-                item.FkOrdenRep = ultimaOrden;
-                console.log(item, "item");
-                //Guarda detalle
-                detalleTareasController.createServ(item);
-            });
+            res.json({ message: ultimaOrden });        
         });
 
     }
@@ -219,19 +193,7 @@ class OrdenesRepController {
         await pool.query('update ordenreparacion set ? Where PkOrdenreparacion = ?', [ordenRep, req.params.PkOrdenRep], function (err: Error, res: Response) {
             if (err) throw err;
         });
-
-        //elimina los detalles
-        detalleTareasController.delete(req.params.PkOrdenRep);
-        detalleRepuestosControllers.delete(req.params.PkOrdenRep);
-
-        //insertar los detalles
-        let tareas = req.body.detalleTareas;
-        console.log(tareas, "tareas");
-        //recorre tarea y guarda
-        tareas.forEach(function (item: DetalleTarea) {
-            //Guarda detalle
-            detalleTareasController.createServ(item);
-        });
+      
         res.json({ text: 'OK' });
     }
 

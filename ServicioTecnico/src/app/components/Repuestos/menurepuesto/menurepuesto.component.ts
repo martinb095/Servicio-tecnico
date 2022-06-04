@@ -10,12 +10,16 @@ import { RepuestoService } from 'src/app/services/repuesto.service';
 import { TipoRepuesto } from 'src/app/models/tiporepuesto';
 import { TipoRepuestoService } from 'src/app/services/tiporepuesto.service';
 
+//Tipo repuesto
+import { Marca } from 'src/app/models/marca';
+import { MarcaService } from 'src/app/services/marca.service';
 
 @Component({
   selector: 'app-menurepuesto',
   templateUrl: './menurepuesto.component.html',
   styleUrls: ['./menurepuesto.component.css']
 })
+
 export class MenurepuestoComponent implements OnInit {
 
   repuesto: Repuesto = {
@@ -27,12 +31,15 @@ export class MenurepuestoComponent implements OnInit {
     Observacion: "",
     NroSerie: 0,
     FkTipoRepuesto: 0,
+    FkMarca: 0,
     Activo:null   
-  };
+  };       
 
   listRepuesto: Repuesto[] = [];
   listTipoRep: TipoRepuesto[] = [];
-  idTipoRepuesto: 0
+  listMarca: Marca[] = [];
+  idTipoRepuesto: 0;
+  idMarca: 0;
   pageActual: number = 1;
 
   //Valor que toma el input de buscar
@@ -42,6 +49,7 @@ export class MenurepuestoComponent implements OnInit {
     private modalService: ModalService,
     private repuestoService: RepuestoService,
     private tipoRepuestoService: TipoRepuestoService,
+    private marcaService: MarcaService,
     private router: Router
   ) { }
 
@@ -51,6 +59,7 @@ export class MenurepuestoComponent implements OnInit {
     if (valido != "true") {
       this.router.navigate(['/login'])
     }
+    this.ObtenerMarca();
     this.ObtenerTipoRepuesto();
     this.ObtenerRepuestos();
   }
@@ -124,6 +133,16 @@ export class MenurepuestoComponent implements OnInit {
     );
   }
 
+  ObtenerMarca() {
+    this.listMarca = [];
+    this.marcaService.ObtenerMarcas().subscribe(
+      (res: any) => {
+        this.listMarca = res;
+        this.idMarca = 0;
+      },
+      err => console.error(err)
+    );
+  }
   GuardarRepuesto() {
     if (this.repuesto.Nombre == "" || this.repuesto.Nombre == null) {
       Swal.fire({ title: "El nombre del repuesto no puede estar vacio.", icon: "warning" });
@@ -147,8 +166,18 @@ export class MenurepuestoComponent implements OnInit {
 
   //Obtiene el repuesto de la fila y la asigna al objeto que despues actualiza
   SetValores(repuesto: Repuesto) {
-    this.repuesto = repuesto;
-    this.repuesto.FkTipoRepuesto = repuesto.FkTipoRepuesto;
+    this.repuesto = {
+      PkRepuesto: repuesto.PkRepuesto,
+      Nombre: repuesto.Nombre,
+      PrecioCosto: repuesto.PrecioCosto,
+      PrecioVenta: repuesto.PrecioVenta,      
+      CantidadStock: repuesto.CantidadStock,
+      Observacion: repuesto.Observacion,
+      NroSerie: repuesto.NroSerie,
+      FkTipoRepuesto: repuesto.FkTipoRepuesto,
+      FkMarca: repuesto.FkMarca,
+      Activo: repuesto.Activo,
+    };  
   }
 
   ModificarRepuesto() {
@@ -173,14 +202,15 @@ export class MenurepuestoComponent implements OnInit {
 
   SetNull() {
     this.repuesto.PkRepuesto= 0,
-    this.repuesto.Nombre = null,
-    this.repuesto.PrecioCosto = null,
+    this.repuesto.Nombre = "",
+    this.repuesto.PrecioCosto = 0,
     this.repuesto.PrecioVenta= 0,
     this.repuesto.CantidadStock= 0,
     this.repuesto.Observacion= "",
     this.repuesto.NroSerie= 0,
     this.repuesto.FkTipoRepuesto= 0,
-    this.repuesto.Activo=null   
+    this.repuesto.FkMarca= 0,
+    this.repuesto.Activo=true   
   }
 
   openModal(id: string) {

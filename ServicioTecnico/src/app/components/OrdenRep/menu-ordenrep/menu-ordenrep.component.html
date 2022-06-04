@@ -58,8 +58,8 @@
             <th width="29%">Cliente</th>
             <th width="9%">Fecha retiro est.</th>
             <th width="3%"> Tarea</th>
-            <th width="5%"> Repuesto</th>
-            <th width="12%">Estado</th>
+            <!-- <th width="5%"> Repuesto</th>
+            <th width="12%">Estado</th> -->
             <th width="6%">Acción</th>
         </tr>
     </thead>
@@ -69,9 +69,9 @@
             <td>{{orden.Pkordenreparacion}} </td>
             <td>{{orden.Cliente}}</td>
             <td>{{orden.FecRetiroEstimado | date:'dd/MM/yyyy'}}</td>
-            <td><a aria-controls="example23" class="btn btn-block btn-outline-info" (click)="TareasSinAsignar(orden.Pkordenreparacion)" data-toggle="modal" data-target="#ModalTarea"><span>Agregar</span></a></td>
-            <!-- <td><a aria-controls="example23" class="btn btn-block btn-outline-info" (click)="RepuestoSinAsignar(orden.Pkordenreparacion)" data-toggle="modal" data-target="#ModalRepuesto"><span>Agregar</span></a></td> -->
-            <td><a aria-controls="example23" class="btn btn-block btn-outline-info" data-toggle="modal" data-target="#ModalRepuesto"><span>Agregar</span></a></td>
+            <!--<td><a aria-controls="example23" class="btn btn-block btn-outline-info" (click)="TareasSinAsignar(orden.Pkordenreparacion)" data-toggle="modal" data-target="#ModalTarea"><span>Agregar</span></a></td>
+             <td><a aria-controls="example23" class="btn btn-block btn-outline-info" (click)="RepuestoSinAsignar(orden.Pkordenreparacion)" data-toggle="modal" data-target="#ModalRepuesto"><span>Agregar</span></a></td> 
+            <td><a aria-controls="example23" class="btn btn-block btn-outline-info" data-toggle="modal" data-target="#ModalRepuesto"><span>Agregar</span></a></td>-->
             <!-- <td>
                 <select required class="form-control custom-select" data-placeholder="Estado" (change)="NotificarCliente(orden.Pkordenreparacion)" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
                     <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       

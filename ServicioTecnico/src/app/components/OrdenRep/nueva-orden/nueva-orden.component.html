@@ -65,7 +65,7 @@
     <!--/row-->
     <div class="row ">
 
-        <div class="col-md-4 ">
+        <!-- <div class="col-md-4 ">
             <div class="form-group ">
                 <label class="control-label ">Producto:</label>
                 <select class="form-control " (change)="onSelectProducto($event.target.value); ">  
@@ -73,9 +73,9 @@
                     <option *ngFor="let producto of listProducto " value={{producto.PkProducto}}>{{producto.Nombre}}</option>                            
                 </select>
             </div>
-        </div>
+        </div> -->
 
-        <div class="col-md-4 ">
+        <div class="col-md-6">
             <div class="form-group ">
                 <label class="control-label ">Marca:</label>
                 <select class="form-control " (change)="onSelectMarca($event.target.value); ">  
@@ -86,7 +86,7 @@
         </div>
 
 
-        <div class="col-md-4 ">
+        <div class="col-md-6 ">
             <div class="form-group ">
                 <label class="control-label ">Modelo:</label>
                 <!-- <select class="form-control custom-select " data-placeholder="Modelo "> -->
@@ -108,11 +108,14 @@
         </div>
     </div>
 
-    <div class="row ">
+    <div class="row justify-content-around ">
+        <button type="button" id="btnGuardar" class="btn-ordenrep btn-success" (click)="GuardarNuevaOrden($event.target.value);">Guardar</button>
+    </div>
+
+    <!-- <div class="row ">
         <div class="col-md-6 ">
 
-            <button type="button" class="btn waves-effect waves-light btn-info" data-toggle="modal" data-target="#ModalTarea" mdbWavesEffect>Gestionar tareas</button>
-            <button type="button" class="btn waves-effect waves-light btn-info float-right" data-toggle="modal" data-target="#ModalNuevaTarea" mdbWavesEffect>Nueva tarea</button>
+             <button type="button" class="btn waves-effect waves-light btn-info float-right" data-toggle="modal" data-target="#ModalNuevaTarea" mdbWavesEffect>Nueva tarea</button>
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
@@ -128,11 +131,8 @@
                 </tbody>
             </table>
         </div>
-
         <div class="col-md-6 ">
-            <button type="button" class="btn waves-effect waves-light btn-info" data-toggle="modal" data-target="#ModalRepuesto" mdbWavesEffect>Gestionar repuestos</button>
-
-            <button type="button" class="btn waves-effect waves-light btn-info float-right" data-toggle="modal" data-target="#ModalNuevoRepuesto" mdbWavesEffect>Nuevo repuesto</button>
+             <button type="button" class="btn waves-effect waves-light btn-info float-right" data-toggle="modal" data-target="#ModalNuevoRepuesto" mdbWavesEffect>Nuevo repuesto</button>
 
             <table class="table table-bordered table-striped " id="myTable ">
                 <thead>
@@ -144,7 +144,6 @@
                 </thead>
                 <tbody *ngIf="listRepuestoTemp.length">
                     <tr *ngFor="let repuestoTemp of listRepuestoTemp">
-                        <!-- <td><input type="checkbox "></td> -->
                         <td>{{repuestoTemp.Nombre}} </td>
                         <td>{{repuestoTemp.PrecioVenta}}</td>
                         <td>{{repuestoTemp.CantidadActual}}</td>
@@ -152,216 +151,374 @@
                 </tbody>
             </table>
         </div>
+    </div> -->
+
+    <div class="row ">
+        <div class="col-md-12 ">
+            <button type="button" class="btn waves-effect waves-light btn-info float-right" (click)="SetNull();openModal('ModalNuevoMov');">Nuevo movimiento</button>
+            <table class="table table-bordered table-striped" id="idTableDetalle">
+                <thead>
+                    <tr>
+                        <th width="20">Repuesto</th>
+                        <th width="20%">Precio</th>
+                        <th width="20%">Cantidad</th>
+                        <th width="20%">Tarea</th>
+                        <th width="20%">Total</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="listDetalleOrden.length">
+                    <tr *ngFor="let listdetalleorden of listDetalleOrden | paginate: {itemsPerPage: 5, currentPage: pageActualDetalle}; let i = index">
+                        <td>{{listdetalleorden.NombreRep}} </td>
+                        <td>{{listdetalleorden.Precio}}</td>
+                        <td>{{listdetalleorden.Cantidad}}</td>
+                        <td>{{listdetalleorden.NombreTarea}}</td>
+                        <td>{{listdetalleorden.Total}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dataTables_paginate paging_simple_numbers">
+                <span>
+                        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualRep = $event"></pagination-controls>
+                    </span>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-around">
+        <button routerLink="/menuordenrep" type="button" class="btn-ordenrep btn-danger">Cancelar</button>
     </div>
 
-    <div class="row justify-content-around ">
-        <!-- <button type="button" class="col-4 btn-lg btn-success" (click)="GuardarNuevaOrden($event.target.value);" data-toggle="modal" data-target="#NotiGuardado">Guardar</button> -->
-        <button type="button" class="col-2 btn-ordenrep btn-success" (click)="GuardarNuevaOrden($event.target.value);">Guardar</button>
-        <button routerLink="/menuordenrep" type="button" class="col-2 btn-ordenrep btn-danger">Cancelar</button>
+    <!-----------------/MODAL------------------->
+    <jw-modal id="ModalNuevoMov">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content" style="width: 700px">
+                <div class="modal-header">
+                    <h4 class="modal-title">Nuevo movimiento</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Repuesto:</label>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control col-md-2" required [(ngModel)]="detalleOrden.FkRepuesto">
+                                    <button (click)="obtenerRepuestos();openModal('ModalSelectRepuesto');" type="button" class="btn btn-info">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    <label id="lblNombreRepuesto" class="control-label text-danger"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-----------------/MODAL------------------->
-        <div id="ModalTarea" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content" style="width: 550px;">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Tareas</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label class="control-label ">Precio:</label>
+                                <input type="text" class="form-control" [(ngModel)]="detalleOrden.Precio">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad:</label>
+                                <input type="text" class="form-control" required [(ngModel)]="detalleOrden.Cantidad">
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered table-striped" id="myTable">
-                            <thead>
-                                <tr>
-                                    <th width="1%"></th>
-                                    <th width="70%">Tarea</th>
-                                    <th width="20%">Costo $</th>
-                                </tr>
-                            </thead>
-
-                            <tbody *ngIf="listTarea.length">
-                                <tr *ngFor="let tarea of listTarea">
-                                    <td scope="row">
-                                        <input class="form-check-input" type="checkbox" id="tarea-{{tarea.PkTarea}}" name="listTarea[]" [(ngModel)]="tarea.checked">
-                                        <label for="tarea-{{tarea.PkTarea}}" class="label-table form-check-label"></label>
-                                    </td>
-                                    <td>{{tarea.Nombre}} </td>
-                                    <td>{{tarea.Costo}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Tarea:</label>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control col-md-2" required [(ngModel)]="detalleOrden.FkTarea">
+                                    <button (click)="obtenerTareas();openModal('ModalSelectTarea');" type="button" class="btn btn-info">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                    <label id="lblNombreTarea" class="control-label text-danger"></label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn waves-effect waves-light btn-success" (click)="getTareas(listTarea);" data-dismiss="modal">Aceptar</button>
-                        <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Observacion:</label>
+                                <input type="text" class="form-control" required [(ngModel)]="detalleOrden.Observacion">
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarDetalleOrden($event.target.value);" data-dismiss="modal">Guardar</button>
+                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
-        <!----------------------- FIN MODAL -------------------------------------->
+    </jw-modal>
+    <!----------------------- FIN MODAL -------------------------------------->
 
 
-        <!-----------------/MODAL------------------->
-        <div id="ModalNuevaTarea" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Nueva tarea:</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <!-----------------/MODAL------------------->
+    <jw-modal id="ModalSelectRepuesto">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 750px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar repuesto</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped" id="tableRepuestos">
+                        <thead>
+                            <tr>
+                                <th width="70%">Nombre</th>
+                                <th width="14%">Precio $</th>
+                                <th width="10%">Cant.disp.</th>
+                                <th width="10%">Marca</th>
+                                <th width="1%">*</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listRepuesto.length">
+                            <tr *ngFor="let repuesto of listRepuesto | paginate: {itemsPerPage: 5, currentPage: pageActualRep}; let i = index">
+                                <td>{{repuesto.Nombre}} </td>
+                                <td>{{repuesto.PrecioVenta}}</td>
+                                <td>{{repuesto.CantidadStock}}</td>
+                                <td>{{repuesto.Marca}}</td>
+                                <i (click)="repuestoSeleccionado(repuesto)" class="fa fa-check"></i>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <span>
+                            <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualRep = $event"></pagination-controls>
+                        </span>
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre:</label>
-                                    <input type="text" class="form-control" required [(ngModel)]="tarea.Nombre">
-                                </div>
-                            </div>
-                            <div class="col-md-4 ">
-                                <div class="form-group ">
-                                    <label class="control-label ">Costo:</label>
-                                    <input type="number" class="form-control" [(ngModel)]="tarea.Costo">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Observación:</label>
-                                    <input type="text" class="form-control" required [(ngModel)]="tarea.Observacion">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarTarea($event.target.value);" data-dismiss="modal">Guardar</button>
-                        <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" (click)="closeModal('ModalSelectRepuesto');" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
-        <!----------------------- FIN MODAL -------------------------------------->
+    </jw-modal>
+    <!----------------------- FIN MODAL -------------------------------------->
 
-        <!-----------------/MODAL------------------->
-        <div id="ModalRepuesto" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content" style="width: 700px">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Repuestos</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <!-----------------/MODAL------------------->
+    <jw-modal id="ModalSelectTarea">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 750px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar tarea</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th width="80%">Nombre</th>
+                                <th width="20%">Precio $</th>
+                                <th width="1%">*</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listTarea.length">
+                            <tr *ngFor="let tarea of listTarea | paginate: {itemsPerPage: 5, currentPage: pageActualTarea}; let i = index">
+                                <td>{{tarea.Nombre}} </td>
+                                <td>{{tarea.Costo}}</td>
+                                <i (click)="tareaSeleccionada(tarea)" class="fa fa-check"></i>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <span>
+                                <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualTarea = $event"></pagination-controls>
+                            </span>
                     </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered table-striped" id="myTable">
-                            <thead>
-                                <tr>
-                                    <th width="1%"></th>
-                                    <th width="70%">Repuesto</th>
-                                    <th width="18%">Precio unitario</th>
-                                    <th width="1%">Stock</th>
-                                    <th width="1%">Cantidad</th>
-                                </tr>
-                            </thead>
-
-                            <tbody *ngIf="listRepuesto.length">
-                                <tr *ngFor="let repuesto of listRepuesto">
-                                    <td scope="row">
-                                        <input class="form-check-input" type="checkbox" id="repuesto-{{repuesto.PkRepuesto}}" name="listRepuesto[]" [(ngModel)]="repuesto.checked">
-                                        <label for="repuesto-{{repuesto.PkRepuesto}}" class="label-table form-check-label"></label>
-                                    </td>
-                                    <td>{{repuesto.Nombre}} </td>
-                                    <td>{{repuesto.PrecioVenta}}</td>
-                                    <td>{{repuesto.CantidadStock}}</td>
-                                    <td contenteditable> <input type="number" name="Cantidad" value="1" min="1" max={{repuesto.CantidadStock}}></td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-
-                    <div class="modal-footer justify-content-between">
-                        <!-- <button type="button" class="btn waves-effect waves-light btn-success" (click)="getRepuestos(listRepuesto);" data-dismiss="modal">Aceptar</button> -->
-                        <button type="button" class="btn waves-effect waves-light btn-success" (click)="getRepuestosChecked(listRepuesto);" data-dismiss="modal">Aceptar</button>
-                        <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" (click)="closeModal('ModalSelectTarea');" class="btn waves-effect waves-light btn-danger">Cancelar</button>
                 </div>
             </div>
         </div>
-        <!----------------------- FIN MODAL -------------------------------------->
+    </jw-modal>
+    <!----------------------- FIN MODAL -------------------------------------->
 
-        <!-----------------/MODAL------------------->
-        <div id="ModalNuevoRepuesto" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Nuevo repuesto:</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-----------------/MODAL------------------->
+    <!-- <div id="ModalTarea" class="modal fade" role="dialog">
+        <div class="modal-dialog">           
+            <div class="modal-content" style="width: 550px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Tareas</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped" id="myTable">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th width="70%">Tarea</th>
+                                <th width="20%">Costo $</th>
+                            </tr>
+                        </thead>
+
+                        <tbody *ngIf="listTarea.length">
+                            <tr *ngFor="let tarea of listTarea">
+                                <td scope="row">
+                                    <input class="form-check-input" type="checkbox" id="tarea-{{tarea.PkTarea}}" name="listTarea[]" [(ngModel)]="tarea.checked">
+                                    <label for="tarea-{{tarea.PkTarea}}" class="label-table form-check-label"></label>
+                                </td>
+                                <td>{{tarea.Nombre}} </td>
+                                <td>{{tarea.Costo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn waves-effect waves-light btn-success" (click)="getTareas(listTarea);" data-dismiss="modal">Aceptar</button>
+                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!----------------------- FIN MODAL -------------------------------------->
+
+
+    <!-----------------/MODAL------------------->
+    <!-- <div id="ModalNuevaTarea" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+                     <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Nueva tarea:</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Nombre:</label>
+                                <input type="text" class="form-control" required [(ngModel)]="tarea.Nombre">
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="form-group ">
+                                <label class="control-label ">Costo:</label>
+                                <input type="number" class="form-control" [(ngModel)]="tarea.Costo">
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre:</label>
-                                    <input type="text" class="form-control" required [(ngModel)]="repuesto.Nombre">
-                                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Observación:</label>
+                                <input type="text" class="form-control" required [(ngModel)]="tarea.Observacion">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarTarea($event.target.value);" data-dismiss="modal">Guardar</button>
+                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!----------------------- FIN MODAL -------------------------------------->
+
+
+
+    <!-----------------/MODAL------------------->
+    <!-- <div id="ModalNuevoRepuesto" class="modal fade" role="dialog">
+        <div class="modal-dialog">          
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Nuevo repuesto:</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nombre:</label>
+                                <input type="text" class="form-control" required [(ngModel)]="repuesto.Nombre">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="form-group ">
+                                <label class="control-label ">Precio costo:</label>
+                                <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioCosto">
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 ">
-                                <div class="form-group ">
-                                    <label class="control-label ">Precio costo:</label>
-                                    <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioCosto">
-                                </div>
+                        <div class="col-md-6 ">
+                            <div class="form-group ">
+                                <label class="control-label">Precio venta:</label>
+                                <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioVenta">
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="col-md-6 ">
-                                <div class="form-group ">
-                                    <label class="control-label">Precio venta:</label>
-                                    <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioVenta">
-                                </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="form-group ">
+                                <label class="control-label">Cantidad stock:</label>
+                                <input type="number" class="form-control" [(ngModel)]="repuesto.CantidadStock">
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 ">
-                                <div class="form-group ">
-                                    <label class="control-label">Cantidad stock:</label>
-                                    <input type="number" class="form-control" [(ngModel)]="repuesto.CantidadStock">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 ">
-                                <div class="form-group ">
-                                    <label class="control-label">Nro. serie:</label>
-                                    <input type="number" class="form-control" [(ngModel)]="repuesto.NroSerie">
-                                </div>
+                        <div class="col-md-6 ">
+                            <div class="form-group ">
+                                <label class="control-label">Nro. serie:</label>
+                                <input type="number" class="form-control" [(ngModel)]="repuesto.NroSerie">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 ">
-                                <label class="control-label">Observacion</label>
-                                <input type="text" class="form-control" [(ngModel)]="repuesto.Observacion">
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label class="control-label">Observacion</label>
+                            <input type="text" class="form-control" [(ngModel)]="repuesto.Observacion">
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 ">
-                                <label class="control-label">Tipo repuesto:</label>
-                                <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <label class="control-label">Tipo repuesto:</label>
+                            <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
                                         <option ngValue="null "></option>   
                                         <option *ngFor="let tiporepuesto of listTipoRep" [value]="tiporepuesto.PkTipoRepuesto">{{tiporepuesto.Nombre}}</option>       
                                     </select>
-                            </div>
                         </div>
+                    </div>
 
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarRepuesto($event.target.value);" data-dismiss="modal">Guardar</button>
-                        <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarRepuesto($event.target.value);" data-dismiss="modal">Guardar</button>
+                    <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
-        <!----------------------- FIN MODAL -------------------------------------->
+    </div> -->
+    <!----------------------- FIN MODAL -------------------------------------->

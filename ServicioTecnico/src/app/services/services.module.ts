@@ -4,7 +4,6 @@ import {CommonModule} from '@angular/common';
 import { ClienteService } from './cliente.service';
 import { OrdenesReparacionService } from './ordenesreparacion.service';
 import { MarcaService } from './marca.service';
-import { ProductoService } from './producto.service';
 import { ModeloService } from './modelo.service';
 import { LoginService } from './login.service';
 import { CiudadService } from './ciudad.service';
@@ -18,8 +17,7 @@ import { CiudadService } from './ciudad.service';
   providers: [
         ClienteService,
         OrdenesReparacionService,
-        MarcaService,
-        ProductoService,
+        MarcaService,        
         ModeloService,
         LoginService,
         CiudadService

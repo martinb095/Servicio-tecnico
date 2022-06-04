@@ -12,9 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database"));
-const detalleRepuestosControllers_1 = __importDefault(require("../controllers/detalleRepuestosControllers"));
-//tareas
-const detalleTareasControllers_1 = __importDefault(require("../controllers/detalleTareasControllers"));
 class OrdenesRepController {
     //listado de ordenes para mostrar en el menu ordenes
     getOrdenes(req, res) {
@@ -181,30 +178,12 @@ class OrdenesRepController {
                 'FkEstado': req.body.FkEstado,
                 'FkUsuario': req.body.FkUsuario,
             };
-            let tareas = req.body.detalleTareas;
-            let repuestos = req.body.detalleRepuestos;
-            //Registro la orden    
-            //    await pool.query('INSERT INTO ordenreparacion set ?', [ordenRep] );
+            //Registro la orden          
             yield database_1.default.query('INSERT INTO ordenreparacion SET ?', [ordenRep], function (err, resultInserOrd) {
                 if (err)
                     throw err;
                 const ultimaOrden = resultInserOrd.insertId;
-                res.json({ message: 'OR guardado' });
-                //recorre repuesto y guarda
-                repuestos.forEach(function (item) {
-                    //Asignar valores a detalle para guardar          
-                    item.FkOrdenrep = ultimaOrden;
-                    //Guarda detalle
-                    detalleRepuestosControllers_1.default.createServ(item);
-                });
-                //recorre tarea y guarda
-                tareas.forEach(function (item) {
-                    //Asignar valores a detalle para guardar 
-                    item.FkOrdenRep = ultimaOrden;
-                    console.log(item, "item");
-                    //Guarda detalle
-                    detalleTareasControllers_1.default.createServ(item);
-                });
+                res.json({ message: ultimaOrden });
             });
         });
     }
@@ -229,17 +208,6 @@ class OrdenesRepController {
             yield database_1.default.query('update ordenreparacion set ? Where PkOrdenreparacion = ?', [ordenRep, req.params.PkOrdenRep], function (err, res) {
                 if (err)
                     throw err;
-            });
-            //elimina los detalles
-            detalleTareasControllers_1.default.delete(req.params.PkOrdenRep);
-            detalleRepuestosControllers_1.default.delete(req.params.PkOrdenRep);
-            //insertar los detalles
-            let tareas = req.body.detalleTareas;
-            console.log(tareas, "tareas");
-            //recorre tarea y guarda
-            tareas.forEach(function (item) {
-                //Guarda detalle
-                detalleTareasControllers_1.default.createServ(item);
             });
             res.json({ text: 'OK' });
         });
