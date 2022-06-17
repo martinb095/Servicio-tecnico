@@ -28,7 +28,7 @@ export class ConsultaestadoComponent implements OnInit {
 
   ValidarExistenciaOrden() {
     if (this.datosOrden.PkOrdenRep == "" || this.datosOrden.PkOrdenRep == null) {
-      Swal.fire({ title: "El nro- de orden no puede estar vacio.", icon: "warning" });
+      Swal.fire({ title: "El nro. de orden no puede estar vacio.", icon: "warning" });
       return;
     }
     if (this.datosOrden.Mail == "" || this.datosOrden.Mail == null) {

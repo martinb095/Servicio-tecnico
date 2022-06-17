@@ -22,8 +22,8 @@ export class DetalleOrdenService {
   }
 
   //Para mostrar en la consulta del cliente
-  ObtenerDetalleMostrar(idOrden: number) {
-    return this.http.get(this.API_URI + "/detalleorden/detalle/" + idOrden);
+  ObtenerDetalleMostrar(FkOrdenrep: number) {
+    return this.http.get(this.API_URI + "/detalleorden/detalle/" + FkOrdenrep);
   }
 
   SelectDetalleOrden(id: number) {
@@ -35,11 +35,12 @@ export class DetalleOrdenService {
   }
 
   GuardarDetalleOrden(detalleOrden: DetalleOrden) {
+    console.log(detalleOrden);
     return this.http.post(this.API_URI + "/detalleorden", detalleOrden);
   }
 
   ActualizarDetalleOrden(id: string, updateDetalleOrden: DetalleOrden) {
-    return this.http.put(this.API_URI + "detalleorden/" + { id }, updateDetalleOrden);
+    return this.http.put(this.API_URI + "/detalleorden/" + { id }, updateDetalleOrden);
   }
 
 }

@@ -25,10 +25,12 @@ const proveedorRoutes_1 = __importDefault(require("./routes/proveedorRoutes"));
 class Server {
     constructor() {
         this.app = express_1.default();
+        this.app.disable('etag');
         this.config();
         this.routes();
     }
     config() {
+        this.app.disable('etag');
         this.app.set('port', process.env.PORT || 3000);
         this.app.use(morgan_1.default('dev'));
         this.app.use(cors_1.default());
@@ -36,6 +38,7 @@ class Server {
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }
     routes() {
+        this.app.disable('etag');
         this.app.use(indexRoutes_1.default);
         this.app.use('/clientes/', clientesRoutes_1.default);
         this.app.use('/ordenesreparacion/', ordenesReparacionRoutes_1.default);
@@ -54,6 +57,7 @@ class Server {
         this.app.use('/proveedores/', proveedorRoutes_1.default);
     }
     start() {
+        this.app.disable('etag');
         this.app.listen(this.app.get('port'), () => {
             console.log('Server en puerto', this.app.get('port'));
         });

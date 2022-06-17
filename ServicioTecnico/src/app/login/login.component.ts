@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
+    
     //valido si existe la sesion
     let valido = localStorage.getItem('ingreso');
     if (valido != "true") {
@@ -44,7 +45,8 @@ export class LoginComponent implements OnInit {
       'Mail': null,
     };
     this.datosMail = {
-      'mail': null
+      'mail': "",
+      'contrasenia': ""
     };
 
     document.getElementById("tbUsuario").focus();
@@ -69,19 +71,36 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  enviarMail() {
+  obtenerContrasenia() {
+    this.mailRecuperar="martin_ballaman@hotmail.com";
     if (this.mailRecuperar == "") {
       Swal.fire({ title: "Debe ingresar un mail.", icon: "warning" });
       return;
-    }     
+    }
     if (this.mailService.validaMail(this.mailRecuperar) == false) {
       Swal.fire({ title: "Debe ingresar un mail valido.", icon: "warning" });
       return;
-    }   
-    this.datosMail.mail = this.mailRecuperar;
+    }
+    this.mailRecuperar="martin_ballaman@hotmail.com";   
+    this.loginService.getPass(this.mailRecuperar).subscribe(
+      res => {
+        if (res != null) {
+          var result = Object.values(res);          
+          this.enviarMail(result[0]);
+        }
+        else {
+          Swal.fire({ icon: 'warging', title: "El mail ingresado no existe." })
+        }
+      },
+      err => console.error(err)
+    )
+  }
 
+  enviarMail(contrasenia: string) {
+    this.datosMail.mail = this.mailRecuperar;
+    this.datosMail.contrasenia = contrasenia;    
     this.mailService.RecuperarPass(this.datosMail).subscribe(
-      res => {      
+      res => {
         var result = Object.values(res);
         if (result[0] == "OK") {
           Swal.fire({ title: "Mail enviado correctamente.", icon: "success" });
@@ -89,9 +108,8 @@ export class LoginComponent implements OnInit {
         }
       },
       err => console.error(err)
-    )    
+    )
   }
-
 
   openModal(id: string) {
     this.modalService.open(id);
@@ -100,7 +118,7 @@ export class LoginComponent implements OnInit {
   closeModal(id: string) {
     this.modalService.close(id);
   }
- 
+
 }
 
 

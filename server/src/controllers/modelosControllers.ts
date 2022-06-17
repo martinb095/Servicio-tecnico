@@ -60,21 +60,18 @@ class ModeloController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     public async create(req: Request, res: Response) {
         await pool.query('INSERT INTO modelo set ?', [req.body]);
-        //  res.json({ message: 'modelo guardada' });
+        res.json({ text: 'OK' });
     }
 
     //Para ver q nro esta eliminando
     public async delete(req: Request, res: Response) {
         await pool.query('UPDATE modelo set Activo = 0 WHERE PkModelo = ?', req.params.PkModelo);
         res.json({ text: 'OK' });
-        //  res.json({ text: 'eliminando modelo' + req.params.PkModelo });
     }
 
-    public async update(req: Request, res: Response) {
-        const { id } = req.params;
+    public async update(req: Request, res: Response) {   
         await pool.query('update modelo set ? Where PkModelo = ?', [req.body, req.params.PkModelo]);
         res.json({ text: 'OK' });
-        //     res.json({ text: 'actualizado modelo' + req.params.PkModelo });
     }
 }
 

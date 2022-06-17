@@ -13,16 +13,16 @@ export class EstadoService {
   constructor(private http: HttpClient) { }
 
   ObtenerEstado() {
-   // return this.http.get(this.API_URI + "/ordenrep");
-    return this.http.get(this.API_URI + "/estados");   
-      } 
+    // return this.http.get(this.API_URI + "/ordenrep");
+    return this.http.get(this.API_URI + "/estados");
+  }
 
   SelectEstado(id: string) {
-    return this.http.get(this.API_URI + "/estados/" +  id );
+    return this.http.get(this.API_URI + "/estados/" + id);
   }
 
   EliminarEstado(id: string) {
-    return this.http.delete(this.API_URI + "/estados/" +  id );
+    return this.http.delete(this.API_URI + "/estados/" + id);
   }
 
   GuardarEstado(estado: Estado) {
@@ -30,7 +30,7 @@ export class EstadoService {
   }
 
   ActualizarEstado(id: string, updateEstado: Estado) {
-    return this.http.put(this.API_URI + "/estados/actualizar/" +  id , updateEstado);
+    return this.http.put(this.API_URI + "/estados/actualizar/" + id, updateEstado);
   }
 
 

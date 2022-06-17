@@ -19,14 +19,13 @@ class DetalleOrdenController {
         });
     }
 
-    public async getFindByOrden(req: Request, res: Response) {
-        const fkOrden = [req.params.FkOrdenRep];
-        // pool.query('Select * from detalletarea where FkOrdenRep = ?', req.params.FkOrdenrep, (err: any, results: any) => {
+    public async getFindByOrden(req: Request, res: Response) {    
+        const fkOrden = [req.params.FkOrdenRep];     
         pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "NombreRep", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre "NombreTarea", (deo.Precio*deo.Cantidad) as "Total" from detalleorden  deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detalleorden no encontrado" });
             }
-            if (results) {                       
+            if (results) {                                                     
                 return res.json(results);
             } else {
                 return res.status(404).json({ text: "detalleorden no encontrado" });
@@ -51,6 +50,7 @@ class DetalleOrdenController {
 
     //funciona
     public async GetDetallesFindByOrden(req: Request, res: Response) {
+        
         pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detallerepuestos no encontrado" });
@@ -90,17 +90,17 @@ class DetalleOrdenController {
         }       
         await pool.query('INSERT INTO detalleorden set ?', [detalleOrden], function (err: any) {
             if (err) throw err;
-        });
+            res.json({ text: 'OK' });
+        });  
     }
 
-    public async delete(fkordenrep: number) {
-        console.log(fkordenrep, "fkordenrep")
-        await pool.query('DELETE FROM detalleorden WHERE FkOrden = ?', fkordenrep);       
+    public async delete(req: Request, res: Response) {               
+        await pool.query('DELETE FROM detalleorden WHERE PkDetalleOrden = ?',  [req.params.PkDetalle]);
+        res.json({ text: 'OK' });              
     }
-
-    public async update(req: Request, res: Response): Promise<void> {
-        const { id } = req.params;
-        await pool.query('update detalleorden set ? Where PkDetalleOrden = ?', [req.body, id]);
+    
+    public update(req: Request, res: Response) {               
+        pool.query('update detalleorden set ? Where PkDetalleOrden = ?', [req.body, req.body.PkDetalleOrden]);
         res.json({ text: 'OK' });
     }
 }

@@ -3,11 +3,10 @@ import { Repuesto } from './repuesto';
 export interface DetalleOrden {
     PkDetalleOrden: number;
     Cantidad: number;
-    FkRepuesto: number;
-    
+    FkRepuesto: number;    
     Precio: number;  
     Observacion:string;
     FkTarea: number;
-    FechaCreacion: Date;
+    FechaCreacion: string;
     FkOrden: number;
 }

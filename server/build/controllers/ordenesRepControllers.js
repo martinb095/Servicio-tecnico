@@ -49,7 +49,7 @@ class OrdenesRepController {
     //obtener detalle de una orden 
     getDetalleEstadoOrden(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT DescripProblema, FechaInicio, FecRetiroEstimado, Modelo.Nombre as "Modelo", Marca.Nombre as "Marca", Producto.Nombre as "Producto" ,Estado.Nombre as "Estado" FROM ordenreparacion  inner join Modelo on modelo.PkModelo=FkModelo inner join Marca on Marca.PkMarca=Modelo.FkMarca inner join Producto on Producto.PkProducto=Marca.FkProducto inner join Estado on estado.PkEstado=FkEstado where PkOrdenreparacion=?;', req.params.PkOrdenRep, (err, results) => {
+            database_1.default.query('SELECT ore.FecRetiroEstimado, ore.DescripProblema, ore.Observacion, ore.FkModelo, mo.Nombre as "Modelo", mo.FkMarca, ma.Nombre "Marca", ore.FkCliente, c.Nombre, c.Telefono, c.Mail, ore.FkEstado, est.Nombre as "Estado", FechaInicio FROM ordenreparacion ore left join Modelo mo on mo.PkModelo=ore.FkModelo left join Marca ma on ma.PkMarca=mo.FkMarca left join Estado est on est.PkEstado=ore.FkEstado left join Cliente c on c.PkCliente=FkCliente where PkOrdenreparacion=?;', req.params.PkOrdenRep, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -230,8 +230,7 @@ class OrdenesRepController {
             Mail: req.body.Mail,
             Contrasenia: req.body.Contrasenia,
         };
-        console.log(datosOrden);
-        database_1.default.query('Select oRe.PkOrdenreparacion from ordenreparacion oRe inner join cliente c on c.PkCliente=oRe.FkCliente where PkOrdenreparacion=? and c.Mail= ? and c.Contrasenia= ?;', [datosOrden.idOrden, datosOrden.Mail, datosOrden.Contrasenia], (err, ordenDb) => {
+        database_1.default.query('Select oRe.PkOrdenreparacion from ordenreparacion oRe left join cliente c on c.PkCliente=oRe.FkCliente where PkOrdenreparacion=? and c.Mail= ? and c.Contrasenia= ?;', [datosOrden.idOrden, datosOrden.Mail, datosOrden.Contrasenia], (err, ordenDb) => {
             if (err) {
                 res.status(404).json({ text: "Error" });
             }

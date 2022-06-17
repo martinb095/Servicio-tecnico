@@ -23,7 +23,11 @@ class UsuarioController {
             from: 'softwaremarbal_soporte@outlook.com',
             to: req.body.mail,
             subject: 'Recuperar contraseña',              
-            html: 'Su contraseña es .',
+            html: "<html>"+
+            "<h2>Recuperar contraseña</h2>"+
+            "<h3>Su contraseña es:</h3>"+
+            "<h3>" + req.body.contrasenia + "</h3>"+
+            "</html>",
         };
         //Envía el correo con el objeto de transporte definido anteriormente
         transporter.sendMail(mailOptions, function (error: any, info: any) {

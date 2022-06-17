@@ -25,6 +25,19 @@ class LoginController {
             }
         });
     }
+    GetPass(req, res) {
+        database_1.default.query('SELECT Contrasenia FROM usuario WHERE Mail = ? limit 1', [req.params.mail], (err, results) => {
+            if (err) {
+                res.status(404).json({ text: "usuario no encontrada." });
+            }
+            if (results) {
+                return res.json(results[0]);
+            }
+            else {
+                return res.status(404).json({ text: "usuario no encontrada." });
+            }
+        });
+    }
 }
 const loginController = new LoginController();
 exports.default = loginController;

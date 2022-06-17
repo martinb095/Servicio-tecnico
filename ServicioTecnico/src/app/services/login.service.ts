@@ -16,6 +16,8 @@ export class LoginService {
     return this.http.post(this.API_URI + "/login", usuario);
   }
 
-
-
+  getPass(mail: string) {       
+    return this.http.get(this.API_URI + "/login/mail/" + mail);    
+  } 
+ 
 }

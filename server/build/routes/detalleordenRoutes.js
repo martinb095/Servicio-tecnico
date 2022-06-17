@@ -24,7 +24,7 @@ class DetalleordenRoutes {
         //Lista detalles por orden
         this.router.get('/ordenrep/:FkOrdenRep', detalleOrdenControllers_1.default.getFindByOrden);
         //Lista detallerepuestos para mostrar
-        this.router.get('/detalle/:FkOrdenrep', detalleOrdenControllers_1.default.getFindByOrden);
+        //this.router.get('/detalle/:FkOrdenrep', detalleordenControllers.getFindByOrden);
     }
 }
 const detalleordenRoutes = new DetalleordenRoutes();

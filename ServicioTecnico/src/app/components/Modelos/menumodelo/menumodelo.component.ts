@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/_modal';
+import Swal from 'sweetalert2';
 
 import { Modelo } from 'src/app/models/modelo';
 import { ModeloService } from 'src/app/services/modelo.service';
@@ -8,8 +9,6 @@ import { ModeloService } from 'src/app/services/modelo.service';
 //Marca
 import { Marca } from 'src/app/models/marca';
 import { MarcaService } from 'src/app/services/marca.service';
-
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-menumodelo',
@@ -22,6 +21,7 @@ export class MenumodeloComponent implements OnInit {
 
   //-----Modelo----------
   listModelo: Modelo[] = [];
+  
   modelo: Modelo = {
     PkModelo: 0,
     Nombre: "",
@@ -96,10 +96,20 @@ export class MenumodeloComponent implements OnInit {
     })
   }
   GuardarModelo() {
-    //Almacena tarea   
+    if (this.modelo.Nombre == "" || this.modelo.Nombre == null) {
+      Swal.fire({ title: "El nombre del modelo no puede estar vacio.", icon: "warning" });
+      return;
+    }   
+    //Almacena modelo   
     this.modeloService.GuardarModelo(this.modelo).subscribe(
       res => {
-        this.ObtenerModelo();
+        var result = Object.values(res);
+        if (result[0] == "OK") {
+          //Mensaje informando el almacenado
+          this.closeModal('ModalNuevoModelo');
+          Swal.fire({ title: "Modelo guardado correctamente.", icon: "success" });
+          this.ObtenerModelo();
+        }       
       },
       err => console.error(err)
     )
@@ -108,11 +118,16 @@ export class MenumodeloComponent implements OnInit {
   }
 
   ModificarModelo() {
-    //Almacena tarea   
+    if (this.modelo.Nombre == "" || this.modelo.Nombre == null) {
+      Swal.fire({ title: "El nombre del modelo no puede estar vacio.", icon: "warning" });
+      return;
+    }   
+    //Almacena modelo   
     this.modeloService.ActualizarModelo(this.modelo.PkModelo, this.modelo).subscribe(
       res => {               
         var result = Object.values(res);
         if (result[0] == "OK") {
+          this.closeModal('ModalEditarModelo');
           //Mensaje informando el almacenado
           Swal.fire({ title: "Modelo modificado correctamente.", icon: "success" });
           this.ObtenerModelo();

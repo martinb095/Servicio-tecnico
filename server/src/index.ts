@@ -24,13 +24,15 @@ class Server {
 
     public app: Application
    
-    constructor() {
+    constructor() {      
         this.app = express();
+        this.app.disable('etag'); 
         this.config();
         this.routes();
     }
 
     config(): void {
+        this.app.disable('etag');        
         this.app.set('port', process.env.PORT || 3000);
         this.app.use(morgan('dev'));
         this.app.use(cors());
@@ -38,7 +40,8 @@ class Server {
         this.app.use(express.urlencoded({ extended: false }));      
     }
 
-    routes(): void {
+    routes(): void {      
+        this.app.disable('etag'); 
         this.app.use(indexRoutes);
         this.app.use('/clientes/', clientesRoutes);
         this.app.use('/ordenesreparacion/', ordenesreparacionRoutes);
@@ -57,7 +60,8 @@ class Server {
         this.app.use('/proveedores/', proveedoresRoutes);
     }
 
-    start(): void {
+    start(): void {    
+        this.app.disable('etag');    
         this.app.listen(this.app.get('port'), () => {
             console.log('Server en puerto', this.app.get('port'))
         });

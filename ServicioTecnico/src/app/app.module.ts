@@ -44,6 +44,8 @@ import { MenumarcaComponent } from './components/Marcas/menumarca/menumarca.comp
 import { MenutiporepuestoComponent } from './components/TipoRepuestos/menutiporepuesto/menutiporepuesto.component';
 //proveedores
 import { MenuproveedorComponent } from './components/Proveedores/menuproveedor/menuproveedor.component';
+//pedidos
+import { MenupedidoComponent } from './components/Pedidos/menupedido/menupedido.component';
 
 
 @NgModule({
@@ -67,7 +69,8 @@ import { MenuproveedorComponent } from './components/Proveedores/menuproveedor/m
     MenutiporepuestoComponent,
     MenutiporepuestoComponent,
     MenuusuarioComponent,
-    MenuproveedorComponent  
+    MenuproveedorComponent,
+    MenupedidoComponent  
   ],
   imports: [
     BrowserModule,

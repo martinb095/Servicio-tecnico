@@ -23,11 +23,12 @@ import { MenutareasComponent } from './components/Tareas/menutareas/menutareas.c
 import { MenumodeloComponent } from './components/Modelos/menumodelo/menumodelo.component';
 //marca
 import { MenumarcaComponent } from './components/Marcas/menumarca/menumarca.component';
-
 //tipo productos
 import { MenutiporepuestoComponent } from './components/TipoRepuestos/menutiporepuesto/menutiporepuesto.component';
 //proveedores
 import { MenuproveedorComponent } from './components/Proveedores/menuproveedor/menuproveedor.component';
+//proveedores
+import { MenupedidoComponent } from './components/Pedidos/menupedido/menupedido.component';
 
 export const appRoutes: Routes = [
 
@@ -66,6 +67,8 @@ export const appRoutes: Routes = [
       { path: 'menuusuario', component: MenuusuarioComponent },
       //Proveedores
       { path: 'menuproveedor', component: MenuproveedorComponent },
+      //Pedido
+      { path: 'menupedido', component: MenupedidoComponent },
 
       { path: '**', redirectTo: '/login' },
     ]

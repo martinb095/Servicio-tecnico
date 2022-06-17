@@ -12,6 +12,7 @@ class LoginRoutes {
     }
     config() {
         this.router.post('/', loginControllers_1.default.GetOne);
+        this.router.get('/mail/:mail', loginControllers_1.default.GetPass);
     }
 }
 const loginRoutes = new LoginRoutes();

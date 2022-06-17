@@ -12,12 +12,11 @@ import { DetalleOrdenService } from '../../services/detalleorden.service'
   styleUrls: ['./detalleestadoorden.component.css']
 })
 export class DetalleestadoordenComponent implements OnInit {
+  pageActualDetalle = 0;
+  total = 0;
 
-  totalRepuestos = 0;
-  totalTareas = 0;
   idOrden = 0;
-  listDetalleTareas: any[] = [];
-  listDetalleRepuestos: any[] = [];
+  listDetalleOrden: any[] = [];
   ordenreparacion: any;
 
   progress = 0;
@@ -28,23 +27,21 @@ export class DetalleestadoordenComponent implements OnInit {
     private datePipe: DatePipe,
     private ordenesrepService: OrdenesReparacionService,
     private detalleordenservice: DetalleOrdenService,
-
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute
+  ) {}
 
 
   ngOnInit() {
     this.idOrden = +this.route.snapshot.paramMap.get('idOrden');
     this.GetDetalleOrden(this.idOrden);
-    this.GetDetalleRepOrden(this.idOrden);
-    //this.GetDetalleTareaOrden(this.idOrden);
+    this.GetDetalleRepOrden(this.idOrden);  
   }
 
 
   GetDetalleOrden(nroOrden: number) {
-    this.ordenesrepService.ObtenerDetalleOrdenRep(nroOrden).subscribe(
+    this.ordenesrepService.ObtenerDatosOrdenRep(nroOrden).subscribe(
       (res: any) => {
-        this.ordenreparacion = res;
-
+        this.ordenreparacion = res;   
         //transforma las fechas a un formato para mostrar
         this.ordenreparacion.FechaInicio = this.datePipe.transform(this.ordenreparacion.FechaInicio, "dd-MM-yyyy");
         this.ordenreparacion.FecRetiroEstimado = this.datePipe.transform(this.ordenreparacion.FecRetiroEstimado, "dd-MM-yyyy");
@@ -71,35 +68,18 @@ export class DetalleestadoordenComponent implements OnInit {
     );
   }
 
-  GetDetalleRepOrden(nroOrden: number) {
+  GetDetalleRepOrden(nroOrden: number) {  
     this.detalleordenservice.ObtenerDetalleMostrar(nroOrden).subscribe(
-      (res: any) => {
-        this.listDetalleRepuestos = res;
-        //Calcula el costo de los repuestos
-        var length = this.listDetalleRepuestos.length;
+      (res: any) => {    
+        this.listDetalleOrden = res;
+        console.log(this.listDetalleOrden);      
+        var length = this.listDetalleOrden.length;
         for (let i = 0; i < length; i++) {
-          this.totalRepuestos = this.totalRepuestos + (this.listDetalleRepuestos[i].Precio * this.listDetalleRepuestos[i].Cantidad);
+          this.total = this.total + (this.listDetalleOrden[i].total);
         }
       },
       err => console.error(err)
     );
   }
-
-  // GetDetalleTareaOrden(nroOrden: number) {
-  //   this.detalletareaservice.ObtenerDetalleMostrar(nroOrden).subscribe(
-  //     (res: any) => {
-  //       this.listDetalleTareas = res;
-
-  //       //Calcula el costo de las tareas
-  //       var length = this.listDetalleTareas.length;
-  //       for (let i = 0; i < length; i++) {
-  //         this.totalTareas = this.totalTareas + this.listDetalleTareas[i].Costo;
-  //       }
-  //     },
-  //     err => console.error(err)
-  //   );
-  // }
-
-
 
 }

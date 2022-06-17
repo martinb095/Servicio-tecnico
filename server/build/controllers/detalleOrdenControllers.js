@@ -32,7 +32,6 @@ class DetalleOrdenController {
     getFindByOrden(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const fkOrden = [req.params.FkOrdenRep];
-            // pool.query('Select * from detalletarea where FkOrdenRep = ?', req.params.FkOrdenrep, (err: any, results: any) => {
             database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "NombreRep", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre "NombreTarea", (deo.Precio*deo.Cantidad) as "Total" from detalleorden  deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detalleorden no encontrado" });
@@ -107,21 +106,19 @@ class DetalleOrdenController {
             yield database_1.default.query('INSERT INTO detalleorden set ?', [detalleOrden], function (err) {
                 if (err)
                     throw err;
+                res.json({ text: 'OK' });
             });
         });
     }
-    delete(fkordenrep) {
+    delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(fkordenrep, "fkordenrep");
-            yield database_1.default.query('DELETE FROM detalleorden WHERE FkOrden = ?', fkordenrep);
+            yield database_1.default.query('DELETE FROM detalleorden WHERE PkDetalleOrden = ?', [req.params.PkDetalle]);
+            res.json({ text: 'OK' });
         });
     }
     update(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            yield database_1.default.query('update detalleorden set ? Where PkDetalleOrden = ?', [req.body, id]);
-            res.json({ text: 'OK' });
-        });
+        database_1.default.query('update detalleorden set ? Where PkDetalleOrden = ?', [req.body, req.body.PkDetalleOrden]);
+        res.json({ text: 'OK' });
     }
 }
 const detalleordenController = new DetalleOrdenController();

@@ -75,7 +75,7 @@ class ModeloController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             yield database_1.default.query('INSERT INTO modelo set ?', [req.body]);
-            //  res.json({ message: 'modelo guardada' });
+            res.json({ text: 'OK' });
         });
     }
     //Para ver q nro esta eliminando
@@ -83,15 +83,12 @@ class ModeloController {
         return __awaiter(this, void 0, void 0, function* () {
             yield database_1.default.query('UPDATE modelo set Activo = 0 WHERE PkModelo = ?', req.params.PkModelo);
             res.json({ text: 'OK' });
-            //  res.json({ text: 'eliminando modelo' + req.params.PkModelo });
         });
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
             yield database_1.default.query('update modelo set ? Where PkModelo = ?', [req.body, req.params.PkModelo]);
             res.json({ text: 'OK' });
-            //     res.json({ text: 'actualizado modelo' + req.params.PkModelo });
         });
     }
 }

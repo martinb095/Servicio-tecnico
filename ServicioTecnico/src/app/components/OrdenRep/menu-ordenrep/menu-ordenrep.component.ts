@@ -18,8 +18,6 @@ import { DetalleOrden } from 'src/app/models/detalleorden';
 import { Repuesto } from 'src/app/models/repuesto';
 import { RepuestoService } from 'src/app/services/repuesto.service';
 
-
-
 import { ClienteService } from '../../../services/cliente.service'
 import { Cliente } from '../../../models/cliente';
 
@@ -67,15 +65,13 @@ export class MenuOrdenrepComponent implements OnInit {
   idEstadoActual = 2;
   CantidadActual = 0;
   pageActual: number = 1;
+  pageActualCliente: number = 1;
 
   constructor(
     private ordenesRepService: OrdenesReparacionService,
-    private estadoService: EstadoService,
-    private tareasService: TareaService,    
-    private repuestoService: RepuestoService,
+    private estadoService: EstadoService,   
     private mailService: MailService,
     private datePipe: DatePipe,
-    private detalleordenService: DetalleOrdenService,
     private clienteService: ClienteService,   
     private router: Router
   ) { }
@@ -88,13 +84,12 @@ export class MenuOrdenrepComponent implements OnInit {
     }
 
     //repuesto para el agregado
-    this.repuestoService.ObtenerRepuestos(0).subscribe(
-      (res: any) => {
-        this.listRepuesto = res;
-      },
-      err => console.error(err)
-    );
-
+    //this.repuestoService.ObtenerRepuestos(0).subscribe(
+    //  (res: any) => {
+    //    this.listRepuesto = res;
+    //  },
+    //  err => console.error(err)
+    //);
 
     //Clientes para la seleccion
     this.clienteService.ObtenerClientes().subscribe(
@@ -106,12 +101,13 @@ export class MenuOrdenrepComponent implements OnInit {
 
 
     this.estadoService.ObtenerEstado().subscribe(
-      (res: any) => {
+      (res: any) => {        
         this.listEstado = res;
+        this.idEstado=1;
       },
       err => console.error(err)
     );
-    this.OrdenesSegunEstado(this.idEstado);
+    this.OrdenesSegunEstado(1);
 
   };
 
@@ -204,15 +200,15 @@ export class MenuOrdenrepComponent implements OnInit {
     })
   }
 
-  TareasSinAsignar(idOrden: number) {
-    this.PkOrden = idOrden
-    this.listTarea = [];
-    this.tareasService.SelectTareaSinAsignar(idOrden).subscribe((data: Tarea[]) => {
-      this.listTarea = data;
-    },
-      err => console.error(err)
-    );
-  }
+  //TareasSinAsignar(idOrden: number) {
+  //  this.PkOrden = idOrden
+  //  this.listTarea = [];
+  //  this.tareasService.SelectTareaSinAsignar(idOrden).subscribe((data: Tarea[]) => {
+  //    this.listTarea = data;
+  //  },
+  //    err => console.error(err)
+  //  );
+  //}
 
   // RepuestoSinAsignar(idOrden: number) {
   //   this.PkOrden = idOrden
@@ -304,9 +300,6 @@ export class MenuOrdenrepComponent implements OnInit {
         Swal.fire({ title: "Cancelado", icon: "error" });
       }
     })
-
-    // this.idEstado = this.idEstadoActual
-
 
   }
 

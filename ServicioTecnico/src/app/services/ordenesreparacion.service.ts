@@ -17,7 +17,7 @@ export class OrdenesReparacionService {
     return this.http.get(this.API_URI + "/ordenesreparacion");
   }
 
-  ObtenerDetalleOrdenRep(idOrdenRep: number) {
+  ObtenerDatosOrdenRep(idOrdenRep: number) {
     return this.http.get(this.API_URI + "/ordenesreparacion/detalleestado/" + idOrdenRep);
   }
 

@@ -10,8 +10,10 @@ class LoginRoutes {
     }
 
     config(): void {
-
         this.router.post('/', loginControllers.GetOne);
+
+        this.router.get('/mail/:mail', loginControllers.GetPass);         
+
     }
 
 }

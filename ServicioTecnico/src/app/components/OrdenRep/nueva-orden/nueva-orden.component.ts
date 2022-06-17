@@ -28,9 +28,6 @@ import { Repuesto } from 'src/app/models/repuesto';
 import { DetalleOrdenService } from '../../../services/detalleorden.service';
 import { DetalleOrden } from 'src/app/models/detalleorden';
 
-import { TipoRepuestoService } from '../../../services/tiporepuesto.service';
-import { TipoRepuesto } from '../../../models/tiporepuesto';
-
 
 @Component({
   selector: 'app-nueva-orden',
@@ -46,8 +43,7 @@ export class NuevaOrdenComponent implements OnInit {
 
   listTarea: Tarea[] = [];
   listRepuesto: Repuesto[] = [];
-  listTipoRep: TipoRepuesto[] = [];
-  listDetalleOrden: DetalleOrden[] = [];
+  listDetalleOrden: any = {};
 
   listCantidad: number[] = [1];
   listCantidadTemp: number[] = [];
@@ -69,16 +65,7 @@ export class NuevaOrdenComponent implements OnInit {
     Observacion: ""
   };
 
-  detalleOrden: DetalleOrden = {
-    PkDetalleOrden: 0,
-    Cantidad: 0,
-    FkRepuesto: 0,
-    Precio: 0,
-    Observacion: "",
-    FkTarea: 0,
-    FechaCreacion: null,
-    FkOrden: 0
-  };
+  detalleOrden: any = {};
 
   repuesto: Repuesto = {
     PkRepuesto: 0,
@@ -99,16 +86,18 @@ export class NuevaOrdenComponent implements OnInit {
     Costo: null,
     Observacion: "",
   };
-
+  date = new Date();
   idUltimaOR = 0;
   idultimoRep = 0;
   idultimaTarea = 0;
   selectedMarca = 0;
   selectedProducto = 0;
   idCliente = 0;
+
   pageActualRep: number = 1;
   pageActualTarea: number = 1;
   pageActualDetalle: number = 1;
+
   constructor(
     private route: ActivatedRoute,
     private modalService: ModalService,
@@ -120,7 +109,6 @@ export class NuevaOrdenComponent implements OnInit {
     private tareaService: TareaService,
     private repuestoService: RepuestoService,
     private datePipe: DatePipe,
-    private tiporepueService: TipoRepuestoService,
     private detalleOrdenService: DetalleOrdenService,
     private router: Router
   ) { }
@@ -131,14 +119,14 @@ export class NuevaOrdenComponent implements OnInit {
   // pero no se lo pongas al select 
 
   ngOnInit() {
+
     //valido si existe la sesion
     let valido = localStorage.getItem('ingreso');
     if (valido != "true") {
       this.router.navigate(['/login'])
     }
-    //Obtiene la fecha actual para el guardado
-    var date = new Date();
-    this.ordenRep.FechaInicio = this.datePipe.transform(date, "yyyy-MM-dd");
+    //Obtiene la fecha actual para el guardado    
+    this.ordenRep.FechaInicio = this.datePipe.transform(this.date, "yyyy-MM-dd");
 
     //Obtiene el idcliente de la URL
     this.idCliente = +this.route.snapshot.paramMap.get('idcliente');
@@ -158,26 +146,11 @@ export class NuevaOrdenComponent implements OnInit {
       err => console.error(err)
     );
 
-    //Carga los productos
-    //this.productoService.ObtenerProductos().subscribe(
-    // (res: any) => {
-    //  this.listProducto = res;
-    //},
-    // err => console.error(err)
-    //);
-
     //Carga los estados
     this.estadoService.ObtenerEstado().subscribe(
       (res: any) => {
         this.listEstado = res;
-      },
-      err => console.error(err)
-    );
-
-    //Carga los tipos de repuestos para el agregado
-    this.tiporepueService.ObtenerTipoRepuesto().subscribe(
-      (res: any) => {
-        this.listTipoRep = res;
+        this.ordenRep.FkEstado=1;
       },
       err => console.error(err)
     );
@@ -187,21 +160,26 @@ export class NuevaOrdenComponent implements OnInit {
     },
       err => console.error(err)
     );
-  this.obtenerDetallesOrden(229);
+
   }
   //------------------------
   //Fin ngOnInit
   //-----------------------
 
-  //lista los detalles de las ordenes de acuerdo al producto
-  obtenerDetallesOrden(idOrden: number) {
-    idOrden = 229
-    this.detalleOrdenService.ObtenerDetalleOrdenDeOR(idOrden).subscribe((data: any[]) => {     
-      this.listDetalleOrden = data;
-    },
+  obtenerDetallesOrden() {
+    this.listDetalleOrden = {};
+    //Trae los datos detalle de la orden
+    this.detalleOrdenService.ObtenerDetalleOrdenDeOR(this.idUltimaOR).subscribe(
+      (res: any) => {
+        this.listDetalleOrden = res;
+        console.log("Lleno");
+        console.log(this.listDetalleOrden);
+      },
       err => console.error(err)
     );
   }
+
+
 
   //lista los productos de acuedo a la marca
   onSelectMarca(idMarca: number) {
@@ -213,47 +191,11 @@ export class NuevaOrdenComponent implements OnInit {
     );
   }
 
-  // //lista los modelos de acuerdo al producto
-  // onSelectProducto(idProducto: number) {
-  //   this.selectedProducto = idProducto;
-  //   this.modeloService.ObtenerModelosFiltrados(this.selectedProducto).subscribe((data: Modelo[]) => {
-  //     this.listModelo = data;
-  //   },
-  //     err => console.error(err)
-  //   );
-  // }
-
-  getTareas(listTarea) {
-    // //Vacia variables a utilizar
-    // this.listTareaTemp = [];
-    // this.listDetalleTareaTemp = [];
-    // this.totaltareas = 0
-    // //Recorre el listado y va agregando los checkeados 
-    // var length = listTarea.length;
-    // for (let i = 0; i < length; i++) {
-    //   if (listTarea[i].checked) {
-    //     //Lista de pantalla
-    //     this.listTareaTemp.push(listTarea[i]);
-    //     //Agrega el costo de las tareas
-    //     this.totaltareas = this.totaltareas + listTarea[i].Costo;
-
-    //     //arma detalletarea
-    //     this.detalleTarea = {
-    //       'PkDetalleTarea': null,
-    //       'FkTarea': listTarea[i].PkTarea,
-    //       'Costo': listTarea[i].Costo,
-    //       'FkOrdenrep': 0
-    //     }
-    //     this.listDetalleTareaTemp.push(this.detalleTarea);
-    //   }
-    // }
-  }
-
   obtenerRepuestos() {
     //Carga los repuestos con stock
     // this.listRepuesto = [];
     this.repuestoService.ObtenerRepuestos(0).subscribe(
-      (res: any) => {       
+      (res: any) => {
         this.listRepuesto = res;
       },
       err => console.error(err)
@@ -280,36 +222,16 @@ export class NuevaOrdenComponent implements OnInit {
     this.closeModal("ModalSelectTarea");
   }
 
-  getRepuestosChecked(listRepuesto) {
-    // //Vacia la lista    
-    // this.listRepuestoTemp = [];
-    // this.listCantidadTemp = [];
-    // this.listDetalleRepTemp = [];
-    // //Recorre el listado y va agregando los checkeados 
-    // var length = listRepuesto.length;
-    // for (let i = 0; i < length; i++) {
-    //   if (listRepuesto[i].checked) {
-    //     //Lista de pantalla
-    //     this.listRepuestoTemp.push(listRepuesto[i]);
-
-    //     //arma detallerepuesto
-    //     this.detalleRepuesto = {
-    //       'PkDetalleRepuesto': null,
-    //       'Cantidad': listRepuesto[i].CantidadActual,
-    //       'FkRepuesto': listRepuesto[i].PkRepuesto,
-    //       'Precio': listRepuesto[i].PrecioVenta,
-    //       'FkOrdenrep': 0,
-    //       'Repuesto': null
-    //     }
-
-    //     this.listDetalleRepTemp.push(this.detalleRepuesto);
-
-    //   }
-    // }
-  }
-
   //Registra orden
   GuardarNuevaOrden() {
+    if (this.ordenRep.FecRetiroEstimado == "" || this.ordenRep.FecRetiroEstimado == null) {
+      Swal.fire({ title: "Debe seleccionar una fecha estimada de retiro.", icon: "warning" });
+      return;
+    }   
+    if (this.ordenRep.FkModelo == 0 || this.ordenRep.FkModelo == null) {
+      Swal.fire({ title: "Debe seleccionar un modelo a reparar.", icon: "warning" });
+      return;
+    }   
     //obtiene el id del cliente y se lo asigna a la orden
     this.ordenRep.FkCliente = this.idCliente;
     //Almacena datos orden
@@ -320,6 +242,7 @@ export class NuevaOrdenComponent implements OnInit {
           if (result[0] != "0") {
             this.idUltimaOR = result[0];
             document.getElementById("btnGuardar").style.display = "none";
+            document.getElementById("btnNuevoMov").style.display = "inline-block";
             Swal.fire({ title: "Orden de reparación guardada.", icon: "success" })
           }
         },
@@ -339,61 +262,39 @@ export class NuevaOrdenComponent implements OnInit {
     if (this.detalleOrden.Precio == null) {
       this.detalleOrden.Precio = 0;
     }
-    this.idUltimaOR=229;
-    this.detalleOrden.FkOrden=this.idUltimaOR;
-    this.detalleOrden.FechaCreacion = new Date()
+    if (this.detalleOrden.Observacion == null) {
+      this.detalleOrden.Observacion = "";
+    }
 
-    console.log(this.detalleOrden);
-    this.detalleOrdenService.GuardarDetalleOrden(this.detalleOrden)
-      .subscribe(
+    this.detalleOrden.FkOrden = this.idUltimaOR;
+    this.detalleOrden.FechaCreacion = this.datePipe.transform(this.date, "yyyy-MM-dd");
+
+    if (this.detalleOrden.PkDetalleOrden != null) {
+      this.detalleOrdenService.ActualizarDetalleOrden(this.detalleOrden.PkDetalleOrden, this.detalleOrden).subscribe(
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            this.obtenerDetallesOrden(this.idUltimaOR);
-            Swal.fire({ title: "Datos guardados cxorrectamente.", icon: "success" })
+            this.closeModal('ModalMov');
+            this.obtenerDetallesOrden();
+            Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
           }
         },
         err => console.error(err)
       )
+    } else {
+      this.detalleOrdenService.GuardarDetalleOrden(this.detalleOrden).subscribe(
+        res => {
+          var result = Object.values(res);
+          if (result[0] == "OK") {
+            this.closeModal('ModalMov');
+            this.obtenerDetallesOrden();
+            Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+          }
+        },
+        err => console.error(err)
+      )
+    }
   }
-
-  //GuardarRepuesto() {
-  //  //Almacena repuesto   
-  //  this.repuestoService.GuardarRepuesto(this.repuesto)
-  //    .subscribe(
-  //      res => {
-  //        var ultimoidRep = res;
-  //        //Agregar la clave primaria para el listado
-  //        this.repuesto.PkRepuesto = Number(ultimoidRep);
-  //      },
-  //      err => console.error(err)
-  //    )
-  //  //Despues del guardado se agrega el listado el repuesto
-  //  this.listRepuesto.push(this.repuesto);
-  //
-  //  //Mensaje informando el almacenado
-  //  Swal.fire({ title: "Repuesto guardado correctamente.", icon: "success" });
-  //}
-
-  // GuardarTarea() {
-  //   //Almacena tarea   
-  //   this.tareaService.GuardarTarea(this.tarea)
-  //     .subscribe(
-  //       res => {
-  //         var ultimoidTarea = res;
-  //         //Agregar la clave primaria para el listado
-  //         console.log(ultimoidTarea, "ultimoidTarea");
-  //         this.tarea.PkTarea = Number(ultimoidTarea);
-  //       },
-  //       err => console.error(err)
-  //     )
-  //   //Despues del guardado se agrega al listado 
-  //   this.listTarea.push(this.tarea);
-
-  //   //Mensaje informando el almacenado
-  //   Swal.fire({ title: "Tarea guardada correctamente.", icon: "success" });
-
-  // }
 
   openModal(id: string) {
     this.modalService.open(id);
@@ -411,6 +312,46 @@ export class NuevaOrdenComponent implements OnInit {
     this.detalleOrden.FkTarea = null;
     this.detalleOrden.FechaCreacion = null;
     this.detalleOrden.FkOrden = null;
+  }
+
+  modificarDetalle(detalleOrdenMod: any) {
+    this.SetNull();
+    this.detalleOrden.PkDetalleOrden = detalleOrdenMod.PkDetalleOrden;
+    this.detalleOrden.Cantidad = detalleOrdenMod.Cantidad;
+    this.detalleOrden.FkRepuesto = detalleOrdenMod.FkRepuesto;
+    document.getElementById("lblNombreRepuesto").innerHTML = detalleOrdenMod.NombreRep;
+    this.detalleOrden.Precio = detalleOrdenMod.Precio;
+    this.detalleOrden.Observacion = detalleOrdenMod.Observacion;
+    this.detalleOrden.FkTarea = detalleOrdenMod.FkTarea;
+    document.getElementById("lblNombreTarea").innerHTML = detalleOrdenMod.NombreTarea;
+    this.detalleOrden.FechaCreacion = detalleOrdenMod.FechaCreacion;
+    this.detalleOrden.FkOrden = detalleOrdenMod.FkOrden;
+    this.openModal("ModalMov");
+  }
+
+  eliminarDetalleOrden(idDetalleOrden: number) {
+    Swal.fire({
+      title: '¿Desea eliminar el movimiento?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'No, cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.detalleOrdenService.EliminarDetalleOrden(idDetalleOrden).subscribe(res => {
+          var rest = Object.values(res);
+          if (rest[0] == "OK") {
+            //Mensaje informando el eliminado     
+            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })
+            this.obtenerDetallesOrden();
+          }
+        },
+          err => console.error(err)
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({ title: "Cancelado", icon: "error" });
+      }
+    })
   }
 
 }
