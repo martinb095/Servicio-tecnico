@@ -1,5 +1,3 @@
-import { Repuesto } from './repuesto';
-
 export interface DetalleOrden {
     PkDetalleOrden: number;
     Cantidad: number;

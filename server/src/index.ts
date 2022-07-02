@@ -19,6 +19,9 @@ import tiporepuestos from './routes/tipoRepuesRoutes';
 import mailRoutes from './routes/mailRoutes';
 import ciudadRoutes from './routes/ciudadRoutes';
 import proveedoresRoutes from './routes/proveedorRoutes';
+import pedidosRoutes from './routes/pedidosRoutes';
+import detallePedidosRoutes from './routes/detallepedidoRoutes';
+import informesRoutes from './routes/informesRoutes';
 
 class Server {
 
@@ -58,6 +61,9 @@ class Server {
         this.app.use('/mail/', mailRoutes);
         this.app.use('/ciudades/', ciudadRoutes);
         this.app.use('/proveedores/', proveedoresRoutes);
+        this.app.use('/pedidos/', pedidosRoutes);
+        this.app.use('/detallepedido/', detallePedidosRoutes);
+        this.app.use('/informes/', informesRoutes);
     }
 
     start(): void {    

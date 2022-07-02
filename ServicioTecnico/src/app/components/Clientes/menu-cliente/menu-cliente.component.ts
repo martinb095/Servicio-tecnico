@@ -29,6 +29,7 @@ export class MenuClienteComponent implements OnInit {
   contraseniaRep = "";
 
   pageActual: number = 1;
+
   cliente: Cliente = {
     PkCliente: 0,
     Nombre: "",
@@ -40,8 +41,6 @@ export class MenuClienteComponent implements OnInit {
     Contrasenia: null,
     Activo: null
   };
-
-
 
   constructor(
     private modalService: ModalService,
@@ -131,8 +130,6 @@ export class MenuClienteComponent implements OnInit {
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Cliente Nro. " + id + " eliminado correctamente." })
 
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
       }
     })
   }

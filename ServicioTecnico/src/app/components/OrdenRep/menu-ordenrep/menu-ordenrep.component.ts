@@ -2,21 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
+import { ModalService } from 'src/app/_modal';
 
 import { OrdenesReparacionService } from '../../../services/ordenesreparacion.service';
 import { OrdenReparacion } from '../../../models/ordenRep';
 
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../../models/estado';
-
-import { TareaService } from '../../../services/tarea.service';
-import { Tarea } from 'src/app/models/tarea';
-
-import { DetalleOrdenService } from 'src/app/services/detalleorden.service';
-import { DetalleOrden } from 'src/app/models/detalleorden';
-
-import { Repuesto } from 'src/app/models/repuesto';
-import { RepuestoService } from 'src/app/services/repuesto.service';
 
 import { ClienteService } from '../../../services/cliente.service'
 import { Cliente } from '../../../models/cliente';
@@ -33,7 +25,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
   DatosMail: any;
 
-  listEstado: Estado[] = [];
+  listEstado: any[] = [];
 
   listOrdenRep: OrdenReparacion[] = [];
 
@@ -47,17 +39,10 @@ export class MenuOrdenrepComponent implements OnInit {
     FkCiudad: null,
     Direccion: null,
     Mail: null,
-    Contrasenia: null,  
-    Activo:null
+    Contrasenia: null,
+    Activo: null
   };
 
-  listTarea: Tarea[] = [];
-  listTareaTemp: Tarea[] = [];
-
-
-  listRepuesto: any[] = [];
-  listRepuestoTemp: Repuesto[] = [];
-  detalleorden: DetalleOrden;
 
   PkOrden = 0;
   idEstado = 2;
@@ -66,30 +51,24 @@ export class MenuOrdenrepComponent implements OnInit {
   CantidadActual = 0;
   pageActual: number = 1;
   pageActualCliente: number = 1;
+  idCambiarEstado: number = 1;
 
   constructor(
     private ordenesRepService: OrdenesReparacionService,
-    private estadoService: EstadoService,   
+    private estadoService: EstadoService,
     private mailService: MailService,
     private datePipe: DatePipe,
-    private clienteService: ClienteService,   
-    private router: Router
+    private clienteService: ClienteService,
+    private router: Router,
+    private modalService: ModalService,
   ) { }
 
-  ngOnInit() {   
+  ngOnInit() {
     //valido si existe la sesion
-    let valido = localStorage.getItem('ingreso');    
-    if(valido != 'true'){
-     this.router.navigate(['/login'])      
+    let valido = localStorage.getItem('ingreso');
+    if (valido != 'true') {
+      this.router.navigate(['/login'])
     }
-
-    //repuesto para el agregado
-    //this.repuestoService.ObtenerRepuestos(0).subscribe(
-    //  (res: any) => {
-    //    this.listRepuesto = res;
-    //  },
-    //  err => console.error(err)
-    //);
 
     //Clientes para la seleccion
     this.clienteService.ObtenerClientes().subscribe(
@@ -99,11 +78,11 @@ export class MenuOrdenrepComponent implements OnInit {
       err => console.error(err)
     );
 
-
+    console.log("estados");
     this.estadoService.ObtenerEstado().subscribe(
-      (res: any) => {        
-        this.listEstado = res;
-        this.idEstado=1;
+      (res: any) => {
+        this.listEstado = res;        
+        this.idEstado = 1;
       },
       err => console.error(err)
     );
@@ -112,9 +91,10 @@ export class MenuOrdenrepComponent implements OnInit {
   };
 
   OrdenesSegunEstado(id: number) {
+    this.pageActual = 1;
     this.listOrdenRep = [];
-    this.ordenesRepService.ObtenerOPporEstado(id).subscribe((data: OrdenReparacion[]) => { 
-      this.listOrdenRep = data;     
+    this.ordenesRepService.ObtenerOPporEstado(id).subscribe((data: OrdenReparacion[]) => {
+      this.listOrdenRep = data;
       this.idEstadoActual = id;
     },
       err => console.error(err)
@@ -142,7 +122,7 @@ export class MenuOrdenrepComponent implements OnInit {
     } else {
       this.listOrdenRep = [];
       this.ordenesRepService.ObtenerORsegunCliEstado(FkEstado, PkCliente).subscribe((res: any) => {
-        this.listOrdenRep = res;         
+        this.listOrdenRep = res;
         //cambiar el valor de la fila
         // this.idEstadoActual = this.listOrdenRep[0].FkEstado;
       },
@@ -168,9 +148,6 @@ export class MenuOrdenrepComponent implements OnInit {
         },
           err => console.error(err)
         );
-
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
       }
     })
   }
@@ -193,8 +170,8 @@ export class MenuOrdenrepComponent implements OnInit {
           FkCiudad: null,
           Direccion: null,
           Mail: null,
-          Contrasenia: null,        
-          Activo:null
+          Contrasenia: null,
+          Activo: null
         };
       }
     })
@@ -245,17 +222,27 @@ export class MenuOrdenrepComponent implements OnInit {
   //         )
   //     }
   //   }
-    //Mensaje informando el almacenado     
-   // Swal.fire({ title: "Repuesto agregado a la orden Nro. " + this.PkOrden, icon: "success" });
+  //Mensaje informando el almacenado     
+  // Swal.fire({ title: "Repuesto agregado a la orden Nro. " + this.PkOrden, icon: "success" });
   //}
 
-  NotificarCliente(idOrden: number) {
+  openModal(id: string, nroOrden: number) {
+    this.idCambiarEstado = nroOrden;
+    this.modalService.open(id);
+  }
+
+  closeModal(id: string) {
+    this.modalService.close(id);
+  }
+
+  NotificarCliente() {
 
     //Datos de la orden para actualizar
     let DatosOrden = {
-      'PkOrdenRep': idOrden,
+      'PkOrdenRep': this.idCambiarEstado,
       'FkEstado': this.idEstadoActual,
     }
+    console.log(DatosOrden);
 
     Swal.fire({
       title: '¿Desea modificar el estado de la orden?',
@@ -266,69 +253,43 @@ export class MenuOrdenrepComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-        //Mensaje informando el almacenado     
-        Swal.fire({ title: "Estado actualizado de la orden Nro. " + idOrden, icon: "success" });
-
         //Cambia al nuevo estado la orden
-        this.ordenesRepService.ActualizarEstadoOrden(idOrden, DatosOrden).subscribe(
+        this.ordenesRepService.ActualizarEstadoOrden(this.idCambiarEstado, DatosOrden).subscribe(
           (res: any) => {
-            //Obtiene los datos de la orden modificada para el envio del mail
-            this.ordenesRepService.SelectOrdenReparaMail(idOrden).subscribe(
-              (res: any) => {
-                this.DatosMail = res;
-                //formatea fecha 
-                this.DatosMail.FechaRetiro = this.datePipe.transform(this.DatosMail.FechaRetiro, "dd-MM-yyyy");
-
-                //Envia en caso de tener mail
-                if (this.DatosMail.Mail != null) {
-                  // Envia mail con los datos obtenidos
-                  this.mailService.EnviarMail(this.DatosMail).subscribe(
-                    (res: any) => {
-
-                    },
-                    err => console.error(err)
-                  );
-                }
-              },
-              err => console.error(err)
-            );
+            console.log(res);
+            var result = Object.values(res);
+            if (result[0] = true) {
+              this.closeModal('ModalConfirmarEstado');
+              //Mensaje informando el almacenado     
+              Swal.fire({ title: "Estado actualizado de la orden Nro. " + this.idCambiarEstado, icon: "success" });
+              //Obtiene los datos de la orden modificada para el envio del mail
+              this.ordenesRepService.SelectOrdenReparaMail(this.idCambiarEstado).subscribe(
+                (res: any) => {
+                  this.DatosMail = res;
+                  //formatea fecha 
+                  this.DatosMail.FechaRetiro = this.datePipe.transform(this.DatosMail.FechaRetiro, "dd-MM-yyyy");
+                  //Envia en caso de tener mail
+                  if (this.DatosMail.Mail != null) {
+                    // Envia mail con los datos obtenidos
+                    this.mailService.EnviarMail(this.DatosMail).subscribe(
+                      (res: any) => {
+                        console.log(res);
+                      },
+                      err => console.error(err)
+                    );
+                  }
+                },
+                err => console.error(err)
+              );
+            }
           },
           err => console.error(err)
         );
-
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
       }
     })
 
+
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
 

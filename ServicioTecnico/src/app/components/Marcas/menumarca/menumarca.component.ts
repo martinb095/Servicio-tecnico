@@ -89,9 +89,7 @@ export class MenumarcaComponent implements OnInit {
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Marca nro. " + id + " eliminada correctamente." })
 
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
   GuardarMarca() {

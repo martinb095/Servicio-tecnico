@@ -235,15 +235,14 @@ export class NuevaOrdenComponent implements OnInit {
     //obtiene el id del cliente y se lo asigna a la orden
     this.ordenRep.FkCliente = this.idCliente;
     //Almacena datos orden
-    this.ordenesService.GuardarOrdenRep(this.ordenRep)
-      .subscribe(
+    this.ordenesService.GuardarOrdenRep(this.ordenRep).subscribe(
         res => {
           var result = Object.values(res);
           if (result[0] != "0") {
             this.idUltimaOR = result[0];
             document.getElementById("btnGuardar").style.display = "none";
             document.getElementById("btnNuevoMov").style.display = "inline-block";
-            Swal.fire({ title: "Orden de reparación guardada.", icon: "success" })
+            Swal.fire({ title: "Orden de reparación guardada correctamente.", icon: "success" })
           }
         },
         err => console.error(err)
@@ -348,9 +347,7 @@ export class NuevaOrdenComponent implements OnInit {
         },
           err => console.error(err)
         );
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
 

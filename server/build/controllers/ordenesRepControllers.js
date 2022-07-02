@@ -153,7 +153,7 @@ class OrdenesRepController {
     //funciona
     GetOneForEmail(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT cliente.Mail as "Mail", Estado.Nombre as "Estado", FecRetiroEstimado as "FechaRetiro" FROM ordenreparacion inner join Cliente on Cliente.PkCliente=ordenreparacion.FkCliente inner join Estado on Estado.PkEstado=ordenreparacion.FkEstado WHERE PkOrdenreparacion = ?', req.params.PkOrdenRep, (err, results) => {
+            database_1.default.query('SELECT c.Mail as "Mail", e.Nombre as "Estado", ord.FecRetiroEstimado as "FechaRetiro" FROM ordenreparacion ord left join Cliente c on c.PkCliente=ord.FkCliente left join Estado e on e.PkEstado=ord.FkEstado WHERE PkOrdenreparacion = ?', req.params.PkOrdenRep, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -214,7 +214,6 @@ class OrdenesRepController {
     }
     //Actuliza unicamente el estado
     updateEstado(req, res) {
-        // await pool.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.params.FkEstado, req.params.PkOrdenRep], function (err: Error, res: Response) {
         database_1.default.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.body.FkEstado, req.params.PkOrdenRep], function (err, resSql) {
             if (err) {
                 return res.status(200).json({ exist: false });

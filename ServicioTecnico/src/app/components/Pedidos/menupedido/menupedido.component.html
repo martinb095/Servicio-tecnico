@@ -1,1 +1,54 @@
-<p>menupedido works!</p>
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu pedidos</h4>
+</div>
+
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-8">
+            <div class="dt-buttons">
+                <a href="menupedido/nuevopedido" aria-controls="example23" class="btn waves-effect waves-light btn-block btn-success"><span >Nuevo pedido</span></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <!-- <h4 class="h4-per">Buscar:</h4>
+                    <input type="text" class="form-control" (keyup)="ClienteSegunNombre(clienteBuscar);" placeholder="Buscar por nombre..." [(ngModel)]="clienteBuscar" [ngModelOptions]="{standalone:true}">-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="10%">Nro. pedido</th>
+            <th width="40%">Proveedor</th>
+            <th width="18%">Fecha creacion</th>
+            <th width="15%">Observacion</th>
+            <th width="10%">Acción</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="listPedido">
+        <tr *ngFor="let pedido of listPedido | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+            <td>{{pedido.PkPedProv}} </td>
+            <td>{{pedido.Firma}}</td>
+            <td>{{pedido.FechaCreacion | date:'dd/MM/yyyy'}}</td>
+            <td>{{pedido.Observacion}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" data-original-title="Procesar"> <i (click)="procesarPed(pedido.PkPedProv);" name="Procesar" class="fa fa-refresh text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Editar"> <i [routerLink]="['/menupedido/modificar', pedido.PkPedProv]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarPedido(pedido.PkPedProv)" class="fa fa-close text-danger"></i> </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                <pagination-controls 
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+                (pageChange)="pageActual = $event"></pagination-controls>
+            </span>
+</div>

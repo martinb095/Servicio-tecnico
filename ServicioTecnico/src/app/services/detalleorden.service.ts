@@ -34,8 +34,7 @@ export class DetalleOrdenService {
     return this.http.delete(this.API_URI + "/detalleorden/" + id);
   }
 
-  GuardarDetalleOrden(detalleOrden: DetalleOrden) {
-    console.log(detalleOrden);
+  GuardarDetalleOrden(detalleOrden: DetalleOrden) {   ;
     return this.http.post(this.API_URI + "/detalleorden", detalleOrden);
   }
 

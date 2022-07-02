@@ -90,9 +90,7 @@ export class MenumodeloComponent implements OnInit {
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Modelo nro. " + id + " eliminado correctamente." })
 
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
   GuardarModelo() {

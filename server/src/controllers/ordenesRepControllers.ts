@@ -106,7 +106,6 @@ class OrdenesRepController {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
                 if (results) {
-
                     return res.json(results);
                 } else {
                     return res.status(404).json({ text: "OR no encontrado" });
@@ -126,13 +125,12 @@ class OrdenesRepController {
             } else {
                 return res.status(404).json({ text: "OR no encontrado" });
             }
-
         });
     }
 
     //funciona
     public async GetOneForEmail(req: Request, res: Response) {
-        pool.query('SELECT cliente.Mail as "Mail", Estado.Nombre as "Estado", FecRetiroEstimado as "FechaRetiro" FROM ordenreparacion inner join Cliente on Cliente.PkCliente=ordenreparacion.FkCliente inner join Estado on Estado.PkEstado=ordenreparacion.FkEstado WHERE PkOrdenreparacion = ?', req.params.PkOrdenRep, (err: any, results: any) => {
+        pool.query('SELECT c.Mail as "Mail", e.Nombre as "Estado", ord.FecRetiroEstimado as "FechaRetiro" FROM ordenreparacion ord left join Cliente c on c.PkCliente=ord.FkCliente left join Estado e on e.PkEstado=ord.FkEstado WHERE PkOrdenreparacion = ?', req.params.PkOrdenRep, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "OR no encontrado" });
             }
@@ -161,7 +159,7 @@ class OrdenesRepController {
         await pool.query('INSERT INTO ordenreparacion SET ?', [ordenRep], function (err: any, resultInserOrd: any) {
             if (err) throw err;
             const ultimaOrden = resultInserOrd.insertId;
-            res.json({ message: ultimaOrden });        
+            res.json({ message: ultimaOrden });
         });
 
     }
@@ -185,15 +183,13 @@ class OrdenesRepController {
         await pool.query('update ordenreparacion set ? Where PkOrdenreparacion = ?', [ordenRep, req.params.PkOrdenRep], function (err: Error, res: Response) {
             if (err) throw err;
         });
-      
+
         res.json({ text: 'OK' });
     }
 
     //Actuliza unicamente el estado
     public updateEstado(req: Request, res: Response) {
-        // await pool.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.params.FkEstado, req.params.PkOrdenRep], function (err: Error, res: Response) {
         pool.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.body.FkEstado, req.params.PkOrdenRep], function (err: Error, resSql: Response) {
-
             if (err) {
                 return res.status(200).json({ exist: false });
             };
@@ -207,7 +203,7 @@ class OrdenesRepController {
             idOrden: req.body.PkOrdenRep,
             Mail: req.body.Mail,
             Contrasenia: req.body.Contrasenia,
-        };      
+        };
         pool.query('Select oRe.PkOrdenreparacion from ordenreparacion oRe left join cliente c on c.PkCliente=oRe.FkCliente where PkOrdenreparacion=? and c.Mail= ? and c.Contrasenia= ?;', [datosOrden.idOrden, datosOrden.Mail, datosOrden.Contrasenia], (err: any, ordenDb: any[]) => {
             if (err) {
                 res.status(404).json({ text: "Error" });

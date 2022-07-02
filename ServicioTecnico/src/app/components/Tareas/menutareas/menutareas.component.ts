@@ -123,9 +123,7 @@ export class MenutareasComponent implements OnInit {
         },
           err => console.error(err)
         );
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
 

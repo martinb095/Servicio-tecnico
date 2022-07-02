@@ -116,9 +116,7 @@ export class MenutiporepuestoComponent implements OnInit {
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Tipo de repuesto nro. " + id + " eliminado correctamente." })
 
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
 

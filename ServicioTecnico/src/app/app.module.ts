@@ -46,6 +46,9 @@ import { MenutiporepuestoComponent } from './components/TipoRepuestos/menutipore
 import { MenuproveedorComponent } from './components/Proveedores/menuproveedor/menuproveedor.component';
 //pedidos
 import { MenupedidoComponent } from './components/Pedidos/menupedido/menupedido.component';
+import { NuevoPedidoComponent } from './components/Pedidos/nuevo-pedido/nuevo-pedido.component';
+import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/modificar-pedido.component';
+import { InformesComponent } from './components/Informes/informes.component';
 
 
 @NgModule({
@@ -70,7 +73,10 @@ import { MenupedidoComponent } from './components/Pedidos/menupedido/menupedido.
     MenutiporepuestoComponent,
     MenuusuarioComponent,
     MenuproveedorComponent,
-    MenupedidoComponent  
+    MenupedidoComponent,
+    NuevoPedidoComponent,
+    ModificarPedidoComponent,
+    InformesComponent  
   ],
   imports: [
     BrowserModule,

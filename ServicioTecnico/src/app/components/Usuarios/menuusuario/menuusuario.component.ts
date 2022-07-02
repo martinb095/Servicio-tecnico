@@ -132,10 +132,7 @@ export class MenuusuarioComponent implements OnInit {
         );
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Usuario nro. " + id + " eliminado correctamente." })
-
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
 

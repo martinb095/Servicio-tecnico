@@ -18,7 +18,10 @@ class MailRoutes {
                 from: 'softwaremarbal_soporte@outlook.com',
                 to: req.body.Mail,
                 subject: 'Estado de su orden',
-                html: 'El estado de su orden a sido cambiado a "' + req.body.Estado + '", recuerde que la fecha de retiro estimada es ' + req.body.FechaRetiro + '. Presentar comprobante de la orden de reparacion para el retiro. ¡Muchas gracias!',
+                html: "<html>" +
+                    '<h3>El estado de su orden a sido cambiado a ' + req.body.Estado + ', recuerde que la fecha de retiro estimada es ' + req.body.FechaRetiro + '.</h3>' +
+                    "<h3>¡Muchas gracias!</h3>" +
+                    "</html>",
             };
             // Envía el correo con el objeto de transporte definido anteriormente
             mailer_1.default.sendMail(mailOptions, function (error, info) {

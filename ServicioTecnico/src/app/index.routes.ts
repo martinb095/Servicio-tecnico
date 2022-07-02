@@ -27,8 +27,12 @@ import { MenumarcaComponent } from './components/Marcas/menumarca/menumarca.comp
 import { MenutiporepuestoComponent } from './components/TipoRepuestos/menutiporepuesto/menutiporepuesto.component';
 //proveedores
 import { MenuproveedorComponent } from './components/Proveedores/menuproveedor/menuproveedor.component';
-//proveedores
+//pedido
 import { MenupedidoComponent } from './components/Pedidos/menupedido/menupedido.component';
+import { NuevoPedidoComponent } from './components/Pedidos/nuevo-pedido/nuevo-pedido.component';
+import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/modificar-pedido.component';
+//informes
+import { InformesComponent } from './components/Informes/informes.component';
 
 export const appRoutes: Routes = [
 
@@ -60,7 +64,7 @@ export const appRoutes: Routes = [
       //Modelos
       { path: 'menumodelo', component: MenumodeloComponent },
       //Marcas
-      { path: 'menumarca', component: MenumarcaComponent },      
+      { path: 'menumarca', component: MenumarcaComponent },
       //Tipo productos
       { path: 'menutiporepuesto', component: MenutiporepuestoComponent },
       //Usuarios
@@ -69,7 +73,11 @@ export const appRoutes: Routes = [
       { path: 'menuproveedor', component: MenuproveedorComponent },
       //Pedido
       { path: 'menupedido', component: MenupedidoComponent },
-
+      { path: 'menupedido/nuevopedido', component: NuevoPedidoComponent },
+      { path: 'menupedido/modificar/:idpedido', component: ModificarPedidoComponent },
+      //informes
+      { path: 'informes', component: InformesComponent },
+      
       { path: '**', redirectTo: '/login' },
     ]
   },

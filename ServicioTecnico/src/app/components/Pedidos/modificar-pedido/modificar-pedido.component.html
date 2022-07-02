@@ -1,0 +1,171 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white">Modificar pedido</h4>
+</div>
+<div class="form-body">
+    <hr>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Firma:</label>
+                <input type="text" readonly class="form-control" [(ngModel)]="pedidoEdit.Firma">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group ">
+                <label class="control-label ">Teléfono:</label>
+                <input type="text" readonly class="form-control" [(ngModel)]="pedidoEdit.Telefono">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group ">
+                <label class="control-label">Mail:</label>
+                <input type="text" readonly class="form-control" [(ngModel)]="pedidoEdit.Mail">
+            </div>
+        </div>
+        <!-- <div class="col-md-1">
+            <div class="form-group ">
+                <a style="margin-top: 30px;" (click)="openModal('ModalSelectProveedor');" aria-controls="example23" class="btn btn-block btn-outline-info"><span>Buscar</span></a>
+            </div>
+        </div> -->
+    </div>
+    <div class="row ">
+        <div class="col-md-12">
+            <div class="form-group ">
+                <label class="control-label ">Observación:</label>
+                <textarea class="form-control" [ngModelOptions]="{standalone:true} " [(ngModel)]="pedidoEdit.Observacion" name="textarea" rows="4" cols="50"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-around ">
+        <button type="button" id="btnGuardar" class="btn-ordenrep btn-success" (click)="ModificarPedido($event.target.value);">Guardar</button>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-12 ">
+            <button type="button" id="btnNuevoMov" class="btn waves-effect waves-light btn-info float-right" (click)="SetNull();openModal('ModalMov');">Nuevo movimiento</button>
+            <table class="table table-bordered table-striped" id="idTableDetalle">
+                <thead>
+                    <tr>
+                        <th width="20%">Repuesto</th>
+                        <th width="20%">Cantidad</th>
+                        <th width="60%">Observacion</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="listDetallePedido.length">
+                    <tr *ngFor="let detallepedido of listDetallePedido | paginate: {id: 'pagDetPed', itemsPerPage: 5, currentPage: pageActualDetalle}; let i = index">
+                        <td>{{detallepedido.FkRepuesto}} - {{detallepedido.Repuesto}} </td>
+                        <td>{{detallepedido.Cantidad}}</td>
+                        <td>{{detallepedido.Observacion}}</td>
+                        <td class="text-nowrap">
+                            <a data-toggle="tooltip" data-original-title="Edit"> <i (click)="modificarDetalle(detallepedido);" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                            <a data-toggle="tooltip" data-original-title="Close"> <i (click)="eliminarDetallePedido(detallepedido.PkDetallePedido);" class="fa fa-close text-danger"></i> </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dataTables_paginate paging_simple_numbers"> <span>
+                        <pagination-controls id="pagDetPed" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualDetalle = $event"></pagination-controls>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-around">
+        <button routerLink="/menupedido" type="button" class="btn-ordenrep btn-danger">Volver</button>
+    </div>
+
+    <!-----------------/MODAL------------------->
+    <jw-modal id="ModalMov">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content" style="width: 700px">
+                <div class="modal-header">
+                    <h4 class="modal-title">Registrar movimiento</h4>
+                    <button type="button" (click)="closeModal('ModalMov');" class="close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Repuesto:</label>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control col-md-2" [ngModelOptions]="{standalone:true}" [(ngModel)]="detallePedido.FkRepuesto">
+                                    <button (click)="obtenerRepuestos();openModal('ModalSelectRepuesto');" type="button" class="btn btn-info">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    <label id="lblNombreRepuesto" class="control-label text-danger"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad:</label>
+                                <input type="number" [ngModelOptions]="{standalone:true}" class="form-control" required (input)="onTextboxChangeValidate($event)" [(ngModel)]="detallePedido.Cantidad">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Observacion:</label>
+                                <input type="text" class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="detallePedido.Observacion">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarDetallePedido($event.target.value);" data-dismiss="modal">Guardar</button>
+                    <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalMov');">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <!----------------------- FIN MODAL -------------------------------------->
+
+
+    <jw-modal id="ModalSelectRepuesto">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 750px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar repuesto</h4>
+                    <button type="button" (click)="closeModal('ModalSelectRepuesto');" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped" id="tableRepuestos">
+                        <thead>
+                            <tr>
+                                <th width="70%">Nombre</th>
+                                <th width="14%">Precio $</th>
+                                <th width="10%">Cant.disp.</th>
+                                <th width="10%">Marca</th>
+                                <th width="1%">*</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listRepuesto.length">
+                            <tr *ngFor="let repuesto of listRepuesto | paginate: {itemsPerPage: 5, currentPage: pageActualRep}; let i = index">
+                                <td>{{repuesto.Nombre}} </td>
+                                <td>{{repuesto.PrecioVenta}}</td>
+                                <td>{{repuesto.CantidadStock}}</td>
+                                <td>{{repuesto.Marca}}</td>
+                                <i (click)="repuestoSeleccionado(repuesto)" class="fa fa-check"></i>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <span>
+                                <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualRep = $event"></pagination-controls>
+                            </span>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" (click)="closeModal('ModalSelectRepuesto');" class="btn waves-effect waves-light btn-danger">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </jw-modal>

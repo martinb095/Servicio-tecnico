@@ -1,7 +1,6 @@
 <div class="card-header bg-info">
     <h4 class="m-b-0 text-white h4-per">Menu ordenes de reparación</h4>
 </div>
-
 <!--/row-->
 <div class="form-group">
     <div class="row">
@@ -13,7 +12,6 @@
         <div class="col-md-8">
         </div>
     </div>
-
     <div class="col-sm-12 col-xs-12">
         <form class="input-form">
             <div class="row">
@@ -32,17 +30,16 @@
                         </span>
                         <input readonly type="text" class="form-control" placeholder="Buscar por cliente..." [(ngModel)]="cliente.Nombre" [ngModelOptions]="{standalone:true}">
                         <span type="button" class="input-group-addon"><i class="icon-close" (click)="VaciarCliente($event.target.value);" ></i></span>
-                        <span type="button" class="input-group-addon"><i class="icon-magnifier" data-toggle="modal" data-target="#SeleccionarCliente"></i></span>
+                        <span type="button" class="input-group-addon"><i class="icon-magnifier" (click)="openModal('modalSeleccionarCliente')" data-toggle="modal" data-target="#SeleccionarCliente"></i></span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <h4 _ngcontent-aln-c4="" class="m-b-0 h4-per" style="margin-top: 10px;">Estado:</h4>
-                        <!-- <div class="col-md-9"> -->
                         <select required class="form-control custom-select" (change)="OrdenesSegunEstado($event.target.value);" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstado"> 
-                                <option value="T">Todos</option>    
-                                <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
-                            </select>
+                            <option value="T">Todos</option>    
+                            <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
+                        </select>
                     </div>
                 </div>
             </div>
@@ -57,186 +54,101 @@
             <th width="6%">Nro. orden</th>
             <th width="29%">Cliente</th>
             <th width="9%">Fecha retiro est.</th>
-            <th width="5%"> Estado</th>
-            <!-- <th width="5%"> Repuesto</th>
-            <th width="12%">Estado</th> -->
+            <th width="6%">Estado</th>
             <th width="6%">Acción</th>
         </tr>
     </thead>
-    <!-- <tbody *ngIf="listOrdenRep.length"> -->
     <tbody *ngIf="listOrdenRep">
-        <tr *ngFor="let orden of listOrdenRep | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+        <tr *ngFor="let orden of listOrdenRep | paginate: { id: 'pagOrRep', itemsPerPage: 7, currentPage: pageActual}; let i = index">
             <td>{{orden.Pkordenreparacion}} </td>
             <td>{{orden.Cliente}}</td>
             <td>{{orden.FecRetiroEstimado | date:'dd/MM/yyyy'}}</td>
-            <!--<td><a aria-controls="example23" class="btn btn-block btn-outline-info" (click)="TareasSinAsignar(orden.Pkordenreparacion)" data-toggle="modal" data-target="#ModalTarea"><span>Agregar</span></a></td>
-             <td><a aria-controls="example23" class="btn btn-block btn-outline-info" (click)="RepuestoSinAsignar(orden.Pkordenreparacion)" data-toggle="modal" data-target="#ModalRepuesto"><span>Agregar</span></a></td> 
-            <td><a aria-controls="example23" class="btn btn-block btn-outline-info" data-toggle="modal" data-target="#ModalRepuesto"><span>Agregar</span></a></td>-->
-            <!-- <td>
-                <select required class="form-control custom-select" data-placeholder="Estado" (change)="NotificarCliente(orden.Pkordenreparacion)" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
-                    <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
-                </select>
-            </td> -->
             <td>{{orden.Estado}}</td>
             <td class="text-nowrap">
+                <a data-toggle="tooltip" data-original-title="Cambiar"> <i (click)="openModal('ModalConfirmarEstado',orden.Pkordenreparacion)" class="fa fa-exchange m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Edit"> <i [routerLink]="['/menuordenrep/modificar', orden.Pkordenreparacion]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Close"> <i (click)="EliminarOrden(orden.Pkordenreparacion)" class="fa fa-close text-danger"></i> </a>
             </td>
-
         </tr>
     </tbody>
 </table>
 <div class="dataTables_paginate paging_simple_numbers">
     <span>
-        <pagination-controls   previousLabel="Anterior"
+        <pagination-controls id="pagOrRep" previousLabel="Anterior"
         nextLabel="Siguiente" (pageChange)="pageActual = $event"></pagination-controls>
     </span>
 </div>
 
 
 <!-----------------/MODAL------------------->
-<div id="ModalTarea" class="modal fade" role="dialog">
+<jw-modal id="ModalConfirmarEstado">
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content" style="width: 602px;">
             <div class="modal-header">
-                <h4 class="modal-title h4-per">Agregar tareas</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cambiar estado</h4>
+                <button type="button" (click)="closeModal('ModalConfirmarEstado')" class="close">&times;</button>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-striped" id="myTable">
-                    <thead>
-                        <tr>
-                            <th width="10%"></th>
-                            <th width="70%">Tarea</th>
-                            <th width="20%">Costo $</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="listTarea.length">
-                        <tr *ngFor="let tarea of listTarea">
-                            <td scope="row">
-                                <input class="form-check-input" type="checkbox" id="tarea-{{tarea.PkTarea}}" name="listTarea[]" [(ngModel)]="tarea.checked">
-                                <label for="tarea-{{tarea.PkTarea}}" class="label-table form-check-label"></label>
-                            </td>
-                            <td>{{tarea.Nombre}} </td>
-                            <td>{{tarea.Costo}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">¿Desea cambiar el estado? Se enviará un mail informándolo.</label>
+                            <!-- <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
+                                <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
+                            </select> -->
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn waves-effect waves-light btn-success" (click)="AgregarTareas(listTarea);" data-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="NotificarCliente()">Aceptar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalConfirmarEstado')">Cancelar</button>
             </div>
         </div>
     </div>
-</div>
-<!----------------------- FIN MODAL -------------------------------------->
+    <jw-modal>
+        <!----------------------- FIN MODAL -------------------------------------->
 
-<!-----------------/MODAL------------------->
-<div id="ModalRepuesto" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Agregar repuestos</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered table-striped" id="myTable">
-                    <thead>
-                        <tr>
-                            <th width="5%"></th>
-                            <th width="70%">Repuesto</th>
-                            <th width="10%">Precio unitario</th>
-                            <th width="10%">Stock</th>
-                            <th width="10%">Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="listRepuesto.length">
-                        <tr *ngFor="let repuesto of listRepuesto">
-                            <td scope="row">
-                                <input class="form-check-input" type="checkbox" id="repuesto-{{repuesto.PkRepuesto}}" name="listRepuesto[]" [(ngModel)]="repuesto.checked">
-                                <label for="repuesto-{{repuesto.PkRepuesto}}" class="label-table form-check-label"></label>
-                            </td>
-                            <td>{{repuesto.Nombre}} </td>
-                            <td>{{repuesto.PrecioVenta}}</td>
-                            <td>{{repuesto.CantidadStock}}</td>
-                            <td contenteditable> <input type="number" value="1" min="1" max={{repuesto.CantidadStock}} [(ngModel)]="repuesto.CantidadActual"></td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-
-            <div class="modal-footer justify-content-between">
-                <!-- <button type="button" class="btn waves-effect waves-light btn-success" (click)="getRepuestos(listRepuesto);" data-dismiss="modal">Aceptar</button> -->
-                <button type="button" class="btn waves-effect waves-light btn-success" (click)="AgregarRepuesto(listRepuesto);" data-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!----------------------- FIN MODAL -------------------------------------->
-
-<!-----------------/MODAL------------------->
-<div id="ConfirmarEstado" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">¿Desea cambiar el estado? Se enviara un mail informandolo.</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn waves-effect waves-light btn-success" (click)="AgregarTareas(listTarea);" data-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn waves-effect waves-light btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!----------------------- FIN MODAL -------------------------------------->
-
-<!-----------------/MODAL------------------->
-<div id="SeleccionarCliente" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title h4-per">Seleccionar cliente</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered table-striped" id="myTable">
-                    <thead>
-                        <tr>
-                            <th width="11%">Nro.</th>
-                            <th width="52%">Nombre</th>
-                            <th width="28%">Tel.</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="listCliente.length">
-                        <tr *ngFor="let cliente of listCliente | paginate: {itemsPerPage: 5, currentPage: pageActualCliente}; let i = index">
-                            <td>{{cliente.PkCliente}} </td>
-                            <td>{{cliente.Nombre}} </td>
-                            <td>{{cliente.Telefono}}</td>
-                            <th width="9%">*</th>
-                            <td>
-                                <a aria-controls="example23" (click)="getCliente(cliente)" class="mdi mdi-check" data-dismiss="modal"></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="dataTables_paginate paging_simple_numbers">
-                    <span>
-                            <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualCliente = $event"></pagination-controls>
+        <!-----------------/MODAL------------------->
+        <jw-modal id="modalSeleccionarCliente">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title h4-per">Seleccionar cliente</h4>
+                        <button type="button" class="close" (click)="closeModal('modalSeleccionarCliente')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-striped" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th width="11%">Nro.</th>
+                                    <th width="52%">Nombre</th>
+                                    <th width="28%">Tel.</th>
+                                    <th width="3%">*</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="listCliente.length">
+                                <tr *ngFor="let cliente of listCliente | paginate: {id: 'pagCli', itemsPerPage: 5, currentPage: pageActualCliente}; let i2 = index">
+                                    <td>{{cliente.PkCliente}} </td>
+                                    <td>{{cliente.Nombre}} </td>
+                                    <td>{{cliente.Telefono}}</td>
+                                    <td>
+                                        <a aria-controls="example23" (click)="getCliente(cliente)" class="mdi mdi-check" data-dismiss="modal"></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <span>
+                            <pagination-controls id="pagCli" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualCliente = $event"></pagination-controls>
                         </span>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" data-dismiss="modal" class="btn waves-effect waves-light btn-danger">Cancelar</button>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" (click)="closeModal('modalSeleccionarCliente')" class="btn waves-effect waves-light btn-danger">Cancelar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<!----------------------- FIN MODAL -------------------------------------->
+            <jw-modal>
+                <!----------------------- FIN MODAL -------------------------------------->

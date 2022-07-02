@@ -186,7 +186,7 @@ export class ModificarOrdenComponent implements OnInit {
 
   obtenerRepuestos() {
     //Carga los repuestos con stock
-    // this.listRepuesto = [];
+     this.listRepuesto = [];
     this.repuestoService.ObtenerRepuestos(0).subscribe(
       (res: any) => {
         this.listRepuesto = res;
@@ -262,9 +262,7 @@ export class ModificarOrdenComponent implements OnInit {
         },
           err => console.error(err)
         );
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({ title: "Cancelado", icon: "error" });
-      }
+      } 
     })
   }
 
