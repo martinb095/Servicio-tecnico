@@ -78,7 +78,6 @@ export class MenuOrdenrepComponent implements OnInit {
       err => console.error(err)
     );
 
-    console.log("estados");
     this.estadoService.ObtenerEstado().subscribe(
       (res: any) => {
         this.listEstado = res;        

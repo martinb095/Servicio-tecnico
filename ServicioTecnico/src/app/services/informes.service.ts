@@ -15,4 +15,11 @@ export class InformesService {
     return this.http.get(this.API_URI + "/informes/clientestop");
   }
 
+  OrdenesFechas(filtro: any) {   
+    return this.http.post(this.API_URI + "/informes/ordenesfechas", filtro);
+  }
+
+  StockRepuestos(filtro: any) {   
+    return this.http.post(this.API_URI + "/informes/stockrepuestos", filtro);
+  }
 }

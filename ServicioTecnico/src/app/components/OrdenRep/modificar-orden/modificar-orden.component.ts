@@ -307,7 +307,7 @@ export class ModificarOrdenComponent implements OnInit {
       this.detalleOrdenService.ActualizarDetalleOrden(this.detalleOrden.PkDetalleOrden, this.detalleOrden).subscribe(
         res => {
           var result = Object.values(res);
-          if (result[0] == "OK") {
+          if (result[0] == "OK") {            
             this.closeModal('ModalMov');
             this.obtenerDetallesOrden();
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
@@ -320,6 +320,8 @@ export class ModificarOrdenComponent implements OnInit {
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
+            document.getElementById("lblNombreRepuesto").innerHTML = "";
+            document.getElementById("lblNombreTarea").innerHTML = "";
             this.closeModal('ModalMov');
             this.obtenerDetallesOrden();
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })

@@ -30,14 +30,14 @@ export class DetalleOrdenService {
     return this.http.get(this.API_URI + "/detalleorden/" + id);
   }
 
-  EliminarDetalleOrden(id: number) {
-    return this.http.delete(this.API_URI + "/detalleorden/" + id);
+  EliminarDetalleOrden(id: number) {      
+    return this.http.put(this.API_URI + "/detalleorden/eliminar/" + id, null);
   }
 
   GuardarDetalleOrden(detalleOrden: DetalleOrden) {   ;
     return this.http.post(this.API_URI + "/detalleorden", detalleOrden);
   }
-
+  
   ActualizarDetalleOrden(id: string, updateDetalleOrden: DetalleOrden) {
     return this.http.put(this.API_URI + "/detalleorden/" + { id }, updateDetalleOrden);
   }

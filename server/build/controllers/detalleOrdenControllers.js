@@ -94,26 +94,45 @@ class DetalleOrdenController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let detalleOrden = {
-                'Cantidad': req.body.Cantidad,
-                'FkRepuesto': req.body.FkRepuesto,
-                'Precio': req.body.Precio,
-                'Observacion': req.body.Observacion,
-                'FkTarea': req.body.FkTarea,
-                'FechaCreacion': req.body.FechaCreacion,
-                'FkOrden': req.body.FkOrden,
-            };
-            yield database_1.default.query('INSERT INTO detalleorden set ?', [detalleOrden], function (err) {
+            //let detalleOrden = {       
+            //    'Cantidad': req.body.Cantidad,
+            //    'FkRepuesto': req.body.FkRepuesto,
+            //    'Precio': req.body.Precio, 
+            //    'Observacion': req.body.Observacion,
+            //    'FkTarea': req.body.FkTarea,
+            //    'FechaCreacion': req.body.FechaCreacion,
+            //    'FkOrden': req.body.FkOrden,
+            //}       
+            //await pool.query('INSERT INTO detalleorden set ?', [detalleOrden], function (err: any) {
+            //    if (err) throw err;
+            //    res.json({ text: 'OK' });
+            //});  
+            const stringSQL = "call insertDetalleOrden(?,?,?,?,?,?,?);";
+            database_1.default.query(stringSQL, [req.body.Cantidad, req.body.FkRepuesto, req.body.Precio, req.body.Observacion, req.body.FkTarea, req.body.FechaCreacion, req.body.FkOrden], function (err, results) {
                 if (err)
                     throw err;
-                res.json({ text: 'OK' });
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
             });
         });
     }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('DELETE FROM detalleorden WHERE PkDetalleOrden = ?', [req.params.PkDetalle]);
-            res.json({ text: 'OK' });
+            const stringSQL = "call eliminarDetalleOrden(?);";
+            database_1.default.query(stringSQL, [req.params.PkDetalleOrden], function (err, results) {
+                if (err)
+                    throw err;
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
+            });
         });
     }
     update(req, res) {

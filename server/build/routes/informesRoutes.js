@@ -12,6 +12,8 @@ class InformesRoutes {
     }
     config() {
         this.router.get('/clientestop/', informesControllers_1.default.clientesMasVentas);
+        this.router.post('/ordenesfechas', informesControllers_1.default.repEntreFechas);
+        this.router.post('/stockrepuestos', informesControllers_1.default.stockRepuestos);
     }
 }
 const informesRoutes = new InformesRoutes();

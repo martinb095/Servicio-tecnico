@@ -9,10 +9,12 @@ class InformesRoutes {
         this.config();
     }
 
-    config(): void {
-     
-        this.router.get('/clientestop/', informesControllers.clientesMasVentas);
-          
+    config(): void {     
+        this.router.get('/clientestop/', informesControllers.clientesMasVentas);  
+
+        this.router.post('/ordenesfechas', informesControllers.repEntreFechas);        
+        
+        this.router.post('/stockrepuestos', informesControllers.stockRepuestos);         
     }
 
 }

@@ -3,14 +3,132 @@
     <div class="col-lg-3 col-md-4">
         <button type="button" (click)="clientesMasOrdenes();" class="btn btn-block btn-lg btn-info">Clientes con mas ordenes</button>
     </div>
-    <div class="col-lg-2 col-md-4">
-        <button type="button" class="btn btn-block btn-lg btn-info">Info</button>
+    <div class="col-lg-3 col-md-4">
+        <button type="button" (click)="openModal('ModalInfOrden');" class="btn btn-block btn-lg btn-info">Ordenes rep. entre fechas</button>
     </div>
     <div class="col-lg-2 col-md-4">
-        <button type="button" class="btn btn-block btn-lg btn-info">Info</button>
+        <button type="button" (click)="openModal('ModalStockRep');" class="btn btn-block btn-lg btn-info">Stock de repuestos</button>
     </div>
-    <div class="col-lg-2 col-md-4">
-        <button type="button" class="btn btn-block btn-lg btn-info">Info</button>
-    </div>
-
 </div>
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalInfOrden">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Informe de ordenes</h4>
+                <button type="button" class="close" (click)="closeModal('ModalInfOrden')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Estado:</label>
+                            <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstado"> 
+                                <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Fecha desde:</label>
+                            <input type="date" class="form-control" [(ngModel)]="fechadesde" [ngModelOptions]="{standalone:true}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Fecha hasta:</label>
+                            <input type="date" class="form-control" [(ngModel)]="fechahasta" [ngModelOptions]="{standalone:true}">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ordenesEntreFechas($event.target.value);" data-dismiss="modal">Imprimir</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalInfOrden')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!----------------------- FIN MODAL -------------------------------------->
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalStockRep">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Informe stock de repuestos</h4>
+                <button type="button" class="close" (click)="closeModal('ModalStockRep')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control col-md-3" [ngModelOptions]="{standalone:true}" required [(ngModel)]="repdesde">
+                        <button (click)="obtenerRepuestos();openModalRep('D');" type="button" class="btn btn-info">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                        <label id="lblNombreRepDesde" class="control-label text-danger"></label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control col-md-3" [ngModelOptions]="{standalone:true}" required [(ngModel)]="rephasta">
+                        <button (click)="obtenerRepuestos();openModalRep('H');" type="button" class="btn btn-info">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <label id="lblNombreRepHasta" class="control-label text-danger"></label>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="stockDeRepuestos($event.target.value);" data-dismiss="modal">Imprimir</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="ModalStockRep('ModalStockRep')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+<!-- </form> -->
+<!----------------------- FIN MODAL -------------------------------------->
+
+<jw-modal id="ModalSelectRepuesto">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 750px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Seleccionar repuesto</h4>
+                <button type="button" (click)="closeModal('ModalSelectRepuesto');" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" id="tableRepuestos">
+                    <thead>
+                        <tr>
+                            <th width="70%">Nombre</th>
+                            <th width="14%">Precio $</th>
+                            <th width="10%">Cant.disp.</th>
+                            <th width="10%">Marca</th>
+                            <th width="1%">*</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="listRepuesto.length">
+                        <tr *ngFor="let repuesto of listRepuesto | paginate: {itemsPerPage: 5, currentPage: pageActualRep}; let i = index">
+                            <td>{{repuesto.Nombre}} </td>
+                            <td>{{repuesto.PrecioVenta}}</td>
+                            <td>{{repuesto.CantidadStock}}</td>
+                            <td>{{repuesto.Marca}}</td>
+                            <i (click)="repuestoSeleccionado(repuesto,this.ran)" class="fa fa-check"></i>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="dataTables_paginate paging_simple_numbers">
+                    <span>
+                        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualRep = $event"></pagination-controls>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" (click)="closeModal('ModalSelectRepuesto');" class="btn waves-effect waves-light btn-danger">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>

@@ -79,24 +79,40 @@ class DetalleOrdenController {
     }
 
     public async create(req: Request, res: Response) {
-        let detalleOrden = {       
-            'Cantidad': req.body.Cantidad,
-            'FkRepuesto': req.body.FkRepuesto,
-            'Precio': req.body.Precio, 
-            'Observacion': req.body.Observacion,
-            'FkTarea': req.body.FkTarea,
-            'FechaCreacion': req.body.FechaCreacion,
-            'FkOrden': req.body.FkOrden,
-        }       
-        await pool.query('INSERT INTO detalleorden set ?', [detalleOrden], function (err: any) {
-            if (err) throw err;
-            res.json({ text: 'OK' });
-        });  
+        //let detalleOrden = {       
+        //    'Cantidad': req.body.Cantidad,
+        //    'FkRepuesto': req.body.FkRepuesto,
+        //    'Precio': req.body.Precio, 
+        //    'Observacion': req.body.Observacion,
+        //    'FkTarea': req.body.FkTarea,
+        //    'FechaCreacion': req.body.FechaCreacion,
+        //    'FkOrden': req.body.FkOrden,
+        //}       
+        //await pool.query('INSERT INTO detalleorden set ?', [detalleOrden], function (err: any) {
+        //    if (err) throw err;
+        //    res.json({ text: 'OK' });
+        //});  
+        const stringSQL = "call insertDetalleOrden(?,?,?,?,?,?,?);";
+        pool.query(stringSQL, [req.body.Cantidad, req.body.FkRepuesto, req.body.Precio, req.body.Observacion, req.body.FkTarea, req.body.FechaCreacion, req.body.FkOrden], function (err: any, results: any) {
+            if (err) throw err;                  
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });
     }
 
-    public async delete(req: Request, res: Response) {               
-        await pool.query('DELETE FROM detalleorden WHERE PkDetalleOrden = ?',  [req.params.PkDetalle]);
-        res.json({ text: 'OK' });              
+    public async delete(req: Request, res: Response) {    
+        const stringSQL = "call eliminarDetalleOrden(?);";
+        pool.query(stringSQL, [req.params.PkDetalleOrden], function (err: any, results: any) {
+            if (err) throw err;                  
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });        
     }
     
     public update(req: Request, res: Response) {               

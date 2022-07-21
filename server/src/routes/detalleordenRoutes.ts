@@ -17,8 +17,10 @@ class DetalleordenRoutes {
 
         //Crear
         this.router.post('/', detalleordenControllers.create);
-        //Eliminar
-        this.router.delete('/:PkDetalle', detalleordenControllers.delete);
+
+        //Eliminar               
+        this.router.put('/eliminar/:PkDetalleOrden', detalleordenControllers.delete);
+
         //Actualizar
         this.router.put('/:PkDetalle', detalleordenControllers.update);
         //Lista detalles por orden
