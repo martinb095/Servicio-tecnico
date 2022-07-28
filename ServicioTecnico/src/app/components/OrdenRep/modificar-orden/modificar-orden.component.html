@@ -99,19 +99,19 @@
                 <thead>
                     <tr>
                         <th width="20">Repuesto</th>
-                        <th width="20%">Precio</th>
-                        <th width="20%">Cantidad</th>
                         <th width="20%">Tarea</th>
-                        <th width="20%">Total</th>
+                        <th width="20%">Precio $</th>
+                        <th width="20%">Cantidad</th>
+                        <th width="20%">Total $</th>
                         <th width="6%">Acción</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="listDetalleOrden.length">
                     <tr *ngFor="let detalleorden of listDetalleOrden | paginate: {itemsPerPage: 5, currentPage: pageActualDetalle}; let i = index">
                         <td>{{detalleorden.NombreRep}} </td>
+                        <td>{{detalleorden.NombreTarea}}</td>
                         <td>{{detalleorden.Precio}}</td>
                         <td>{{detalleorden.Cantidad}}</td>
-                        <td>{{detalleorden.NombreTarea}}</td>
                         <td>{{detalleorden.Total}}</td>
                         <td class="text-nowrap">
                             <!-- <a data-toggle="tooltip" data-original-title="Edit"> <i (click)="modificarDetalle(detalleorden);" class="fa fa-pencil text-inverse m-r-10"></i> </a> -->
@@ -137,7 +137,7 @@
             <!-- Modal content-->
             <div class="modal-content" style="width: 700px">
                 <div class="modal-header">
-                    <h4 class="modal-title">Registrar movimiento</h4>
+                    <h4 class="modal-title">Registrar movimiento de repuesto</h4>
                     <button type="button" (click)="closeModal('ModalMov');" class="close">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -166,7 +166,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad:</label>
-                                <input type="number" [ngModelOptions]="{standalone:true}" class="form-control" required [(ngModel)]="detalleOrden.Cantidad">
+                                <input type="number" [min]="1" [ngModelOptions]="{standalone:true}" class="form-control" required [(ngModel)]="detalleOrden.Cantidad">
                             </div>
                         </div>
                     </div>

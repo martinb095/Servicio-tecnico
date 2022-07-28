@@ -80,7 +80,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
     this.estadoService.ObtenerEstado().subscribe(
       (res: any) => {
-        this.listEstado = res;        
+        this.listEstado = res;
         this.idEstado = 1;
       },
       err => console.error(err)
@@ -92,7 +92,7 @@ export class MenuOrdenrepComponent implements OnInit {
   OrdenesSegunEstado(id: number) {
     this.pageActual = 1;
     this.listOrdenRep = [];
-    this.ordenesRepService.ObtenerOPporEstado(id).subscribe((data: OrdenReparacion[]) => {
+    this.ordenesRepService.ObtenerOPporEstado(id).subscribe((data: OrdenReparacion[]) => {      
       this.listOrdenRep = data;
       this.idEstadoActual = id;
     },
@@ -100,7 +100,11 @@ export class MenuOrdenrepComponent implements OnInit {
     );
   }
 
-  OrdenesSegunId(id: number) {
+  OrdenesSegunId(id: number) {   
+    if(id == null ){
+      Swal.fire({ title: "Debe seleccionar un nro. de orden.", icon: "warning" });
+      return;
+    }
     this.listOrdenRep = [];
     this.ordenesRepService.ObtenerORporNro(id).subscribe((data: OrdenReparacion[]) => {
       this.listOrdenRep = data;
@@ -113,6 +117,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
   getCliente(cliente: Cliente) {
     this.cliente = cliente;
+    this.closeModal('modalSeleccionarCliente');
   }
 
   OrdenesSegunClienteEstado(PkCliente: number, FkEstado: number) {
@@ -140,17 +145,16 @@ export class MenuOrdenrepComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-        //Mensaje informando el almacenado     
-        Swal.fire({ icon: 'success', title: "Orden de reparación Nro. " + id + " eliminada correctamente.", })
         this.ordenesRepService.EliminarOrdenRep(this.PkOrden).subscribe(res => {
-          //    console.log(res)
+          console.log(res);
+          //Mensaje informando el almacenado     
+          Swal.fire({ icon: 'success', title: "Orden de reparación Nro. " + id + " eliminada correctamente." })
         },
           err => console.error(err)
         );
       }
     })
   }
-
 
   VaciarCliente() {
     Swal.fire({
@@ -176,54 +180,6 @@ export class MenuOrdenrepComponent implements OnInit {
     })
   }
 
-  //TareasSinAsignar(idOrden: number) {
-  //  this.PkOrden = idOrden
-  //  this.listTarea = [];
-  //  this.tareasService.SelectTareaSinAsignar(idOrden).subscribe((data: Tarea[]) => {
-  //    this.listTarea = data;
-  //  },
-  //    err => console.error(err)
-  //  );
-  //}
-
-  // RepuestoSinAsignar(idOrden: number) {
-  //   this.PkOrden = idOrden
-  //   this.listRepuesto = [];
-  //   this.repuestoService.SelectRepuestoSinAsignar(idOrden).subscribe((data: Repuesto[]) => {
-  //     this.listRepuesto = data;
-  //   },
-  //     err => console.error(err)
-  //   );
-  // }
-
-  // AgregarRepuesto(listRepuesto) {
-  //   // console.log(listRepuesto[0].CantidadActual, "CantidadActual")
-  //   var length = listRepuesto.length;
-  //   for (let i = 0; i < length; i++) {
-  //     if (listRepuesto[i].checked) {
-  //       //arma detallerepuesto
-  //       this.detallerepuesto = {
-  //         'PkDetalleRepuesto': null,
-  //         'FkRepuesto': listRepuesto[i].PkRepuesto,
-  //         'Precio': listRepuesto[i].PrecioVenta,
-  //         'Cantidad': listRepuesto[i].CantidadActual,
-  //         'FkOrdenrep': this.PkOrden,
-  //         'Repuesto': null,
-  //       }
-
-  //       //   console.log(this.detallerepuesto, "    this.detallerepuesto");
-  //       //Almacena datos orden
-  //       this.detallerepuestoService.GuardarDetalleRepuesto(this.detallerepuesto)
-  //         .subscribe(
-  //           res => {
-  //           },
-  //           err => console.error(err)
-  //         )
-  //     }
-  //   }
-  //Mensaje informando el almacenado     
-  // Swal.fire({ title: "Repuesto agregado a la orden Nro. " + this.PkOrden, icon: "success" });
-  //}
 
   openModal(id: string, nroOrden: number) {
     this.idCambiarEstado = nroOrden;
@@ -241,8 +197,6 @@ export class MenuOrdenrepComponent implements OnInit {
       'PkOrdenRep': this.idCambiarEstado,
       'FkEstado': this.idEstadoActual,
     }
-    console.log(DatosOrden);
-
     Swal.fire({
       title: '¿Desea modificar el estado de la orden?',
       text: 'Se enviara un correo al cliente notificando la modificación.',
@@ -262,6 +216,8 @@ export class MenuOrdenrepComponent implements OnInit {
               //Mensaje informando el almacenado     
               Swal.fire({ title: "Estado actualizado de la orden Nro. " + this.idCambiarEstado, icon: "success" });
               //Obtiene los datos de la orden modificada para el envio del mail
+              this.OrdenesSegunEstado(this.idEstadoActual);
+              this.idEstado = this.idEstadoActual;
               this.ordenesRepService.SelectOrdenReparaMail(this.idCambiarEstado).subscribe(
                 (res: any) => {
                   this.DatosMail = res;

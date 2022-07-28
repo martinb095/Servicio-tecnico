@@ -110,9 +110,7 @@ export class MenumodeloComponent implements OnInit {
         }       
       },
       err => console.error(err)
-    )
-    //Mensaje informando el almacenado
-    Swal.fire({ title: "Modelo guardado correctamente.", icon: "success" });
+    )    
   }
 
   ModificarModelo() {

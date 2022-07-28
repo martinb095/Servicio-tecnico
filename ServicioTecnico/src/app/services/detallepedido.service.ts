@@ -21,8 +21,7 @@ export class DetallePedidoService {
     return this.http.delete(this.API_URI + "/detallepedido/" + id);
   }
 
-  GuardarDetallePedido(detallePedido: DetallePedido) {   
-    console.log(detallePedido);
+  GuardarDetallePedido(detallePedido: DetallePedido) {       
     return this.http.post(this.API_URI + "/detallepedido", detallePedido);
   }
   

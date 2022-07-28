@@ -8,7 +8,7 @@
                     <h2 class="box-title m-b-20" style="text-align:center">Consultar estado de la reparación</h2>
                     <div class="form-group ">
                         <div class="col-xs-12">
-                            <input class="form-control" type="number" placeholder="Nro. orden" [ngModelOptions]="{standalone:true}" [(ngModel)]="datosOrden.PkOrdenRep"> </div>
+                            <input class="form-control" [min]="1" type="number" placeholder="Nro. orden" [ngModelOptions]="{standalone:true}" [(ngModel)]="datosOrden.PkOrdenRep"> </div>
                     </div>
                     <div class="form-group ">
                         <div class="col-xs-12">

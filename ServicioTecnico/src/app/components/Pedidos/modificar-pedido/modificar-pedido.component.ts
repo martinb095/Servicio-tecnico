@@ -92,6 +92,7 @@ export class ModificarPedidoComponent implements OnInit {
     this.detallePedido.FkRepuesto = null;
     this.detallePedido.Observacion = null;
     this.detallePedido.FkPedProv = null;
+    document.getElementById("lblNombreRepuesto").innerHTML = "";
   }
 
   eliminarDetallePedido(idDetallePedido: number) {
@@ -127,6 +128,7 @@ export class ModificarPedidoComponent implements OnInit {
       err => console.error(err)
     );
   }
+
   repuestoSeleccionado(repuesto: any) {
     this.detallePedido.FkRepuesto = repuesto.PkRepuesto;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
@@ -134,7 +136,7 @@ export class ModificarPedidoComponent implements OnInit {
   }
 
 
- 
+
   ModificarPedido() {
     //Almacena datos orden
     this.pedidoService.ActualizarPedido(this.idPedido, this.pedidoEdit)
@@ -142,8 +144,8 @@ export class ModificarPedidoComponent implements OnInit {
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            //Mensaje informando el almacenado y redirecciona    
-            Swal.fire({ title: "Pedido modificado correctamente.", icon: "success" }).then(function () {
+              //Mensaje informando el almacenado y redirecciona    
+              Swal.fire({ title: "Pedido modificado correctamente.", icon: "success" }).then(function () {
               window.location.href = "/menupedido";
             },
               err => console.error(err)
@@ -158,8 +160,9 @@ export class ModificarPedidoComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar un repuesto.", icon: "warning" });
       return;
     }
-    if (this.detallePedido.Cantidad == null) {
-      this.detallePedido.Cantidad = 0;
+    if (this.detallePedido.Cantidad == null || this.detallePedido.Cantidad == "" || this.detallePedido.Cantidad == "0") {
+      Swal.fire({ title: "Debe seleccionar una cantidad valida.", icon: "warning" });
+      return;
     }
     if (this.detallePedido.Observacion == null) {
       this.detallePedido.Observacion = "";

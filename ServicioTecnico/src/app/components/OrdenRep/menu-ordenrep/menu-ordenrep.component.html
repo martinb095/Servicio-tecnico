@@ -53,6 +53,7 @@
         <tr>
             <th width="6%">Nro. orden</th>
             <th width="29%">Cliente</th>
+            <th width="9%">Fecha inicio</th>
             <th width="9%">Fecha retiro est.</th>
             <th width="6%">Estado</th>
             <th width="6%">Acción</th>
@@ -62,12 +63,13 @@
         <tr *ngFor="let orden of listOrdenRep | paginate: { id: 'pagOrRep', itemsPerPage: 7, currentPage: pageActual}; let i = index">
             <td>{{orden.Pkordenreparacion}} </td>
             <td>{{orden.Cliente}}</td>
+            <td>{{orden.FechaInicio | date:'dd/MM/yyyy'}}</td>
             <td>{{orden.FecRetiroEstimado | date:'dd/MM/yyyy'}}</td>
             <td>{{orden.Estado}}</td>
             <td class="text-nowrap">
                 <a data-toggle="tooltip" data-original-title="Cambiar"> <i (click)="openModal('ModalConfirmarEstado',orden.Pkordenreparacion)" class="fa fa-exchange m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Edit"> <i [routerLink]="['/menuordenrep/modificar', orden.Pkordenreparacion]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                <a data-toggle="tooltip" data-original-title="Close"> <i (click)="EliminarOrden(orden.Pkordenreparacion)" class="fa fa-close text-danger"></i> </a>
+                <!-- <a data-toggle="tooltip" data-original-title="Close"> <i (click)="EliminarOrden(orden.Pkordenreparacion)" class="fa fa-close text-danger"></i> </a> -->
             </td>
         </tr>
     </tbody>
@@ -94,9 +96,9 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">¿Desea cambiar el estado? Se enviará un mail informándolo.</label>
-                            <!-- <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
+                            <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
                                 <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
-                            </select> -->
+                            </select>
                         </div>
                     </div>
                 </div>

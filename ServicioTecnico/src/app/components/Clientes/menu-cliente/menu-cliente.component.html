@@ -23,9 +23,9 @@
 <table class="table table-bordered table-striped" id="myTable">
     <thead>
         <tr>
-            <th width="10%">Nro. cliente</th>
+            <th width="10%">Nro.</th>
             <th width="40%">Nombre</th>
-            <th width="18%">Telefono</th>
+            <th width="18%">Teléfono</th>
             <th width="15%">Mail</th>
             <th width="10%">Acción</th>
         </tr>
@@ -33,7 +33,7 @@
     <tbody *ngIf="listCliente">
         <tr *ngFor="let cliente of listCliente | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
             <td>{{cliente.PkCliente}} </td>
-            <td>{{cliente.Nombre}}</td>
+            <td>{{cliente.Nombre}} {{cliente.Apellido}}</td>
             <td>{{cliente.Telefono}}</td>
             <td>{{cliente.Mail}}</td>
             <td class="text-nowrap">
@@ -64,7 +64,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="cliente.Nombre">
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre:<span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="cliente.Nombre">
                         </div>
                     </div>

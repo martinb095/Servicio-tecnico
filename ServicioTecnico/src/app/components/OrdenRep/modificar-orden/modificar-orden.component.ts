@@ -71,7 +71,7 @@ export class ModificarOrdenComponent implements OnInit {
     CantidadStock: null,
     Observacion: null,
     NroSerie: null,
-    FkTipoRepuesto: null,
+    FkTipoRepuesto: null,  
     FkMarca: null,
     Activo: true,
   };
@@ -97,8 +97,7 @@ export class ModificarOrdenComponent implements OnInit {
     private tareaService: TareaService,
     private repuestoService: RepuestoService,
     private detalleOrdenService: DetalleOrdenService,
-    private router: Router,
-    private datePipe: DatePipe,
+    private router: Router,    
     private modalService: ModalService
   ) { }
 
@@ -301,7 +300,7 @@ export class ModificarOrdenComponent implements OnInit {
     }
 
     this.detalleOrden.FkOrden = this.idOrdeRep;
-    this.detalleOrden.FechaCreacion = this.datePipe.transform(this.date, "yyyy-MM-dd");
+    this.detalleOrden.FechaCreacion = this.datepipe.transform(this.date, "yyyy-MM-dd");
 
     if (this.detalleOrden.PkDetalleOrden != null) {
       this.detalleOrdenService.ActualizarDetalleOrden(this.detalleOrden.PkDetalleOrden, this.detalleOrden).subscribe(

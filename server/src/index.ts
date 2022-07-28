@@ -26,25 +26,25 @@ import informesRoutes from './routes/informesRoutes';
 class Server {
 
     public app: Application
-   
-    constructor() {      
+
+    constructor() {
         this.app = express();
-        this.app.disable('etag'); 
+        this.app.disable('etag');
         this.config();
         this.routes();
     }
 
     config(): void {
-        this.app.disable('etag');        
+        this.app.disable('etag');
         this.app.set('port', process.env.PORT || 3000);
         this.app.use(morgan('dev'));
         this.app.use(cors());
         this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }));      
+        this.app.use(express.urlencoded({ extended: false }));
     }
 
-    routes(): void {      
-        this.app.disable('etag'); 
+    routes(): void {
+        this.app.disable('etag');
         this.app.use(indexRoutes);
         this.app.use('/clientes/', clientesRoutes);
         this.app.use('/ordenesreparacion/', ordenesreparacionRoutes);
@@ -54,7 +54,7 @@ class Server {
         this.app.use('/estados/', estadosRoutes);
         this.app.use('/tareas/', tareasRoutes);
         this.app.use('/repuestos/', repuestosRoutes);
-        this.app.use('/detalleorden/', detalleOrdenRoutes);      
+        this.app.use('/detalleorden/', detalleOrdenRoutes);
         this.app.use('/usuarios/', usuariosRoutes);
         this.app.use('/login/', loginRoutes);
         this.app.use('/tiporepuestos/', tiporepuestos);
@@ -63,11 +63,12 @@ class Server {
         this.app.use('/proveedores/', proveedoresRoutes);
         this.app.use('/pedidos/', pedidosRoutes);
         this.app.use('/detallepedido/', detallePedidosRoutes);
-        this.app.use('/informes/', informesRoutes);
+        this.app.use('/informes/', informesRoutes);       
+
     }
 
-    start(): void {    
-        this.app.disable('etag');    
+    start(): void {
+        this.app.disable('etag');
         this.app.listen(this.app.get('port'), () => {
             console.log('Server en puerto', this.app.get('port'))
         });

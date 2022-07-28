@@ -22,7 +22,7 @@ export class MenuusuarioComponent implements OnInit {
     PkUsuario: 0,
     Nombre: "",
     Contrasenia: "",
-    FkTipoUsuario: 0,
+    FkTipoUsuario: 1,
     UltimoIngreso: null,
     Mail: "",
   };
@@ -84,19 +84,34 @@ export class MenuusuarioComponent implements OnInit {
   }
 
   GuardarUsuario() {
-    //Almacena usuario      
-    if (this.passRepe == this.usuario.Contrasenia) {
-      this.usuarioService.GuardarUsuario(this.usuario).subscribe(
-        res => {
-          Swal.fire({ title: "Usuario guardado correctamente.", icon: "success" });
-          this.ObtenerUsuarios();
-          this.closeModal('ModalNuevoUsuario');      
-        },
-        err => console.error(err)
-      )
-    } else {
+   
+    //Almacena usuario   
+    if (this.usuario.Nombre == "" || this.usuario.Nombre == null) {
+      Swal.fire({ title: "Debe ingresar un nombre.", icon: "error" });
+      return;
+    }   
+    if (this.usuario.Contrasenia == "" || this.usuario.Contrasenia == null) {
+      Swal.fire({ title: "Debe ingresar una contraseña.", icon: "error" });
+      return;
+    }      
+   
+    if (this.passRepe != this.usuario.Contrasenia) {
       Swal.fire({ title: "Las contraseñas no son iguales.", icon: "error" });
-    }
+      return;
+    }   
+    if (this.usuario.FkTipoUsuario == null) {
+      Swal.fire({ title: "Debe seleccionar un tipo de usuario.", icon: "error" });
+      return;
+    }   
+    this.usuarioService.GuardarUsuario(this.usuario).subscribe(
+      res => {
+        Swal.fire({ title: "Usuario guardado correctamente.", icon: "success" });
+        this.closeModal('ModalNuevoUsuario');
+        this.ObtenerUsuarios();
+      },
+      err => console.error(err)
+    )
+
 
   }
 
@@ -110,7 +125,7 @@ export class MenuusuarioComponent implements OnInit {
           this.closeModal('ModalEditarUsuario');
           Swal.fire({ title: "Usuario modificado correctamente.", icon: "success" });
           this.ObtenerUsuarios();
-        }         
+        }
       },
       err => console.error(err)
     )
@@ -132,7 +147,7 @@ export class MenuusuarioComponent implements OnInit {
         );
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Usuario nro. " + id + " eliminado correctamente." })
-      } 
+      }
     })
   }
 

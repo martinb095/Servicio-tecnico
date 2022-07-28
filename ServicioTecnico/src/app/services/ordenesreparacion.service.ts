@@ -47,8 +47,9 @@ export class OrdenesReparacionService {
   }
 
   EliminarOrdenRep(id: number) {
-    return this.http.delete(this.API_URI + "/ordenesreparacion/" + id);
+    return this.http.put(this.API_URI + "/ordenesreparacion/eliminar/" + id, null);
   }
+
 
   GuardarOrdenRep(ordenrep: OrdenReparacion) {
     return this.http.post(this.API_URI + "/ordenesreparacion/nuevaorden", ordenrep);

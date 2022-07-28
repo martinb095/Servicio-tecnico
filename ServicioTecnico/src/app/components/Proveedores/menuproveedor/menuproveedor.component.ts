@@ -33,6 +33,7 @@ export class MenuproveedorComponent implements OnInit {
     Telefono: "",
     Mail: "",
     Cuit: "",    
+    Observacion: "",
     Activo:null
   };
 
@@ -150,7 +151,7 @@ export class MenuproveedorComponent implements OnInit {
   }
 
   //Obtiene el proveedor de la fila y la asigna al objeto que despues actualiza
-  SetValores(proveedor: Proveedor) {
+  SetValores(proveedor: Proveedor) {    
     this.proveedor = {
       PkProveedor: proveedor.PkProveedor,
       Nombre: proveedor.Nombre,
@@ -159,6 +160,7 @@ export class MenuproveedorComponent implements OnInit {
       Telefono: proveedor.Telefono,
       Mail: proveedor.Mail, 
       Cuit: proveedor.Cuit,    
+      Observacion: proveedor.Observacion,  
       Activo:proveedor.Activo,
     };
   
@@ -194,6 +196,7 @@ export class MenuproveedorComponent implements OnInit {
       this.proveedor.Telefono= "",
       this.proveedor.Mail= "",
       this.proveedor.Cuit= "",    
+      this.proveedor.Observacion= "",  
       this.proveedor.Activo=null,
       this.idProvincia = null;
   }

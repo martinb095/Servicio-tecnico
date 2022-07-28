@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
-    
+
     //valido si existe la sesion
     let valido = localStorage.getItem('ingreso');
     if (valido != "true") {
@@ -57,13 +57,13 @@ export class LoginComponent implements OnInit {
     this.usuario.Contrasenia = this.contrasenia;
     this.loginService.ValidarUsuario(this.usuario).subscribe(
       (res: any) => {
-        var valido = res.exist;
-        if (valido == true) {
+        if (res.length > 0) {
           localStorage.setItem('ingreso', 'true');
           localStorage.setItem('username', this.usuario.Nombre);
+          localStorage.setItem('tipoUsuario', res[0].FkTipoUsuario.toString());
           this.router.navigate(['/menuordenrep']);
         }
-        else if (valido == false) {
+        else {
           Swal.fire({ icon: 'error', title: "El usuario ingresado no es valido." })
         }
       },
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
   }
 
   obtenerContrasenia() {
-    this.mailRecuperar="martin_ballaman@hotmail.com";
+    this.mailRecuperar = "martin_ballaman@hotmail.com";
     if (this.mailRecuperar == "") {
       Swal.fire({ title: "Debe ingresar un mail.", icon: "warning" });
       return;
@@ -81,11 +81,11 @@ export class LoginComponent implements OnInit {
       Swal.fire({ title: "Debe ingresar un mail valido.", icon: "warning" });
       return;
     }
-    this.mailRecuperar="martin_ballaman@hotmail.com";   
+    this.mailRecuperar = "martin_ballaman@hotmail.com";
     this.loginService.getPass(this.mailRecuperar).subscribe(
       res => {
         if (res != null) {
-          var result = Object.values(res);          
+          var result = Object.values(res);
           this.enviarMail(result[0]);
         }
         else {
@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
 
   enviarMail(contrasenia: string) {
     this.datosMail.mail = this.mailRecuperar;
-    this.datosMail.contrasenia = contrasenia;    
+    this.datosMail.contrasenia = contrasenia;
     this.mailService.RecuperarPass(this.datosMail).subscribe(
       res => {
         var result = Object.values(res);

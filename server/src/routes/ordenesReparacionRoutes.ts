@@ -31,8 +31,10 @@ class OrdenesReparacionRoutes {
 
         //Nueva
         this.router.post('/nuevaorden', ordenesreparacionControllers.create);
-        //Eliminar
-        this.router.delete('/:PkOrdenRep', ordenesreparacionControllers.delete);
+
+        //Eliminar               
+        this.router.put('/eliminar/:PkOrden', ordenesreparacionControllers.delete);
+  
         //Actualizar
         this.router.put('/actualizar/:PkOrdenRep', ordenesreparacionControllers.update);
         //Actualizar estado

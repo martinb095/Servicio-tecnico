@@ -49,8 +49,7 @@ class DetalleOrdenController {
     }
 
     //funciona
-    public async GetDetallesFindByOrden(req: Request, res: Response) {
-        
+    public async GetDetallesFindByOrden(req: Request, res: Response) {        
         pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detallerepuestos no encontrado" });

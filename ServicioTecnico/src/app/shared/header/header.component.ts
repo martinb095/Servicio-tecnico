@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-header',
@@ -14,9 +15,23 @@ export class HeaderComponent implements OnInit {
   }
 
   cerrarSesion() {
-    localStorage.setItem('ingreso', "false");
 
-    this.router.navigate(['/login'])
+   
+      Swal.fire({
+        title: '¿Está seguro que desea cerrar sesión?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, cerrar.',
+        cancelButtonText: 'No, cancelar.'
+      }).then((result) => {
+        if (result.value) {
+          localStorage.setItem('ingreso', "false");
+          this.router.navigate(['/login'])
+        }
+      })
+    
+
+
   }
 
 }

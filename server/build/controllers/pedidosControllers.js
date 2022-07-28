@@ -46,7 +46,7 @@ class PedidoController {
     }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const stringSQL = "call deletePedido(?,?);";
+            const stringSQL = "call deletePedido(?);";
             database_1.default.query(stringSQL, [req.params.PkPedProv], function (err, results) {
                 if (err)
                     throw err;

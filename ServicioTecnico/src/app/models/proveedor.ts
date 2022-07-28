@@ -6,5 +6,6 @@ export interface Proveedor {
     Telefono: string;
     Mail: string; 
     Cuit: string;    
+    Observacion: string;    
     Activo:Boolean;    
 }

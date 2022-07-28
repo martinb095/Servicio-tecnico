@@ -50,9 +50,9 @@ class OrdenesRepController {
     public async getOrdenesFindByEstado(req: Request, res: Response) {
         let stringSQL: string = "";
         if (req.params.FkEstado != "T") {
-            stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
+            stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
         } else {
-            stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
+            stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
         }
         pool.query(stringSQL, req.params.FkEstado, (err: any, results: any) => {
             if (err) {
@@ -68,7 +68,7 @@ class OrdenesRepController {
     }
 
     public async getOrdenesFindByNro(req: Request, res: Response) {
-        pool.query('Select Pkordenreparacion, cliente.Nombre as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err: any, results: any) => {
+        pool.query('Select OrR.Pkordenreparacion, cliente.Nombre as "Cliente", FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado inner join cliente on cliente.PkCliente = OrR.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "OR no encontrado" });
             }
@@ -165,9 +165,23 @@ class OrdenesRepController {
     }
 
     //Para ver q nro esta eliminando
-    public async delete(req: Request, res: Response) {
-        await pool.query('DELETE FROM ordenreparacion WHERE PkOrdenreparacion = ?', [req.params.PkOrdenRep]);
+    // public async delete(req: Request, res: Response) {
+    //     await pool.query('DELETE FROM ordenreparacion WHERE PkOrdenreparacion = ?', [req.params.PkOrdenRep]);
+    // }
+    public async delete(req: Request, res: Response) {   
+        console.log(req.params.PkOrden); 
+        const stringSQL = "call eliminarOrden(?);";
+        pool.query(stringSQL, [req.params.PkOrden], function (err: any, results: any) {
+            if (err) throw err;                  
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });        
     }
+
+
 
     public async update(req: Request, res: Response) {
         let ordenRep = {
@@ -208,7 +222,6 @@ class OrdenesRepController {
             if (err) {
                 res.status(404).json({ text: "Error" });
             }
-            console.log(ordenDb);
             if (ordenDb.length == 0) {
                 return res.status(200).json({ exist: false });
             }

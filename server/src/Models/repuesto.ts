@@ -7,6 +7,6 @@ export interface Repuesto {
     Observacion: string;
     NroSerie: number;
     FkTipoRepuesto: number;
-    FkMarca: number;
+    FkMarca: number;    
     Activo:Boolean;
 }

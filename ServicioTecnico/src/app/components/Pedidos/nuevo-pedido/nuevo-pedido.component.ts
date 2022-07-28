@@ -44,6 +44,7 @@ export class NuevoPedidoComponent implements OnInit {
     Telefono: "",
     Mail: "",
     Cuit: "",
+    Observacion: "",
     Activo: null
   };
 
@@ -105,7 +106,7 @@ export class NuevoPedidoComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar un repuesto.", icon: "warning" });
       return;
     }
-    if (this.detallePedido.Cantidad == null) {
+    if (this.detallePedido.Cantidad == null || this.detallePedido.Cantidad=="") {
       this.detallePedido.Cantidad = 0;
     }
     if (this.detallePedido.Observacion == null) {

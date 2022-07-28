@@ -36,7 +36,7 @@ import { DetalleOrden } from 'src/app/models/detalleorden';
 })
 
 export class NuevaOrdenComponent implements OnInit {
-
+  
   listMarca: Marca[] = [];
   listModelo: Modelo[] = [];
   listEstado: Estado[] = [];
@@ -76,7 +76,7 @@ export class NuevaOrdenComponent implements OnInit {
     Observacion: null,
     NroSerie: null,
     FkTipoRepuesto: null,
-    FkMarca: null,
+    FkMarca: null,    
     Activo: true,
   };
 
@@ -228,6 +228,10 @@ export class NuevaOrdenComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar una fecha estimada de retiro.", icon: "warning" });
       return;
     }   
+    if (this.datePipe.transform(this.ordenRep.FecRetiroEstimado, 'yyyy-MM-dd') < this.datePipe.transform(this.date, 'yyyy-MM-dd')) {
+      Swal.fire({ title: "La fecha de retiro debe ser mayor a la de emision.", icon: "warning" });
+      return;
+    }
     if (this.ordenRep.FkModelo == 0 || this.ordenRep.FkModelo == null) {
       Swal.fire({ title: "Debe seleccionar un modelo a reparar.", icon: "warning" });
       return;
@@ -235,6 +239,7 @@ export class NuevaOrdenComponent implements OnInit {
     //obtiene el id del cliente y se lo asigna a la orden
     this.ordenRep.FkCliente = this.idCliente;
     //Almacena datos orden
+    console.log("this.ordenRep",this.ordenRep.FkEstado)
     this.ordenesService.GuardarOrdenRep(this.ordenRep).subscribe(
         res => {
           var result = Object.values(res);
@@ -255,6 +260,7 @@ export class NuevaOrdenComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar al menos un repuesto o tarea.", icon: "warning" });
       return;
     }
+    
     if (this.detalleOrden.Cantidad == null) {
       this.detalleOrden.Cantidad = 0;
     }

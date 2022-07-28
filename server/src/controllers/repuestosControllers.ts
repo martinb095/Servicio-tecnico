@@ -7,7 +7,7 @@ class RepuestoController {
 
     public async getRepuestos(req: Request, res: Response) {
         if (req.params.FkTipoRepuesto > 0) {
-            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca" FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err: any, results: any) => {
+            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -19,7 +19,7 @@ class RepuestoController {
             });
         }
         else {
-            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca" FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err: any, results: any) => {
+            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -31,17 +31,17 @@ class RepuestoController {
             });
         }
     }
-    public async getRepuestosFindByNombre(req: Request, res: Response) {     
-            pool.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca' FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and repuesto.Nombre like '%" + req.params.Valor + "%' and repuesto.Activo = 1 order by Repuesto.nombre", (err: any, results: any) => {
-                if (err) {
-                    res.status(404).json({ text: "repuesto no encontrado" });
-                }
-                if (results) {
-                    return res.json(results);
-                } else {
-                    return res.status(404).json({ text: "repuesto no encontrado" });
-                }
-            });    
+    public async getRepuestosFindByNombre(req: Request, res: Response) {
+        pool.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err: any, results: any) => {
+            if (err) {
+                res.status(404).json({ text: "repuesto no encontrado" });
+            }
+            if (results) {
+                return res.json(results);
+            } else {
+                return res.status(404).json({ text: "repuesto no encontrado" });
+            }
+        });
     }
 
     public GetOne(req: Request, res: Response) {
@@ -105,7 +105,7 @@ class RepuestoController {
             'FkMarca': req.body.FkMarca,
             'NroSerie': req.body.NroSerie,
             'Activo': true
-        }       
+        }
         await pool.query('update repuesto set ? Where PkRepuesto = ?', [repuesto, req.params.PkRepuesto]);
         res.json({ text: 'OK' });
     }
@@ -124,6 +124,8 @@ class RepuestoController {
             }
         });
     }
+
+
 }
 
 

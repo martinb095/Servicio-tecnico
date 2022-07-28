@@ -37,10 +37,10 @@
 <table class="table table-bordered table-striped" id="myTable">
     <thead>
         <tr>
-            <th width="6%">Nro. repuesto</th>
+            <th width="6%">Nro.</th>
             <th width="24%">Nombre</th>
-            <th width="6%">Precio costo</th>
-            <th width="6%">Precio venta</th>
+            <th width="6%">Precio costo $</th>
+            <th width="6%">Precio venta $</th>
             <th width="4%">Cantidad</th>
             <th width="8%">Tipo de repuesto</th>
             <th width="6%">Acción</th>
@@ -84,7 +84,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group ">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" [(ngModel)]="repuesto.Nombre" [ngModelOptions]="{standalone:true}">
                         </div>
                     </div>
@@ -93,14 +93,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group ">
-                            <label class="control-label ">Precio costo:</label>
+                            <label class="control-label ">Precio costo: $</label>
                             <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioCosto" [ngModelOptions]="{standalone:true}">
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group ">
-                            <label class="control-label">Precio venta:</label>
+                            <label class="control-label">Precio venta: $</label>
                             <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioVenta" [ngModelOptions]="{standalone:true}">
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group ">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" [(ngModel)]="repuesto.Nombre" [ngModelOptions]="{standalone:true}">
                         </div>
                     </div>
@@ -176,14 +176,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group ">
-                            <label class="control-label ">Precio costo:</label>
+                            <label class="control-label ">Precio costo: $</label>
                             <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioCosto" [ngModelOptions]="{standalone:true}">
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group ">
-                            <label class="control-label">Precio venta:</label>
+                            <label class="control-label">Precio venta: $</label>
                             <input type="number" class="form-control" [(ngModel)]="repuesto.PrecioVenta" [ngModelOptions]="{standalone:true}">
                         </div>
                     </div>
@@ -203,16 +203,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="row">
-                    <div class="col-md-12 ">
-                        <label class="control-label">Tipo repuesto:</label>
-                        <select required class="form-control custom-select" data-placeholder="TipoRepuesto" [ngModelOptions]="{standalone:true}" [(ngModel)]="repuesto.FkTipoRepuesto"> 
-                            <option *ngFor="let tiporepuesto of listTipoRep" [value]="tiporepuesto.PkTipoRepuesto">{{tiporepuesto.Nombre}}</option>       
-                        </select>
-                    </div>
-                </div> -->
-
                 <div class="row">
                     <div class="col-md-6 ">
                         <div class="form-group ">
@@ -236,6 +226,31 @@
                         <textarea class="form-control" name="textarea" rows="3" cols="20" [ngModelOptions]="{standalone:true} " [(ngModel)]="repuesto.Observacion"></textarea>
                     </div>
                 </div>
+                <!-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group ">
+                            <label class="control-label">Imagen:</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" accept=".jpg,.png" class="button" (change)="uploadImage($event.target.files)" />
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text upload" (click)="upload()" id="btnUpload">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                            <form action="/api/upload" method="post" enctype="multipart/form-data">
+                                <input (change)="fileChange($event)" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            </form>
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                    </div>
+                </div> -->
+
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarRepuesto(repuesto.PkRepuesto, repuesto);closeModal('ModalEditarRepuesto');">Guardar</button>

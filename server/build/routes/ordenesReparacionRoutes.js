@@ -29,8 +29,8 @@ class OrdenesReparacionRoutes {
         this.router.get('/nro/:PkOrdenRep', ordenesRepControllers_1.default.getOrdenesFindByNro);
         //Nueva
         this.router.post('/nuevaorden', ordenesRepControllers_1.default.create);
-        //Eliminar
-        this.router.delete('/:PkOrdenRep', ordenesRepControllers_1.default.delete);
+        //Eliminar               
+        this.router.put('/eliminar/:PkOrden', ordenesRepControllers_1.default.delete);
         //Actualizar
         this.router.put('/actualizar/:PkOrdenRep', ordenesRepControllers_1.default.update);
         //Actualizar estado

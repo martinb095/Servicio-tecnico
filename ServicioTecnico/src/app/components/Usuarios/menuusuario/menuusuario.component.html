@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="usuario.Nombre">
                         </div>
                     </div>
@@ -80,8 +80,8 @@
                         <div class="form-group">
                             <label class="control-label">Tipo:</label>
                             <select required class="custom-select col-12" [ngModelOptions]="{standalone:true}" [(ngModel)]="usuario.FkTipoUsuario">
-                                <option [selected]="index == 1" value="1">Administrador</option>
-                                <option value="2">Invitado</option>
+                                <option value="1">Administrador</option>
+                                <option value="2">Compras</option>
                                 <option value="3">Técnico</option>                              
                             </select>
                         </div>
@@ -107,7 +107,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="usuario.Nombre">
                         </div>
                     </div>

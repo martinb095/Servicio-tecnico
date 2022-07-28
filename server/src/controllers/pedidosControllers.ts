@@ -32,7 +32,7 @@ class PedidoController {
     }
 
     public async delete(req: Request, res: Response) {       
-        const stringSQL = "call deletePedido(?,?);";
+        const stringSQL = "call deletePedido(?);";
         pool.query(stringSQL, [req.params.PkPedProv], function (err: any, results: any) {
             if (err) throw err;                  
             try {

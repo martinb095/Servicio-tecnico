@@ -11,15 +11,14 @@ class LoginController {
             'Contrasenia': req.body.Contrasenia,
         }
         const stringSQL = "call validarUsuario(?,?);";
-        pool.query(stringSQL, [usuario.Nombre, usuario.Contrasenia], function (err: any, usuarioDb: Usuario[]) {
-            if (err) throw err;
-            var string = JSON.stringify(usuarioDb[0]);
-            var json = JSON.parse(string);
-            try {
-                let id = json[0].PkUsuario
-                return res.status(200).json({ exist: true });
-            } catch (error) {
-                return res.status(200).json({ exist: false });
+        pool.query(stringSQL, [usuario.Nombre, usuario.Contrasenia], function (err: any, results: any) {
+            if (err) {
+                res.status(404).json({ text: "usuario no encontrado" });
+            }
+            if (results) {
+                return res.json(results[0]);
+            } else {
+                return res.status(404).json({ text: "usuario no encontrado" });
             }
         });
     }

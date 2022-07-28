@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,VERSION } from '@angular/core';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/_modal';
@@ -14,6 +14,15 @@ import { TipoRepuestoService } from 'src/app/services/tiporepuesto.service';
 import { Marca } from 'src/app/models/marca';
 import { MarcaService } from 'src/app/services/marca.service';
 
+
+import {
+  HttpClientModule,
+  HttpClient,
+  HttpRequest,
+  HttpResponse,
+  HttpEventType,
+} from '@angular/common/http';
+
 @Component({
   selector: 'app-menurepuesto',
   templateUrl: './menurepuesto.component.html',
@@ -21,6 +30,7 @@ import { MarcaService } from 'src/app/services/marca.service';
 })
 
 export class MenurepuestoComponent implements OnInit {
+
 
   repuesto: Repuesto = {
     PkRepuesto: 0,
@@ -31,7 +41,7 @@ export class MenurepuestoComponent implements OnInit {
     Observacion: "",
     NroSerie: 0,
     FkTipoRepuesto: 0,
-    FkMarca: 0,
+    FkMarca: 0,   
     Activo:null   
   };       
 
@@ -45,7 +55,8 @@ export class MenurepuestoComponent implements OnInit {
   //Valor que toma el input de buscar
   repuestoBuscar: string;
 
-  constructor(
+  constructor(    
+    private http: HttpClient,
     private modalService: ModalService,
     private repuestoService: RepuestoService,
     private tipoRepuestoService: TipoRepuestoService,
@@ -173,7 +184,7 @@ export class MenurepuestoComponent implements OnInit {
       Observacion: repuesto.Observacion,
       NroSerie: repuesto.NroSerie,
       FkTipoRepuesto: repuesto.FkTipoRepuesto,
-      FkMarca: repuesto.FkMarca,
+      FkMarca: repuesto.FkMarca,     
       Activo: repuesto.Activo,
     };  
   }
@@ -182,7 +193,7 @@ export class MenurepuestoComponent implements OnInit {
     if (this.repuesto.Nombre == "" || this.repuesto.Nombre == null) {
       Swal.fire({ title: "El nombre del repuesto no puede estar vacio.", icon: "warning" });
       return;
-    }
+    }  
     //Almacena repuesto   
     this.repuestoService.ActualizarRepuesto(this.repuesto.PkRepuesto, this.repuesto).subscribe(
       res => {       
@@ -207,7 +218,7 @@ export class MenurepuestoComponent implements OnInit {
     this.repuesto.Observacion= "",
     this.repuesto.NroSerie= 0,
     this.repuesto.FkTipoRepuesto= 0,
-    this.repuesto.FkMarca= 0,
+    this.repuesto.FkMarca= 0,   
     this.repuesto.Activo=true   
   }
 
@@ -219,4 +230,34 @@ export class MenurepuestoComponent implements OnInit {
     this.modalService.close(id);
   }
 
+
+  // uploadImage(files: File[]) {
+  //   this.basicUploadImage(files);
+  // }
+
+  // basicUploadImage(files: File[]) {
+  //   var formData = new FormData();
+  //   Array.from(files).forEach((f) => formData.append('file', f));
+  //   this.http.post('https://file.io', formData).subscribe((event) => {
+ 
+  //     console.log('done');
+  //     console.log(event);
+  //   });
+  // }
+  // fileChange(element){
+  //   this.uploadedFiles = element.target.files;
+  // }
+
+  // upload(){
+  //   let formData = new FormData();
+  //   for(var i = 0; i < this.uploadedFiles.length; i++) {
+  //       formData.append("uploads[]", this.uploadedFiles[i], this.uploadedFiles[i].name);
+  //   }
+  //   this.http.post('/api/upload', formData)
+  //   .subscribe((response)=>{
+  //     console.log('response receved is ', response);
+  //   })
+  // }
+
+  
 }

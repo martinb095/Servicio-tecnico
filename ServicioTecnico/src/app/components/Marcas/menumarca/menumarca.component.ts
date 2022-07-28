@@ -71,8 +71,8 @@ export class MenumarcaComponent implements OnInit {
       title: '¿Desea eliminar la marca nro. ' + id + ' ?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Si, eliminar',
-      cancelButtonText: 'No, cancelar'
+      confirmButtonText: 'Si, eliminar.',
+      cancelButtonText: 'No, cancelar.'
     }).then((result) => {
       if (result.value) {
         this.marcaService.EliminarMarca(id).subscribe(res => {

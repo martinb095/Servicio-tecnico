@@ -22,7 +22,6 @@
             <th width="80%">Nombre</th>
         </tr>
     </thead>
-    <!-- <tbody *ngIf="listOrdenRep.length"> -->
     <tbody *ngIf="listTiposRepuestos">
         <tr *ngFor="let tiporepuesto of listTiposRepuestos | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
             <td>{{tiporepuesto.PkTipoRepuesto}} </td>
@@ -41,7 +40,7 @@
                     nextLabel="Siguiente" (pageChange)="pageActual = $event"></pagination-controls>
                 </span>
 </div>
-<!-- </div> -->
+
 <!-----------------/MODAL------------------->
 <jw-modal id="ModalNuevoTipoRep">
     <div class="modal-dialog">
@@ -55,7 +54,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="tipoRepuesto.Nombre">
                         </div>
                     </div>
@@ -69,7 +68,7 @@
         </div>
     </div>
 </jw-modal>
-<!-- </form> -->
+
 <!----------------------- FIN MODAL -------------------------------------->
 <jw-modal id="ModalEditarTipoRep">
     <div class="modal-dialog">
@@ -82,7 +81,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre:</label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="tipoRepuesto.Nombre">
                         </div>
                     </div>
@@ -96,5 +95,5 @@
         </div>
     </div>
 </jw-modal>
-<!-- </form> -->
+
 <!----------------------- FIN MODAL -------------------------------------->

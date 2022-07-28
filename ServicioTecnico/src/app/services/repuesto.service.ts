@@ -37,7 +37,10 @@ export class RepuestoService {
     return this.http.put(this.API_URI + "/repuestos/" + id, updateRepuesto);
   }
 
-  ObtenerRepPorNombre(valor: string) {
+  ObtenerRepPorNombre(valor: string) {    
     return this.http.get(this.API_URI + "/repuestos/filtro/" + valor);
   }
+
+  
+
 }

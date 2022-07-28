@@ -133,7 +133,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Repuesto:</label>
+                                <label class="control-label">Repuesto: <span class="spanBold">*</span></label>
                                 <div class="col-md-12">
                                     <input type="text" class="form-control col-md-2" [ngModelOptions]="{standalone:true}" [(ngModel)]="detallePedido.FkRepuesto">
                                     <button (click)="obtenerRepuestos();openModal('ModalSelectRepuesto');" type="button" class="btn btn-info">
@@ -148,14 +148,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad:</label>
-                                <input type="number" [ngModelOptions]="{standalone:true}" class="form-control" required [(ngModel)]="detallePedido.Cantidad">
+                                <input type="number" [min]="1" value="0" [ngModelOptions]="{standalone:true}" class="form-control" required [(ngModel)]="detallePedido.Cantidad">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Observacion:</label>
+                                <label class="control-label">Observación:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="detallePedido.Observacion">
                             </div>
                         </div>

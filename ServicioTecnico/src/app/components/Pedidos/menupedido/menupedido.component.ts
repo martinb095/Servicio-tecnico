@@ -54,13 +54,12 @@ export class MenupedidoComponent implements OnInit {
           var result = Object.values(res);
           if (result[0] == "OK") {
             this.ObtenerPedidos();
+            //Mensaje informando el eliminado     
+            Swal.fire({ icon: 'success', title: "Pedido nro. " + id + " eliminado correctamente." })
           }
         },
           err => console.error(err)
         );
-        //Mensaje informando el eliminado     
-        Swal.fire({ icon: 'success', title: "Cliente Nro. " + id + " eliminado correctamente." })
-
       }
     })
   }

@@ -106,14 +106,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad:</label>
-                                <input type="number" [ngModelOptions]="{standalone:true}" class="form-control" required (input)="onTextboxChangeValidate($event)" [(ngModel)]="detallePedido.Cantidad">
+                                <input type="number" [min]="1" [ngModelOptions]="{standalone:true}" class="form-control" [value]="1" [(ngModel)]="detallePedido.Cantidad">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Observacion:</label>
+                                <label class="control-label">Observación:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="detallePedido.Observacion">
                             </div>
                         </div>

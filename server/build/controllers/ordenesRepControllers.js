@@ -66,10 +66,10 @@ class OrdenesRepController {
         return __awaiter(this, void 0, void 0, function* () {
             let stringSQL = "";
             if (req.params.FkEstado != "T") {
-                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
+                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
             }
             else {
-                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
+                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
             }
             database_1.default.query(stringSQL, req.params.FkEstado, (err, results) => {
                 if (err) {
@@ -87,7 +87,7 @@ class OrdenesRepController {
     }
     getOrdenesFindByNro(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select Pkordenreparacion, cliente.Nombre as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err, results) => {
+            database_1.default.query('Select OrR.Pkordenreparacion, cliente.Nombre as "Cliente", FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado inner join cliente on cliente.PkCliente = OrR.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -188,9 +188,23 @@ class OrdenesRepController {
         });
     }
     //Para ver q nro esta eliminando
+    // public async delete(req: Request, res: Response) {
+    //     await pool.query('DELETE FROM ordenreparacion WHERE PkOrdenreparacion = ?', [req.params.PkOrdenRep]);
+    // }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('DELETE FROM ordenreparacion WHERE PkOrdenreparacion = ?', [req.params.PkOrdenRep]);
+            console.log(req.params.PkOrden);
+            const stringSQL = "call eliminarOrden(?);";
+            database_1.default.query(stringSQL, [req.params.PkOrden], function (err, results) {
+                if (err)
+                    throw err;
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
+            });
         });
     }
     update(req, res) {
@@ -233,7 +247,6 @@ class OrdenesRepController {
             if (err) {
                 res.status(404).json({ text: "Error" });
             }
-            console.log(ordenDb);
             if (ordenDb.length == 0) {
                 return res.status(200).json({ exist: false });
             }

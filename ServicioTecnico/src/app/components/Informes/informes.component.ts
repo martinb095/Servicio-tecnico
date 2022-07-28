@@ -53,7 +53,6 @@ export class InformesComponent implements OnInit {
       (res: any) => {
         this.list = res[0];
         var encabezado: string[] = ['Nro.', 'Nombre', 'Stock', 'Precio Costo', 'Precio Venta'];
-
         this.createpdf(this.list, 'Software Marbal - Stock de repuestos', encabezado);
         this.closeModal('ModalStockRep')
       },
@@ -68,10 +67,23 @@ export class InformesComponent implements OnInit {
     this.filtro.FkEstado = this.idEstado;
     this.informeService.OrdenesFechas(this.filtro).subscribe(
       (res: any) => {
-        this.list = res[0];
-        var encabezado: string[] = ['Estado', 'Fecharetiro', 'Nro', 'Marca', 'Modelo', 'Cliente'];
 
-        this.createpdf(this.list, 'Software Marbal - Ordenes de reparaciones', encabezado);
+        var estado: string;
+        if (this.idEstado == 1) {
+          estado = "pendientes.";
+        } else if (this.idEstado == 2) {
+          estado = "reparando.";
+        } else if (this.idEstado == 3) {
+          estado = "reparadas.";
+        } else if (this.idEstado == 4) {
+          estado = "canceladas.";
+        } else if (this.idEstado == 5) {
+          estado = "entregadas.";
+        }
+        this.list = res[0];
+        var encabezado: string[] = ['Nro', 'FechaInicio', 'FechaRetiro', 'Marca', 'Modelo', 'Cliente'];
+
+        this.createpdf(this.list, 'Software Marbal - Ordenes de reparaciones ' + estado, encabezado);
         this.closeModal('ModalInfOrden')
       },
       err => console.error(err)
