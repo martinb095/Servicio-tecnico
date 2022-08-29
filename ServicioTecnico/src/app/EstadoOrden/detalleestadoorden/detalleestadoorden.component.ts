@@ -13,6 +13,10 @@ import { DetalleOrden } from 'src/app/models/detalleorden';
   styleUrls: ['./detalleestadoorden.component.css']
 })
 export class DetalleestadoordenComponent implements OnInit {
+
+  tel = '[5493537665239]';
+  mensaje = 'Hola, queria hacer una consulta respecto a mi orden de reparación.';
+  
   pageActualDetalle = 0;
   total = 0;
 
@@ -79,4 +83,6 @@ export class DetalleestadoordenComponent implements OnInit {
     );
   }
 
+
+  
 }

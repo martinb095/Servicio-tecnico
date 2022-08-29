@@ -50,16 +50,7 @@ export class ModificarOrdenComponent implements OnInit {
   ordenRep: any = {};
 
   listDetalleOrden: any = {};
-  // detalleOrden: DetalleOrden = {
-  //   PkDetalleOrden: 0,
-  //   Cantidad: 0,
-  //   FkRepuesto: 0,
-  //   Precio: 0,
-  //   Observacion: "",
-  //   FkTarea: 0,
-  //   FechaCreacion: null,
-  //   FkOrden: 0
-  // };
+
 
   detalleOrden: any = {};
 

@@ -16,7 +16,7 @@ class EstadosController {
     //listado de estados
     getEstados(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select * from estado order by nombre', (err, results) => {
+            database_1.default.query('Select * from estado order by PkEstado', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "estado no encontrado" });
                 }

@@ -11,7 +11,9 @@ import { OrdenesReparacionService } from '../../services/ordenesreparacion.servi
   styleUrls: ['./consultaestado.component.css']
 })
 export class ConsultaestadoComponent implements OnInit {
-  
+
+  tel = '[5493537665239]';
+  mensaje = 'Hola, queria hacer una consulta respecto a mi orden de reparación.';
 
   datosOrden: any = {
     PkOrdenRep: "",
@@ -38,12 +40,12 @@ export class ConsultaestadoComponent implements OnInit {
     if (this.datosOrden.Contrasenia == "" || this.datosOrden.Contrasenia == null) {
       Swal.fire({ title: "La contraseña no puede estar vacia.", icon: "warning" });
       return;
-    }    
+    }
 
     //valida datos de la orden
     this.ordenesreparacionService.ValidarOrdenRep(this.datosOrden).subscribe(
       (res: any) => {
-        var valido = res.exist;      
+        var valido = res.exist;
         if (valido == true) {
           this.router.navigate(["/detalleestadoorden", this.datosOrden.PkOrdenRep])
         }

@@ -61,7 +61,6 @@ class DetalleOrdenController {
             });
         });
     }
-    //funciona
     GetDetallesFindByOrden(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err, results) => {

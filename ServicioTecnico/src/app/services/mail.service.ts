@@ -19,6 +19,12 @@ export class MailService {
     return this.http.post(this.API_URI + "/mail/recuperarpass", datosMail);           
   }  
 
+  EnviarWsp(datosWsp: any) {   
+    return this.http.post(this.API_URI + "/mail/enviarwsp", datosWsp);   
+  }  
+
+
+
   validaMail(email: string): boolean {
     let mailValido = false;
     'use strict';

@@ -36,6 +36,8 @@ class MailRoutes {
         this.router.post('/recuperarpass', mailsControllers.recuperarPass);
 
         this.router.get('/obtenerMail/:Mail', mailsControllers.GetPass);
+
+        this.router.post('/enviarwsp', mailsControllers.enviarWsp);
     }
 }
 

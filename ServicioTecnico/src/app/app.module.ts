@@ -5,6 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ModalModule } from './_modal';
+import { NgxWhastappButtonModule } from 'ngx-whatsapp-button';
 
 //Rutas
 import { appRoutes } from './index.routes';
@@ -87,7 +88,8 @@ import { InformesComponent } from './components/Informes/informes.component';
     PagesModule,
     NgxPaginationModule,
     ServicesModule,
-    ModalModule
+    ModalModule,
+    NgxWhastappButtonModule
   ],
   providers: [
     DatePipe,

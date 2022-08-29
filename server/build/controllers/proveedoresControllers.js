@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class ProveedorController {
     getProveedores(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Observacion from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err, results) => {
+            database_1.default.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Contacto1, p.Contacto2 from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "proveedores no encontrado" });
                 }
@@ -63,6 +63,7 @@ class ProveedorController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
             yield database_1.default.query('INSERT INTO proveedor set ?', [req.body]);
             res.json({ text: 'OK' });
         });
@@ -84,7 +85,8 @@ class ProveedorController {
                 'Telefono': req.body.Telefono,
                 'Mail': req.body.Mail,
                 'Cuit': req.body.Cuit,
-                'Observacion': req.body.Observacion,
+                'Contacto1': req.body.Contacto1,
+                'Contacto2': req.body.Contacto2,
                 'Activo': true
             };
             yield database_1.default.query('update proveedor set ? Where PkProveedor = ?', [proveedor, req.params.PkProveedor]);

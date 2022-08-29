@@ -33,7 +33,8 @@ export class MenuproveedorComponent implements OnInit {
     Telefono: "",
     Mail: "",
     Cuit: "",    
-    Observacion: "",
+    Contacto1: "",
+    Contacto2: "",
     Activo:null
   };
 
@@ -135,6 +136,7 @@ export class MenuproveedorComponent implements OnInit {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;
     }  
+    console.log(this.proveedor);
     //Almacena proveedor   
     this.proveedorService.GuardarProveedor(this.proveedor).subscribe(
       res => {
@@ -160,7 +162,8 @@ export class MenuproveedorComponent implements OnInit {
       Telefono: proveedor.Telefono,
       Mail: proveedor.Mail, 
       Cuit: proveedor.Cuit,    
-      Observacion: proveedor.Observacion,  
+      Contacto1: proveedor.Contacto1,  
+      Contacto2: proveedor.Contacto2,  
       Activo:proveedor.Activo,
     };
   
@@ -196,7 +199,8 @@ export class MenuproveedorComponent implements OnInit {
       this.proveedor.Telefono= "",
       this.proveedor.Mail= "",
       this.proveedor.Cuit= "",    
-      this.proveedor.Observacion= "",  
+      this.proveedor.Contacto1= "",  
+      this.proveedor.Contacto2= "",  
       this.proveedor.Activo=null,
       this.idProvincia = null;
   }

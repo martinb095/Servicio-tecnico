@@ -66,10 +66,10 @@ class OrdenesRepController {
         return __awaiter(this, void 0, void 0, function* () {
             let stringSQL = "";
             if (req.params.FkEstado != "T") {
-                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
+                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
             }
             else {
-                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
+                stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
             }
             database_1.default.query(stringSQL, req.params.FkEstado, (err, results) => {
                 if (err) {

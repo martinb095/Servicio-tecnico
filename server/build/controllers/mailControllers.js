@@ -5,6 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database"));
 const mailer_1 = __importDefault(require("../mailer"));
+const TWILIO_ID = 'ACd645517d385bbd78deda0200b9eb7818';
+const TWILIO_SK = 'f543f9207b42fbe2e33c6fafeb842a94';
+const client = require('twilio')(TWILIO_ID, TWILIO_SK);
 class UsuarioController {
     GetOne(req, res) {
         database_1.default.query('SELECT top 1 Contrasenia from usuario WHERE PkModelo = ?', req.params.Mail, (err, results) => {
@@ -52,6 +55,18 @@ class UsuarioController {
                 return res.status(404).json({ text: "Usuario no encontrado." });
             }
         });
+    }
+    enviarWsp(req, res) {
+        let datosWsp = {
+            'Nro': req.body.Nro,
+            'Mensaje': req.body.FecRetiroEstimado,
+        };
+        client.messages
+            .create({
+            from: 'whatsapp:+14155238886',
+            body: req.body.Mensaje,
+            to: 'whatsapp:' + req.body.Nro
+        }).then();
     }
 }
 const usuarioController = new UsuarioController();

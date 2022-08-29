@@ -7,7 +7,7 @@ import { Proveedor } from '../Models/proveedor'
 class ProveedorController {
     
      public async getProveedores(req: Request, res: Response) {
-        pool.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Observacion from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
+        pool.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Contacto1, p.Contacto2 from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "proveedores no encontrado" });
             }
@@ -49,6 +49,7 @@ class ProveedorController {
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     public async create(req: Request, res: Response) {       
+        console.log(req.body);
         await pool.query('INSERT INTO proveedor set ?', [req.body]);        
         res.json({ text: 'OK' });
     }
@@ -68,7 +69,8 @@ class ProveedorController {
             'Telefono': req.body.Telefono,
             'Mail': req.body.Mail,   
             'Cuit': req.body.Cuit,   
-            'Observacion': req.body.Observacion,
+            'Contacto1': req.body.Contacto1,
+            'Contacto2': req.body.Contacto2,
             'Activo': true 
         }       
 

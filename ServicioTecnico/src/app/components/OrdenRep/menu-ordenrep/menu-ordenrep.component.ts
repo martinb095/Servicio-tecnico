@@ -3,9 +3,14 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 import { ModalService } from 'src/app/_modal';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import { OrdenesReparacionService } from '../../../services/ordenesreparacion.service';
 import { OrdenReparacion } from '../../../models/ordenRep';
+
+import { DetalleOrdenService } from '../../../services/detalleorden.service';
 
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../../models/estado';
@@ -24,8 +29,13 @@ import { MailService } from 'src/app/services/mail.service';
 export class MenuOrdenrepComponent implements OnInit {
 
   DatosMail: any;
+  DatosWsp: any;
+
+  list: any;
+  listArray: any[] = [];
 
   listEstado: any[] = [];
+  listEstadoPosible: any[] = [];
 
   listOrdenRep: OrdenReparacion[] = [];
 
@@ -48,6 +58,8 @@ export class MenuOrdenrepComponent implements OnInit {
   idEstado = 2;
   pkCliente = 0;
   idEstadoActual = 2;
+  cliTel = "";
+  estadoWsp = "";
   CantidadActual = 0;
   pageActual: number = 1;
   pageActualCliente: number = 1;
@@ -61,6 +73,7 @@ export class MenuOrdenrepComponent implements OnInit {
     private clienteService: ClienteService,
     private router: Router,
     private modalService: ModalService,
+    private detalleOrdenService: DetalleOrdenService
   ) { }
 
   ngOnInit() {
@@ -92,7 +105,7 @@ export class MenuOrdenrepComponent implements OnInit {
   OrdenesSegunEstado(id: number) {
     this.pageActual = 1;
     this.listOrdenRep = [];
-    this.ordenesRepService.ObtenerOPporEstado(id).subscribe((data: OrdenReparacion[]) => {      
+    this.ordenesRepService.ObtenerOPporEstado(id).subscribe((data: OrdenReparacion[]) => {
       this.listOrdenRep = data;
       this.idEstadoActual = id;
     },
@@ -100,8 +113,8 @@ export class MenuOrdenrepComponent implements OnInit {
     );
   }
 
-  OrdenesSegunId(id: number) {   
-    if(id == null ){
+  OrdenesSegunId(id: number) {
+    if (id == null) {
       Swal.fire({ title: "Debe seleccionar un nro. de orden.", icon: "warning" });
       return;
     }
@@ -146,7 +159,6 @@ export class MenuOrdenrepComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.ordenesRepService.EliminarOrdenRep(this.PkOrden).subscribe(res => {
-          console.log(res);
           //Mensaje informando el almacenado     
           Swal.fire({ icon: 'success', title: "Orden de reparación Nro. " + id + " eliminada correctamente." })
         },
@@ -180,9 +192,21 @@ export class MenuOrdenrepComponent implements OnInit {
     })
   }
 
+  estadosPosibles() {
+    this.listEstadoPosible = [];
+    for (var i = 0; i < this.listEstado.length; i++) {
+      if (this.listEstado[i].PkEstado >= this.idEstadoActual) {
+        this.listEstadoPosible.push(this.listEstado[i]);
+      }
 
-  openModal(id: string, nroOrden: number) {
-    this.idCambiarEstado = nroOrden;
+    }
+  }
+
+
+  openModal(id: string, orden: any) {
+    console.log(orden);
+    this.idCambiarEstado = orden.nroOrden;
+    this.cliTel = orden.CliTel;
     this.modalService.open(id);
   }
 
@@ -191,7 +215,8 @@ export class MenuOrdenrepComponent implements OnInit {
   }
 
   NotificarCliente() {
-
+    let enviarMail = document.getElementById("cbEnviarMail") as HTMLInputElement;
+    let enviarWsp = document.getElementById("cbEnviarWsp") as HTMLInputElement;
     //Datos de la orden para actualizar
     let DatosOrden = {
       'PkOrdenRep': this.idCambiarEstado,
@@ -209,7 +234,6 @@ export class MenuOrdenrepComponent implements OnInit {
         //Cambia al nuevo estado la orden
         this.ordenesRepService.ActualizarEstadoOrden(this.idCambiarEstado, DatosOrden).subscribe(
           (res: any) => {
-            console.log(res);
             var result = Object.values(res);
             if (result[0] = true) {
               this.closeModal('ModalConfirmarEstado');
@@ -218,20 +242,18 @@ export class MenuOrdenrepComponent implements OnInit {
               //Obtiene los datos de la orden modificada para el envio del mail
               this.OrdenesSegunEstado(this.idEstadoActual);
               this.idEstado = this.idEstadoActual;
+              if (enviarWsp.checked) {
+                this.enviarWsp();
+              }
               this.ordenesRepService.SelectOrdenReparaMail(this.idCambiarEstado).subscribe(
                 (res: any) => {
                   this.DatosMail = res;
                   //formatea fecha 
                   this.DatosMail.FechaRetiro = this.datePipe.transform(this.DatosMail.FechaRetiro, "dd-MM-yyyy");
                   //Envia en caso de tener mail
-                  if (this.DatosMail.Mail != null) {
+                  if (this.DatosMail.Mail != null && enviarMail.checked) {
                     // Envia mail con los datos obtenidos
-                    this.mailService.EnviarMail(this.DatosMail).subscribe(
-                      (res: any) => {
-                        console.log(res);
-                      },
-                      err => console.error(err)
-                    );
+                    this.enviarMail();
                   }
                 },
                 err => console.error(err)
@@ -244,6 +266,181 @@ export class MenuOrdenrepComponent implements OnInit {
     })
 
 
+  }
+
+  enviarMail() {
+    // Envia mail con los datos obtenidos
+    this.mailService.EnviarMail(this.DatosMail).subscribe(
+      (res: any) => {
+        console.log(res);
+      },
+      err => console.error(err)
+    );
+  }
+
+  enviarWsp() {
+    this.estadoWsp = "";
+    this.estadoSegunId();
+    //Datos de la orden para actualizar
+    let DatosWsp = {
+      'Nro': this.cliTel,
+      'Mensaje': "El estado de su orden de reparación cambio a " + this.estadoWsp,
+    }
+    this.mailService.EnviarWsp(DatosWsp).subscribe(
+      (res: any) => {
+        console.log(res);
+      },
+      err => console.error(err)
+    );
+  }
+
+  estadoSegunId() {
+    //Define valor de la progress bar
+    if (this.idEstadoActual == 1) {
+      this.estadoWsp = "pendiente.";
+    }
+    else if (this.idEstadoActual == 2) {
+      this.estadoWsp = "reparando.";
+    }
+    else if (this.idEstadoActual == 3) {
+      this.estadoWsp = "reparado.";
+    }
+    else if (this.idEstadoActual == 4) {
+      this.estadoWsp = "entregado.";
+    }
+    else if (this.idEstadoActual == 5) {
+      this.estadoWsp = "cancelado.";
+    }
+  }
+
+  async createPdf(id: number) {
+    this.GetDetalleOrden(id);
+
+  }
+
+  buildTableBody(data, columns) {
+    var body = [];
+    body.push(columns);
+    data.forEach(function (row) {
+      var dataRow = [];
+      columns.forEach(function (column) {
+        dataRow.push(row[column].toString());
+      })
+      body.push(dataRow);
+    });
+    return body;
+  }
+
+  table(data, columns) {
+    console.log(data, columns);
+    return {
+      table: {
+        headerRows: 1,
+        body: this.buildTableBody(data, columns)
+      },
+      layout: 'headerLineOnly',
+    };
+  }
+
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = 50;
+        canvas.height = 45;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL);
+      };
+      img.onerror = error => {
+        reject(error);
+      };
+      img.src = url;
+    });
+  }
+
+
+  async generarPdf(nroOrden: number) {
+    var encabezado: string[] = ['NombreTarea', 'NombreRep', 'Precio', 'Cantidad', 'Total'];
+    console.log(this.list);
+    let docDefinition = {
+      styles: {
+        header: {
+          font: 'Roboto',
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          margin: [20, 20],
+        },
+      },
+      content: [
+        {
+          image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png")
+        },
+        { text: "Orden de reparación Nro. " + nroOrden, style: 'header' },
+        {
+          columns: [
+            [
+              {
+                text: "Cliente: " + this.list.Nombre + "  -  Mail: " + this.list.Mail + "  -  Teléfono: " + this.list.Telefono,
+                heights: 160,
+                alignment: 'left',
+                margin: [5, 5]
+              },
+              {
+                text: "Fecha inicio: " + this.list.FechaInicio + "                                                     Fecha retiro estimado: " + this.list.FecRetiroEstimado + "",
+                alignment: 'left',
+                margin: [5, 5]
+              },
+              {
+                text: "Estado: " + this.list.Estado + "",
+                alignment: 'left',
+                margin: [5, 5]
+              },
+              {
+                text: "Dispositivo Marca: " + this.list.Marca + " - " + this.list.Modelo + " - ",
+                alignment: 'left',
+                margin: [5, 5, 5, 15]
+              }
+            ]
+          ],
+          columnGap: 30
+        },
+        this.table(this.listArray, encabezado)
+      ],
+     
+    }
+
+    pdfMake.createPdf(docDefinition).open();
+  }
+
+  GetDetalleOrden(nroOrden: number) {
+    this.list = [];
+    this.ordenesRepService.ObtenerDatosOrdenRep(nroOrden).subscribe(
+      (res: any) => {
+        this.list = res;
+        this.list.FechaInicio = this.datePipe.transform(this.list.FechaInicio, "dd-MM-yyyy");
+        this.list.FecRetiroEstimado = this.datePipe.transform(this.list.FecRetiroEstimado, "dd-MM-yyyy");
+        this.GetDetalleRepOrden(nroOrden);
+
+      },
+      err => console.error(err)
+    );
+  }
+
+  GetDetalleRepOrden(nroOrden: number) {
+    this.listArray = [];
+    //Trae los datos detalle de la orden
+    this.detalleOrdenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
+      (res: any) => {
+        this.listArray = res;
+        this.generarPdf(nroOrden);
+      },
+      err => console.error(err)
+    );
   }
 
 }

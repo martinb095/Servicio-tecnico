@@ -33,6 +33,7 @@ class MailRoutes {
         });
         this.router.post('/recuperarpass', mailControllers_1.default.recuperarPass);
         this.router.get('/obtenerMail/:Mail', mailControllers_1.default.GetPass);
+        this.router.post('/enviarwsp', mailControllers_1.default.enviarWsp);
     }
 }
 const mailRoutes = new MailRoutes();

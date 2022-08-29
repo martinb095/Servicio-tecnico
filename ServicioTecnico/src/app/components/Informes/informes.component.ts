@@ -40,7 +40,6 @@ export class InformesComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerEstados();
-
   }
 
 
@@ -95,7 +94,6 @@ export class InformesComponent implements OnInit {
     this.list = [];
     this.informeService.ClientesMasOrdenes().subscribe(
       (res: any) => {
-        console.log(res);
         this.list = res;
         var encabezado: string[] = ['Nro', 'Nombre', 'Apellido', 'Telefono', 'Mail', 'Cantidad'];
         this.createpdf(this.list, 'Software Marbal - Clientes con mas ordenes', encabezado);
@@ -116,46 +114,6 @@ export class InformesComponent implements OnInit {
     );
   }
 
-  createpdf(list: any[], titulo: string, encabezado: string[]) {
-    var dd = {
-      content: [
-        { text: titulo, style: 'header' },
-        this.table(list, encabezado)
-      ],
-      styles: {
-        header: {
-          font: 'Roboto',
-          fontSize: 18,
-          bold: true,
-          alignment: 'center',
-          margin: [20, 20],
-        }
-      },
-    }
-    pdfMake.createPdf(dd).open();
-  }
-
-  buildTableBody(data, columns) {
-    var body = [];
-    body.push(columns);
-    data.forEach(function (row) {
-      var dataRow = [];
-      columns.forEach(function (column) {
-        dataRow.push(row[column].toString());
-      })
-      body.push(dataRow);
-    });
-    return body;
-  }
-
-  table(data, columns) {
-    return {
-      table: {
-        headerRows: 1,
-        body: this.buildTableBody(data, columns)
-      }
-    };
-  }
 
   obtenerEstados() {
     this.estadoService.ObtenerEstado().subscribe(
@@ -190,7 +148,77 @@ export class InformesComponent implements OnInit {
     }
     this.closeModal('ModalSelectRepuesto');
   }
+  
   closeModal(id: string) {
     this.modalService.close(id);
   }
+
+
+  
+  async createpdf(list: any[], titulo: string, encabezado: string[]) {
+    var dd = {
+      styles: {
+        header: {
+          font: 'Roboto',
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+          margin: [20, 20],       
+        },
+      },
+      content: [
+        {
+          image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png")               
+        },        
+        { text: titulo, style: 'header' },
+        this.table(list, encabezado)
+      ],   
+    }
+    pdfMake.createPdf(dd).open();
+  }
+
+  
+  buildTableBody(data, columns) {
+    var body = [];
+    body.push(columns);
+    data.forEach(function (row) {
+      var dataRow = [];
+      columns.forEach(function (column) {
+        dataRow.push(row[column].toString());
+      })
+      body.push(dataRow);
+    });
+    return body;
+  }
+
+  table(data, columns) {
+    return {
+      table: {
+        headerRows: 1,
+        body: this.buildTableBody(data, columns)
+      },
+      layout: 'headerLineOnly',
+    };
+  }
+
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");    
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = 50;
+        canvas.height = 45;    
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);    
+        var dataURL = canvas.toDataURL("image/png");    
+        resolve(dataURL);
+      };    
+      img.onerror = error => {
+        reject(error);
+      };    
+      img.src = url;
+    });}
+
+  
 }

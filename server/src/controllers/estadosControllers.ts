@@ -5,7 +5,7 @@ import pool from '../database';
 class EstadosController {
     //listado de estados
     public async getEstados(req: Request, res: Response) {
-        pool.query('Select * from estado order by nombre', (err: any, results: any) => {
+        pool.query('Select * from estado order by PkEstado', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "estado no encontrado" });
             }

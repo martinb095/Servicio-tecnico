@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <div class="form-group has-success">
                         <label class="control-label">Estado:</label>
-                        <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="ordenRep.FkEstado"> 
+                        <select [disabled]="true" required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="ordenRep.FkEstado"> 
                                 <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>        
                             </select>
                         <!-- <small class="form-control-feedback">Selecciona el estado de la reparación </small> -->

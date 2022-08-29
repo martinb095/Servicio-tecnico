@@ -9,7 +9,7 @@ class LoginController {
         let usuario = {
             'Nombre': req.body.Nombre,
             'Contrasenia': req.body.Contrasenia,
-        }
+        }        
         const stringSQL = "call validarUsuario(?,?);";
         pool.query(stringSQL, [usuario.Nombre, usuario.Contrasenia], function (err: any, results: any) {
             if (err) {

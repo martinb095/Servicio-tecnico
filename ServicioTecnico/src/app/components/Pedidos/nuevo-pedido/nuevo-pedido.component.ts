@@ -44,7 +44,8 @@ export class NuevoPedidoComponent implements OnInit {
     Telefono: "",
     Mail: "",
     Cuit: "",
-    Observacion: "",
+    Contacto1: "",
+    Contacto2: "",
     Activo: null
   };
 
