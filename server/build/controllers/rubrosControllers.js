@@ -12,74 +12,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database"));
-class EstadosController {
-    //listado de estados
-    getEstados(req, res) {
+class RubroController {
+    list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select * from estado order by PkEstado', (err, results) => {
+            database_1.default.query('SELECT * FROM rubro where Activo=1 order by nombre', (err, results) => {
                 if (err) {
-                    res.status(404).json({ text: "estado no encontrado" });
+                    res.status(404).json({ text: "rubro no encontrado" });
                 }
                 if (results) {
+                    //return res.json(results[0]);
                     return res.json(results);
                 }
                 else {
-                    return res.status(404).json({ text: "estado no encontrado" });
+                    return res.status(404).json({ text: "rubro no encontrado" });
                 }
             });
         });
     }
     //funciona
     GetOne(req, res) {
-        database_1.default.query('SELECT * FROM estado WHERE PkEstado = ?', req.params.PkEstado, (err, results) => {
+        database_1.default.query('SELECT * FROM rubro WHERE PkRubro = ?', req.params.PkRubro, (err, results) => {
             if (err) {
-                res.status(404).json({ text: "estado no encontrado" });
+                res.status(404).json({ text: "rubro no encontrada." });
             }
             if (results) {
                 return res.json(results[0]);
             }
             else {
-                return res.status(404).json({ text: "estado no encontrado" });
+                return res.status(404).json({ text: "rubro no encontrada." });
             }
-        });
-    }
-    //listado de estados
-    getHistorialEstados(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT es.PkEstadoHis, es.Observacion, es.Fecha, es.FkEstado, e.Nombre FROM estadohistorial es left join estado e on e.PkEstado = es.FkEstado where es.FkOrdenRep = ?', req.params.PkOrdenRep, (err, results) => {
-                if (err) {
-                    res.status(404).json({ text: "estado no encontrado" });
-                }
-                if (results) {
-                    return res.json(results[0]);
-                }
-                else {
-                    return res.status(404).json({ text: "estado no encontrado" });
-                }
-            });
         });
     }
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO estado set ?', [req.body]);
-            res.json({ message: 'estado guardado' });
+            yield database_1.default.query('INSERT INTO rubro set ?', [req.body]);
+            res.json({ text: 'OK' });
         });
     }
     //Para ver q nro esta eliminando
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('DELETE FROM estado WHERE PkEstado = ?', req.params.PkEstado);
+            yield database_1.default.query('UPDATE rubro set Activo = 0 WHERE PkRubro = ?', req.params.PkRubro);
             res.json({ text: 'OK' });
         });
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            yield database_1.default.query('update estado set ? Where PkEstado = ?', [req.body, id]);
+            yield database_1.default.query('update rubro set ? Where PkRubro = ?', [req.body, req.params.PkRubro]);
             res.json({ text: 'OK' });
         });
     }
 }
-const estadosController = new EstadosController();
-exports.default = estadosController;
+const rubroController = new RubroController();
+exports.default = rubroController;

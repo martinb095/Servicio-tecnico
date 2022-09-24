@@ -38,7 +38,7 @@ class OrdenesReparacionRoutes {
         //Actualizar
         this.router.put('/actualizar/:PkOrdenRep', ordenesreparacionControllers.update);
         //Actualizar estado
-        this.router.put('/actualizarestado/:PkOrdenRep', ordenesreparacionControllers.updateEstado);
+        this.router.post('/actualizarestado/', ordenesreparacionControllers.updateEstado);
 
         //validar orden
         this.router.post('/validar', ordenesreparacionControllers.ValidarOrden);

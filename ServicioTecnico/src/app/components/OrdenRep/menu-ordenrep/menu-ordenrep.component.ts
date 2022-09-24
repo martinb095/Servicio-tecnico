@@ -64,6 +64,7 @@ export class MenuOrdenrepComponent implements OnInit {
   pageActual: number = 1;
   pageActualCliente: number = 1;
   idCambiarEstado: number = 1;
+  observacion = "";
 
   constructor(
     private ordenesRepService: OrdenesReparacionService,
@@ -203,9 +204,8 @@ export class MenuOrdenrepComponent implements OnInit {
   }
 
 
-  openModal(id: string, orden: any) {
-    console.log(orden);
-    this.idCambiarEstado = orden.nroOrden;
+  openModal(id: string, orden: any) {   
+    this.idCambiarEstado = orden.Pkordenreparacion;
     this.cliTel = orden.CliTel;
     this.modalService.open(id);
   }
@@ -218,13 +218,18 @@ export class MenuOrdenrepComponent implements OnInit {
     let enviarMail = document.getElementById("cbEnviarMail") as HTMLInputElement;
     let enviarWsp = document.getElementById("cbEnviarWsp") as HTMLInputElement;
     //Datos de la orden para actualizar
-    let DatosOrden = {
+    // let DatosOrden = {
+    //   'PkOrdenRep': this.idCambiarEstado,
+    //   'FkEstado': this.idEstadoActual,
+    // }
+    let DatosCambioEstado = {
       'PkOrdenRep': this.idCambiarEstado,
       'FkEstado': this.idEstadoActual,
-    }
+      'Observacion': this.observacion,
+    }    
     Swal.fire({
       title: '¿Desea modificar el estado de la orden?',
-      text: 'Se enviara un correo al cliente notificando la modificación.',
+      //text: 'Se enviara un correo al cliente notificando la modificación.',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Si, modificar',
@@ -232,7 +237,7 @@ export class MenuOrdenrepComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         //Cambia al nuevo estado la orden
-        this.ordenesRepService.ActualizarEstadoOrden(this.idCambiarEstado, DatosOrden).subscribe(
+        this.ordenesRepService.ActualizarEstadoOrden(DatosCambioEstado).subscribe(
           (res: any) => {
             var result = Object.values(res);
             if (result[0] = true) {
@@ -331,8 +336,7 @@ export class MenuOrdenrepComponent implements OnInit {
     return body;
   }
 
-  table(data, columns) {
-    console.log(data, columns);
+  table(data, columns) {    
     return {
       table: {
         headerRows: 1,
@@ -364,8 +368,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
 
   async generarPdf(nroOrden: number) {
-    var encabezado: string[] = ['NombreTarea', 'NombreRep', 'Precio', 'Cantidad', 'Total'];
-    console.log(this.list);
+    var encabezado: string[] = ['NombreTarea', 'NombreRep', 'Precio', 'Cantidad', 'Total'];  
     let docDefinition = {
       styles: {
         header: {
@@ -411,7 +414,7 @@ export class MenuOrdenrepComponent implements OnInit {
         },
         this.table(this.listArray, encabezado)
       ],
-     
+
     }
 
     pdfMake.createPdf(docDefinition).open();
@@ -441,6 +444,18 @@ export class MenuOrdenrepComponent implements OnInit {
       },
       err => console.error(err)
     );
+  }
+
+  mostrarHistorial(nroOrden: number) {
+    // this.listArray = [];
+    // //Trae los datos detalle de la orden
+    // this.detalleOrdenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
+    //   (res: any) => {
+    //     this.listArray = res;
+    //     this.generarPdf(nroOrden);
+    //   },
+    //   err => console.error(err)
+    // );
   }
 
 }

@@ -70,6 +70,8 @@
                 <a data-toggle="tooltip" data-original-title="Cambiar"> <i (click)="estadosPosibles();openModal('ModalConfirmarEstado',orden)" class="fa fa-exchange m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Edit"> <i [routerLink]="['/menuordenrep/modificar', orden.Pkordenreparacion]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Imprimir"> <i (click)="createPdf(orden.Pkordenreparacion);" name="Imprimir" class="fa fa-print text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Estados"> <i (click)="mostrarHistorial(orden.Pkordenreparacion);" name="Historial estados" class="fa fa-search-plus text-inverse m-r-10"></i> </a>
+
             </td>
         </tr>
     </tbody>
@@ -95,7 +97,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">¿Desea cambiar el estado?.</label>
+                            <label class="control-label">¿Desea cambiar el estado?</label>
                             <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
                                 <option *ngFor="let estado of listEstadoPosible" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
                             </select>
@@ -106,6 +108,12 @@
                         <label for="cbEnviarMail">Enviar mail.</label>
                         <input type="checkbox" id="cbEnviarWsp">
                         <label for="cbEnviarWsp">Enviar whatsapp.</label>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Observacion:</label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="observacion">
+                        </div>
                     </div>
                 </div>
             </div>

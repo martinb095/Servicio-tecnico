@@ -33,6 +33,8 @@ import { NuevoPedidoComponent } from './components/Pedidos/nuevo-pedido/nuevo-pe
 import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/modificar-pedido.component';
 //informes
 import { InformesComponent } from './components/Informes/informes.component';
+//informes
+import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.component';
 
 export const appRoutes: Routes = [
 
@@ -77,6 +79,8 @@ export const appRoutes: Routes = [
       { path: 'menupedido/modificar/:idpedido', component: ModificarPedidoComponent },
       //informes
       { path: 'informes', component: InformesComponent },
+      //rubros
+      { path: 'menurubro', component: MenurubrosComponent },
       
       { path: '**', redirectTo: '/login' },
     ]

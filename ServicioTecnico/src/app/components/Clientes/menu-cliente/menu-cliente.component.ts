@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/_modal';
+import { SharedService } from 'src/app/services/shared.service';
 
 import { Cliente } from 'src/app/models/cliente';
 import { ClienteService } from 'src/app/services/cliente.service';
@@ -46,7 +47,8 @@ export class MenuClienteComponent implements OnInit {
     private modalService: ModalService,
     private clienteService: ClienteService,
     private ciudadService: CiudadService,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
@@ -63,7 +65,7 @@ export class MenuClienteComponent implements OnInit {
     this.listCliente = [];
     this.clienteService.ObtenerClientes().subscribe(
       (res: any) => {
-        this.listCliente = res;
+        this.listCliente = res;        
       },
       err => console.error(err)
     );
@@ -203,16 +205,16 @@ export class MenuClienteComponent implements OnInit {
 
   SetNull() {
     this.cliente.PkCliente = 0,
-    this.cliente.Nombre = "",
-    this.cliente.Apellido = "",
-    this.cliente.Telefono = null,
-    this.cliente.FkCiudad = null,
-    this.cliente.Direccion = null,
-    this.cliente.Mail = null,
-    this.cliente.Contrasenia = null,
-    this.cliente.Activo = null
+      this.cliente.Nombre = "",
+      this.cliente.Apellido = "",
+      this.cliente.Telefono = null,
+      this.cliente.FkCiudad = null,
+      this.cliente.Direccion = null,
+      this.cliente.Mail = null,
+      this.cliente.Contrasenia = null,
+      this.cliente.Activo = null
     this.idProvincia = null;
-    this.contraseniaRep="";
+    this.contraseniaRep = "";
   }
 
   openModal(id: string) {
@@ -223,4 +225,8 @@ export class MenuClienteComponent implements OnInit {
     this.modalService.close(id);
   }
 
+
+  exportexcel() {
+    this.sharedService.exportexcel("Clientes", this.listCliente);
+  }
 }

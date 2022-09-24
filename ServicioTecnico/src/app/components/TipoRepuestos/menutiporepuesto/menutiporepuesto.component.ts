@@ -101,7 +101,7 @@ export class MenutiporepuestoComponent implements OnInit {
 
   EliminarTipoRepuesto(id: number) {
     Swal.fire({
-      title: '¿Desea eliminar la tarea Nro. ' + id + ' ?',
+      title: '¿Desea eliminar el tipo de repuesto Nro. ' + id + ' ?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Si, eliminar',

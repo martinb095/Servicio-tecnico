@@ -51,6 +51,8 @@ import { NuevoPedidoComponent } from './components/Pedidos/nuevo-pedido/nuevo-pe
 import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/modificar-pedido.component';
 import { InformesComponent } from './components/Informes/informes.component';
 
+import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.component';
+
 
 @NgModule({
   declarations: [
@@ -77,7 +79,8 @@ import { InformesComponent } from './components/Informes/informes.component';
     MenupedidoComponent,
     NuevoPedidoComponent,
     ModificarPedidoComponent,
-    InformesComponent  
+    InformesComponent,
+    MenurubrosComponent  
   ],
   imports: [
     BrowserModule,

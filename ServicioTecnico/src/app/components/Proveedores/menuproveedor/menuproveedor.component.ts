@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/_modal';
+import { SharedService } from 'src/app/services/shared.service';
 
 import { Proveedor } from 'src/app/models/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
@@ -42,7 +43,8 @@ export class MenuproveedorComponent implements OnInit {
     private modalService: ModalService,
     private proveedorService: ProveedorService,
     private ciudadService: CiudadService,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
@@ -211,5 +213,9 @@ export class MenuproveedorComponent implements OnInit {
 
   closeModal(id: string) {
     this.modalService.close(id);
+  }
+  
+  exportexcel() {
+    this.sharedService.exportexcel("Proveedores", this.listProveedor);
   }
 }

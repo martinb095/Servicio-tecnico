@@ -4,7 +4,7 @@ import pool from '../database';
 class ModeloController {
 
     public async getModelos(req: Request, res: Response) {
-        pool.query('SELECT modelo.PkModelo, modelo.Nombre, modelo.Observacion, modelo.FkMarca, marca.Nombre as "Marca" FROM modelo inner join marca on marca.PkMarca=modelo.FkMarca where modelo.Activo=1 order by nombre', (err: any, results: any) => {
+        pool.query('SELECT m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, m.Nombre as "Marca", m.FkRubro, r.Nombre as "Rubro" FROM modelo m inner join marca on marca.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro where m.Activo=1 order by nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "modelo no encontrado" });
             }
@@ -17,7 +17,7 @@ class ModeloController {
     }
 
     public async getModelosFindByNombre(req: Request, res: Response) {
-        pool.query("Select modelo.PkModelo, modelo.Nombre, modelo.Observacion, modelo.FkMarca, marca.Nombre as 'Marca' FROM modelo inner join marca on marca.PkMarca=modelo.FkMarca WHERE modelo.Nombre like '%" + req.params.Valor + "%' and modelo.Activo=1 order by modelo.nombre", (err: any, results: any) => {
+        pool.query("Select m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, ma.Nombre as 'Marca', m.FkRubro r.Nombre as 'Rubro' FROM modelo m inner join marca ma on ma.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro WHERE m.Nombre like '%" + req.params.Valor + "%' and m.Activo=1 order by m.nombre", (err: any, results: any) => {
 
             if (err) {
                 res.status(404).json({ text: "modelo no encontrado" });

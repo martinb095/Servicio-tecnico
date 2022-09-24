@@ -84,6 +84,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <label class="control-label">Rubro:</label>
+                        <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="modelo.FkRubro"> 
+                            <option *ngFor="let rubro of listRubro" [value]="rubro.PkRubro">{{rubro.Nombre}}</option>       
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarModelo($event.target.value);" data-dismiss="modal">Guardar</button>
@@ -126,6 +134,14 @@
                             <label class="control-label">Observación:</label>
                             <textarea class="form-control ng-pristine ng-valid ng-touched" name="textarea" rows="3" [(ngModel)]="modelo.Observacion"></textarea>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <label class="control-label">Rubro:</label>
+                        <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="modelo.FkRubro"> 
+                            <option *ngFor="let rubro of listRubro" [value]="rubro.PkRubro">{{rubro.Nombre}}</option>       
+                        </select>
                     </div>
                 </div>
             </div>

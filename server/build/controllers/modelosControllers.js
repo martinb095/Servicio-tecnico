@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class ModeloController {
     getModelos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT modelo.PkModelo, modelo.Nombre, modelo.Observacion, modelo.FkMarca, marca.Nombre as "Marca" FROM modelo inner join marca on marca.PkMarca=modelo.FkMarca where modelo.Activo=1 order by nombre', (err, results) => {
+            database_1.default.query('SELECT m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, m.Nombre as "Marca", m.FkRubro, r.Nombre as "Rubro" FROM modelo m inner join marca on marca.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro where m.Activo=1 order by nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "modelo no encontrado" });
                 }
@@ -30,7 +30,7 @@ class ModeloController {
     }
     getModelosFindByNombre(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query("Select modelo.PkModelo, modelo.Nombre, modelo.Observacion, modelo.FkMarca, marca.Nombre as 'Marca' FROM modelo inner join marca on marca.PkMarca=modelo.FkMarca WHERE modelo.Nombre like '%" + req.params.Valor + "%' and modelo.Activo=1 order by modelo.nombre", (err, results) => {
+            database_1.default.query("Select m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, ma.Nombre as 'Marca', m.FkRubro r.Nombre as 'Rubro' FROM modelo m inner join marca ma on ma.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro WHERE m.Nombre like '%" + req.params.Valor + "%' and m.Activo=1 order by m.nombre", (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "modelo no encontrado" });
                 }

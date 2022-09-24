@@ -1,0 +1,99 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu rubros</h4>
+</div>
+
+<!--/row-->
+<div class="form-group ">
+    <div class="row ">
+        <div class="col-md-4 ">
+            <div class="dt-buttons">
+                <button type="button" aria-controls="example23" class="btn waves-effect waves-light btn-success" (click)="SetNull();openModal('ModalNuevoRubro');">Nuevo rubro</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="20%">Número</th>
+            <th width="80%">Nombre</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="listRubros">
+        <tr *ngFor="let rubro of listRubros | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+            <td>{{rubro.PkRubro}} </td>
+            <td>{{rubro.Nombre}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="SetValores(rubro);openModal('ModalEditarRubro');"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarRubro(rubro.PkRubro)" class="fa fa-close text-danger"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                    <pagination-controls
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente" (pageChange)="pageActual = $event"></pagination-controls>
+                </span>
+</div>
+
+<!-----------------/MODAL------------------->
+<jw-modal id="ModalNuevoRubro">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nuevo rubro</h4>
+                <button type="button" class="close" (click)="closeModal('ModalNuevoRubro');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
+                            <input type="text" class="form-control" required [(ngModel)]="rubro.Nombre">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="GuardarRubro($event.target.value);">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalNuevoRubro');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+
+<!----------------------- FIN MODAL -------------------------------------->
+<jw-modal id="ModalEditarRubro">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modifcar rubro</h4>
+                <button type="button" class="close" (click)="closeModal('ModalEditarRubro');">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
+                            <input type="text" class="form-control" required [(ngModel)]="rubro.Nombre">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn waves-effect waves-light btn-success" (click)="ModificarRubro(rubro.PkRubro, rubro);">Guardar</button>
+                <button type="button" class="btn waves-effect waves-light btn-danger" (click)="closeModal('ModalEditarRubro');">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</jw-modal>
+
+<!----------------------- FIN MODAL -------------------------------------->

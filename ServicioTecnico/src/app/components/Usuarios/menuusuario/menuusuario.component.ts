@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Moment } from "moment";
-
+import { SharedService } from 'src/app/services/shared.service';
 import { ModalService } from 'src/app/_modal';
 
 import Swal from 'sweetalert2'
@@ -35,7 +35,8 @@ export class MenuusuarioComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
@@ -149,6 +150,10 @@ export class MenuusuarioComponent implements OnInit {
         Swal.fire({ icon: 'success', title: "Usuario nro. " + id + " eliminado correctamente." })
       }
     })
+  }
+
+  exportexcel() {
+    this.sharedService.exportexcel("Usuarios", this.listUsuarios);
   }
 
   openModal(id: string) {

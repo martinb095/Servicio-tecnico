@@ -20,6 +20,8 @@ class EstadosRoutes {
         this.router.delete('/:PkEstado', estadosControllers.delete);
         //Actualizar
         this.router.put('/:PkEstado', estadosControllers.update);
+
+        this.router.get('/:PkOrdenRep', estadosControllers.getHistorialEstados);
     }
 
 }

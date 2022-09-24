@@ -2,5 +2,6 @@ export interface Modelo {
     PkModelo: number;
     Nombre: string;
     Observacion: string,
-    FkMarca: number
+    FkMarca: number,
+    FkRubro: number
 }

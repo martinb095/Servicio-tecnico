@@ -3,6 +3,8 @@ import pool from '../database';
 
 
 class EstadosController {
+
+
     //listado de estados
     public async getEstados(req: Request, res: Response) {
         pool.query('Select * from estado order by PkEstado', (err: any, results: any) => {
@@ -29,6 +31,20 @@ class EstadosController {
                 return res.status(404).json({ text: "estado no encontrado" });
             }
         });
+    }
+
+    //listado de estados
+    public async getHistorialEstados(req: Request, res: Response) {
+        pool.query('SELECT es.PkEstadoHis, es.Observacion, es.Fecha, es.FkEstado, e.Nombre FROM estadohistorial es left join estado e on e.PkEstado = es.FkEstado where es.FkOrdenRep = ?', req.params.PkOrdenRep, (err: any, results: any) => {
+            if (err) {
+                res.status(404).json({ text: "estado no encontrado" });
+            }
+            if (results) {
+                return res.json(results[0]);
+            } else {
+                return res.status(404).json({ text: "estado no encontrado" });
+            }
+        });        
     }
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora

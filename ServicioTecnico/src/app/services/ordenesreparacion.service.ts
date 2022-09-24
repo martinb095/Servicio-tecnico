@@ -59,8 +59,9 @@ export class OrdenesReparacionService {
     return this.http.put(this.API_URI + "/ordenesreparacion/actualizar/" + id, updateOrdenRep);
   }
 
-  ActualizarEstadoOrden(PkOrdenRep: number, datosOrden: any) {
-    return this.http.put(this.API_URI + "/ordenesreparacion/actualizarestado/" + PkOrdenRep, datosOrden);
+  ActualizarEstadoOrden(datosCambioEstado:  any) {
+    //return this.http.put(this.API_URI + "/ordenesreparacion/actualizarestado/" + PkOrdenRep, datosOrden);
+    return this.http.post(this.API_URI + "/ordenesreparacion/actualizarestado/", datosCambioEstado);
   }
 
   //valida la orden para la consulta del usuario

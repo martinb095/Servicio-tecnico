@@ -22,6 +22,7 @@ import proveedoresRoutes from './routes/proveedorRoutes';
 import pedidosRoutes from './routes/pedidosRoutes';
 import detallePedidosRoutes from './routes/detallepedidoRoutes';
 import informesRoutes from './routes/informesRoutes';
+import rubrosRoutes from './routes/rubrosRoutes';
 
 class Server {
 
@@ -64,7 +65,7 @@ class Server {
         this.app.use('/pedidos/', pedidosRoutes);
         this.app.use('/detallepedido/', detallePedidosRoutes);
         this.app.use('/informes/', informesRoutes);       
-
+        this.app.use('/rubros/', rubrosRoutes);   
     }
 
     start(): void {

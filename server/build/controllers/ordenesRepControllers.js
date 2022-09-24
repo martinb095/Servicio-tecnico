@@ -228,12 +228,25 @@ class OrdenesRepController {
     }
     //Actuliza unicamente el estado
     updateEstado(req, res) {
-        database_1.default.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.body.FkEstado, req.params.PkOrdenRep], function (err, resSql) {
-            if (err) {
+        // pool.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.body.FkEstado, req.params.PkOrdenRep], function (err: Error, resSql: Response) {
+        //     if (err) {
+        //         return res.status(200).json({ exist: false });
+        //     };
+        //     return res.status(200).json({ exist: true });
+        // });
+        console.log(req.params);
+        console.log("req.body");
+        console.log(req.body);
+        const stringSQL = "call actualizarEstadoOrden(?,?,?);";
+        database_1.default.query(stringSQL, [req.body.PkOrdenRep, req.body.FkEstado, req.body.Observacion], function (err, results) {
+            if (err)
+                throw err;
+            try {
+                return res.json({ text: 'OK' });
+            }
+            catch (error) {
                 return res.status(200).json({ exist: false });
             }
-            ;
-            return res.status(200).json({ exist: true });
         });
     }
     //Valida que la orden ingresada por el cliente sea valida

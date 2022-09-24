@@ -10,32 +10,40 @@ import { ModeloService } from 'src/app/services/modelo.service';
 import { Marca } from 'src/app/models/marca';
 import { MarcaService } from 'src/app/services/marca.service';
 
+//Rubro
+import { Rubro } from 'src/app/models/rubro';
+import { RubroService } from 'src/app/services/rubro.service';
+
 @Component({
   selector: 'app-menumodelo',
   templateUrl: './menumodelo.component.html',
   styleUrls: ['./menumodelo.component.css']
 })
 export class MenumodeloComponent implements OnInit {
-  //-----Modelo----------
-  listMarca: Marca[] = [];
 
   //-----Modelo----------
+  listMarca: Marca[] = [];
+  //-----Modelo----------
   listModelo: Modelo[] = [];
-  
+  //-----Rubro----------
+  listRubro: Rubro[] = [];
+
   modelo: Modelo = {
     PkModelo: 0,
     Nombre: "",
     Observacion: "",
     FkMarca: null,
+    FkRubro: null,
   };
-  
+
   modeloBuscar: string;
   modPageActual: number = 1;
 
-  constructor(   
+  constructor(
     private modalService: ModalService,
     private modeloService: ModeloService,
     private marcaService: MarcaService,
+    private rubroService: RubroService,
     private router: Router
   ) { }
 
@@ -48,18 +56,29 @@ export class MenumodeloComponent implements OnInit {
     }
     this.ObtenerModelo();
     this.ObtenerMarca();
+    this.ObtenerRubro();
+  }
+
+  ObtenerRubro() {
+    this.listRubro = [];
+    this.rubroService.ObtenerRubro().subscribe(
+      (res: any) => {
+        this.listRubro = res;
+      },
+      err => console.error(err)
+    );
   }
 
   ObtenerMarca() {
     this.listMarca = [];
     this.marcaService.ObtenerMarcas().subscribe(
-      (res: any) => {        
+      (res: any) => {
         this.listMarca = res;
       },
       err => console.error(err)
     );
   }
-  
+
   //------------------------------------
   //Modelo
   //------------------------------------
@@ -90,14 +109,14 @@ export class MenumodeloComponent implements OnInit {
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Modelo nro. " + id + " eliminado correctamente." })
 
-      } 
+      }
     })
   }
   GuardarModelo() {
     if (this.modelo.Nombre == "" || this.modelo.Nombre == null) {
       Swal.fire({ title: "El nombre del modelo no puede estar vacio.", icon: "warning" });
       return;
-    }   
+    }
     //Almacena modelo   
     this.modeloService.GuardarModelo(this.modelo).subscribe(
       res => {
@@ -107,20 +126,20 @@ export class MenumodeloComponent implements OnInit {
           this.closeModal('ModalNuevoModelo');
           Swal.fire({ title: "Modelo guardado correctamente.", icon: "success" });
           this.ObtenerModelo();
-        }       
+        }
       },
       err => console.error(err)
-    )    
+    )
   }
 
   ModificarModelo() {
     if (this.modelo.Nombre == "" || this.modelo.Nombre == null) {
       Swal.fire({ title: "El nombre del modelo no puede estar vacio.", icon: "warning" });
       return;
-    }   
+    }
     //Almacena modelo   
     this.modeloService.ActualizarModelo(this.modelo.PkModelo, this.modelo).subscribe(
-      res => {               
+      res => {
         var result = Object.values(res);
         if (result[0] == "OK") {
           this.closeModal('ModalEditarModelo');
@@ -130,16 +149,17 @@ export class MenumodeloComponent implements OnInit {
         }
       },
       err => console.error(err)
-    )   
+    )
   }
 
 
-  SetValores(modelo: Modelo) { 
+  SetValores(modelo: Modelo) {
     this.modelo = {
-      PkModelo:modelo.PkModelo,
+      PkModelo: modelo.PkModelo,
       Nombre: modelo.Nombre,
       Observacion: modelo.Observacion,
       FkMarca: modelo.FkMarca,
+      FkRubro: modelo.FkRubro,
     };
   }
 
@@ -162,6 +182,7 @@ export class MenumodeloComponent implements OnInit {
     this.modelo.Nombre = null;
     this.modelo.Observacion = null;
     this.modelo.FkMarca = null;
+    this.modelo.FkRubro = null;
   }
 
   openModal(id: string) {
