@@ -13,7 +13,6 @@ export class EstadoService {
   constructor(private http: HttpClient) { }
 
   ObtenerEstado() {
-    // return this.http.get(this.API_URI + "/ordenrep");
     return this.http.get(this.API_URI + "/estados");
   }
 
@@ -31,6 +30,10 @@ export class EstadoService {
 
   ActualizarEstado(id: string, updateEstado: Estado) {
     return this.http.put(this.API_URI + "/estados/actualizar/" + id, updateEstado);
+  }
+
+  obtenerEstadosHis(id: number) {
+    return this.http.get(this.API_URI + "/estados/estadohis/" + id);
   }
 
 

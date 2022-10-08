@@ -5,7 +5,7 @@ import pool from '../database';
 class PedidoController {
    
     public async getPedidos(req: Request, res: Response) {       
-        pool.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor order by p.PkPedProv;', (err: any, results: any) => {
+        pool.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor where fechacreacion between ? and ? order by p.PkPedProv;',[req.params.FechaDesde, req.params.FechaHasta], (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "pedidos no encontrado" });
             }

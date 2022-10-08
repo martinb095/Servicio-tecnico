@@ -33,8 +33,11 @@ import { NuevoPedidoComponent } from './components/Pedidos/nuevo-pedido/nuevo-pe
 import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/modificar-pedido.component';
 //informes
 import { InformesComponent } from './components/Informes/informes.component';
-//informes
+//rubros
 import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.component';
+//Presupuesto
+import { MenupresupuestoComponent } from './components/Presupuestos/menupresupuesto/menupresupuesto.component';
+import { ModificarpresupuestoComponent } from './components/Presupuestos/modificarpresupuesto/modificarpresupuesto.component';
 
 export const appRoutes: Routes = [
 
@@ -81,7 +84,10 @@ export const appRoutes: Routes = [
       { path: 'informes', component: InformesComponent },
       //rubros
       { path: 'menurubro', component: MenurubrosComponent },
-      
+      //presupuestos
+      { path: 'menupresupuesto', component: MenupresupuestoComponent },
+      { path: 'menupresupuesto/modificar/:idpresupuesto', component: ModificarpresupuestoComponent },
+
       { path: '**', redirectTo: '/login' },
     ]
   },

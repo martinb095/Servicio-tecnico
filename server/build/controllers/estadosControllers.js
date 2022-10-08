@@ -51,7 +51,7 @@ class EstadosController {
                     res.status(404).json({ text: "estado no encontrado" });
                 }
                 if (results) {
-                    return res.json(results[0]);
+                    return res.json(results);
                 }
                 else {
                     return res.status(404).json({ text: "estado no encontrado" });

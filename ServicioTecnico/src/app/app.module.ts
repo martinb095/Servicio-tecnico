@@ -52,6 +52,9 @@ import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/
 import { InformesComponent } from './components/Informes/informes.component';
 
 import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.component';
+import { MenupresupuestoComponent } from './components/Presupuestos/menupresupuesto/menupresupuesto.component';
+
+import { ModificarpresupuestoComponent } from './components/Presupuestos/modificarpresupuesto/modificarpresupuesto.component';
 
 
 @NgModule({
@@ -80,7 +83,9 @@ import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.c
     NuevoPedidoComponent,
     ModificarPedidoComponent,
     InformesComponent,
-    MenurubrosComponent  
+    MenurubrosComponent,
+    MenupresupuestoComponent,  
+    ModificarpresupuestoComponent  
   ],
   imports: [
     BrowserModule,

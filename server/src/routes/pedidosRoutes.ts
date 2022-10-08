@@ -10,9 +10,8 @@ class PedidosRoutes {
     }
 
     config(): void {
-        //Lista todos los clientes
-        this.router.get('/', pedidosControllers.getPedidos);
-
+        //Lista
+        this.router.get('/:FechaDesde/:FechaHasta', pedidosControllers.getPedidos);
         this.router.get('/:PkPedProv', pedidosControllers.getOne);
         //Eliminar
         this.router.put('/eliminar/:PkPedProv', pedidosControllers.delete);

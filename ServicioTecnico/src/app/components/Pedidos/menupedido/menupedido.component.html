@@ -4,9 +4,20 @@
 
 <div class="form-group ">
     <div class="row ">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <div class="dt-buttons">
                 <a href="menupedido/nuevopedido" aria-controls="example23" class="btn waves-effect waves-light btn-block btn-success"><span >Nuevo pedido</span></a>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="input-group">
+                <label style="margin-top: 5px;">Fecha desde:</label>
+                <input type="date" class="form-control" [(ngModel)]="fechaDesde" [ngModelOptions]="{standalone:true}">
+                <label style="margin-top: 5px;">Fecha hasta:</label>
+                <input type="date" class="form-control" [(ngModel)]="fechaHasta" [ngModelOptions]="{standalone:true}">
+                <span class="input-group-btn">
+                                 <button class="btn btn-info" type="button" (click)="ObtenerPedidos()">Buscar</button>
+                              </span>
             </div>
         </div>
     </div>

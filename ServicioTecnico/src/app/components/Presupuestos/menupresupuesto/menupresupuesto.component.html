@@ -1,0 +1,55 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white h4-per">Menu presupuestos</h4>
+</div>
+
+<div class="form-group">
+    <div class="row ">
+        <div class="col-md-5">
+            <div class="dt-buttons">
+                <a href="menupresupuesto/nuevopresupuesto" aria-controls="example23" class="btn waves-effect waves-light btn-block btn-success"><span>Nuevo presupuesto</span></a>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="input-group">
+                <label style="margin-top: 5px;">Fecha desde:</label>
+                <input type="date" class="form-control" [(ngModel)]="fechaDesde" [ngModelOptions]="{standalone:true}">
+                <label style="margin-top: 5px;">Fecha hasta:</label>
+                <input type="date" class="form-control" [(ngModel)]="fechaHasta" [ngModelOptions]="{standalone:true}">
+                <span class="input-group-btn">
+                             <button class="btn btn-info" type="button" (click)="ObtenerPresupuestos()">Buscar</button>
+                          </span>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th width="10%">Nro.</th>
+            <th width="40%">Cliente</th>
+            <th width="18%">Fecha creación</th>
+            <th width="15%">Fecha vigencia</th>
+            <th width="10%">Acción</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="listPresupuesto">
+        <tr *ngFor="let presupuesto of listPresupuesto | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
+            <td>{{presupuesto.PkPresupuesto}} </td>
+            <td>{{presupuesto.Nombre}} {{presupuesto.Apellido}}</td>
+            <td>{{presupuesto.FechaCreacion | date:'dd/MM/yyyy'}}</td>
+            <td>{{presupuesto.FechaVigencia | date:'dd/MM/yyyy'}}</td>
+            <td class="text-nowrap">
+                <a data-toggle="tooltip" data-original-title="Editar"> <i [routerLink]="['/menupresupuesto/modificar', presupuesto.PkPresupuesto]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarPresupuesto(presupuesto.PkPresupuesto)" class="fa fa-close text-danger"></i> </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_simple_numbers">
+    <span>
+                <pagination-controls 
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+                (pageChange)="pageActual = $event"></pagination-controls>
+            </span>
+</div>

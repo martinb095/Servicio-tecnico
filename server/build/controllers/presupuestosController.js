@@ -12,42 +12,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database"));
-class PedidoController {
-    getPedidos(req, res) {
+class PresupuestoController {
+    getPresupuestos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor where fechacreacion between ? and ? order by p.PkPedProv;', [req.params.FechaDesde, req.params.FechaHasta], (err, results) => {
+            database_1.default.query('SELECT p.PkPresupuesto, p.FKCliente, c.Nombre, c.Apellido, p.FechaVigencia, p.FechaCreacion, p.Observacion, p.Confirmado from presupuesto p left join cliente c on c.PkCliente = p.FkCliente where fechacreacion between ? and ? order by p.PkPresupuesto;', [req.params.FechaDesde, req.params.FechaHasta], (err, results) => {
                 if (err) {
-                    res.status(404).json({ text: "pedidos no encontrado" });
+                    res.status(404).json({ text: "presup no encontrado" });
                 }
                 if (results) {
-                    //return res.json(results[0]);
                     return res.json(results);
                 }
                 else {
-                    return res.status(404).json({ text: "pedidos no encontrado" });
+                    return res.status(404).json({ text: "presup no encontrado" });
                 }
             });
         });
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select p.FkProveedor, prov.Firma, prov.Telefono, prov.Mail, p.FechaCreacion, p.Observacion from pedido p left join Proveedor prov on p.FkProveedor = prov.PkProveedor where PkPedProv=?;', req.params.PkPedProv, (err, results) => {
+            database_1.default.query('SELECT p.PkPresupuesto, p.FKCliente, c.Nombre, c.Apellido, p.FechaVigencia, p.FechaCreacion, p.Observacion, p.Confirmado from presupuesto p left join cliente c on c.PkCliente = p.FkCliente where PkPresupuesto=?;', req.params.PkPresupuesto, (err, results) => {
                 if (err) {
-                    res.status(404).json({ text: "pedido no encontrado" });
+                    res.status(404).json({ text: "presup no encontrado" });
                 }
                 if (results) {
                     return res.json(results[0]);
                 }
                 else {
-                    return res.status(404).json({ text: "pedido no encontrado" });
+                    return res.status(404).json({ text: "presup no encontrado" });
                 }
             });
         });
     }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const stringSQL = "call deletePedido(?);";
-            database_1.default.query(stringSQL, [req.params.PkPedProv], function (err, results) {
+            const stringSQL = "call deletePresupuesto(?);";
+            database_1.default.query(stringSQL, [req.params.PkPresupuesto], function (err, results) {
                 if (err)
                     throw err;
                 try {
@@ -59,31 +58,29 @@ class PedidoController {
             });
         });
     }
-    procesar(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stringSQL = "call procesarPedido(?);";
-            database_1.default.query(stringSQL, [req.params.PkPedProv], function (err, results) {
-                if (err)
-                    throw err;
-                try {
-                    return res.json({ text: 'OK' });
-                }
-                catch (error) {
-                    return res.status(200).json({ exist: false });
-                }
-            });
-        });
-    }
+    // public async procesar(req: Request, res: Response) {       
+    //     const stringSQL = "call procesarPedido(?);";
+    //     pool.query(stringSQL, [req.params.PkPedProv], function (err: any, results: any) {
+    //         if (err) throw err;                  
+    //         try {
+    //             return res.json({ text: 'OK' });
+    //         } catch (error) {
+    //             return res.status(200).json({ exist: false });
+    //         }
+    //     });
+    // }
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let pedido = {
-                'FkProveedor': req.body.FkProveedor,
+            let presupuesto = {
+                'FkCliente': req.body.FkCliente,
                 'FechaCreacion': req.body.FechaCreacion,
+                'FechaVigencia': req.body.FechaVigencia,
                 'Observacion': req.body.Observacion,
+                'Confirmado': '0',
             };
             //Registro la orden          
-            yield database_1.default.query('INSERT INTO pedido SET ?', [pedido], function (err, resultInser) {
+            yield database_1.default.query('INSERT INTO presupuesto SET ?', [presupuesto], function (err, resultInser) {
                 if (err)
                     throw err;
                 const ultimo = resultInser.insertId;
@@ -93,11 +90,13 @@ class PedidoController {
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body.Observacion);
-            let pedido = {
+            let presupuesto = {
+                'FkCliente': req.body.FkCliente,
+                'FechaVigencia': req.body.FechaVigencia,
                 'Observacion': req.body.Observacion,
+                'Confirmado': req.body.Confirmado,
             };
-            yield database_1.default.query('update pedido set ? Where PkPedProv = ?', [pedido, req.params.PkPedProv], function (err, res) {
+            yield database_1.default.query('update presupuesto set ? Where PkPresupuesto = ?', [presupuesto, req.params.PkPresupuesto], function (err, res) {
                 if (err)
                     throw err;
             });
@@ -105,5 +104,5 @@ class PedidoController {
         });
     }
 }
-const pedidosController = new PedidoController();
-exports.default = pedidosController;
+const presupuestosController = new PresupuestoController();
+exports.default = presupuestosController;

@@ -13,8 +13,8 @@ export class PedidoService {
 
   constructor(private http: HttpClient) { }
 
-  ObtenerPedidos() {
-    return this.http.get(this.API_URI + "/pedidos");
+  ObtenerPedidos(fechaDesde: string, fechaHasta: string) {
+    return this.http.get(this.API_URI + "/pedidos/" + fechaDesde +"/"+ fechaHasta);
   }
 
   obtenerPedido(idPedido: number) {

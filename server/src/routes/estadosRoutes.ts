@@ -21,7 +21,7 @@ class EstadosRoutes {
         //Actualizar
         this.router.put('/:PkEstado', estadosControllers.update);
 
-        this.router.get('/:PkOrdenRep', estadosControllers.getHistorialEstados);
+        this.router.get('/estadohis/:PkOrdenRep', estadosControllers.getHistorialEstados);
     }
 
 }

@@ -11,8 +11,8 @@ class PedidosRoutes {
         this.config();
     }
     config() {
-        //Lista todos los clientes
-        this.router.get('/', pedidosControllers_1.default.getPedidos);
+        //Lista
+        this.router.get('/:FechaDesde/:FechaHasta', pedidosControllers_1.default.getPedidos);
         this.router.get('/:PkPedProv', pedidosControllers_1.default.getOne);
         //Eliminar
         this.router.put('/eliminar/:PkPedProv', pedidosControllers_1.default.delete);

@@ -67,7 +67,7 @@
             <td>{{orden.FecRetiroEstimado | date:'dd/MM/yyyy'}}</td>
             <td>{{orden.Estado}}</td>
             <td class="text-nowrap">
-                <a data-toggle="tooltip" data-original-title="Cambiar"> <i (click)="estadosPosibles();openModal('ModalConfirmarEstado',orden)" class="fa fa-exchange m-r-10"></i> </a>
+                <a data-toggle="tooltip" data-original-title="Cambiar"> <i (click)="estadosPosibles();openModalEstados('ModalConfirmarEstado', orden)" class="fa fa-exchange m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Edit"> <i [routerLink]="['/menuordenrep/modificar', orden.Pkordenreparacion]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Imprimir"> <i (click)="createPdf(orden.Pkordenreparacion);" name="Imprimir" class="fa fa-print text-inverse m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Estados"> <i (click)="mostrarHistorial(orden.Pkordenreparacion);" name="Historial estados" class="fa fa-search-plus text-inverse m-r-10"></i> </a>
@@ -168,3 +168,37 @@
             </div>
             <jw-modal>
                 <!----------------------- FIN MODAL -------------------------------------->
+
+                <!-----------------/MODAL------------------->
+                <jw-modal id="modalHistorialEstados">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width: 600px">
+                            <div class="modal-header">
+                                <h4 class="modal-title h4-per">Historial de estados</h4>
+                                <button type="button" class="close" (click)="closeModal('modalHistorialEstados')">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th width="3%">Estado</th>
+                                            <th width="93%">Observación</th>
+                                            <th width="3%">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let historial of listEstadoHis">
+                                            <td>{{historial.Nombre}}</td>
+                                            <td>{{historial.Observacion}}</td>
+                                            <td>{{historial.Fecha | date:'dd/MM/yyyy'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" (click)="closeModal('modalHistorialEstados')" class="btn waves-effect waves-light btn-danger">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <jw-modal>
+                        <!----------------------- FIN MODAL -------------------------------------->

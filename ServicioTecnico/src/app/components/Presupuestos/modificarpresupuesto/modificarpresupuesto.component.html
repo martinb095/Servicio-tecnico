@@ -1,0 +1,91 @@
+<div class="card-header bg-info">
+    <h4 class="m-b-0 text-white">Modificar presupuesto</h4>
+</div>
+<div class="form-body">
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Cliente:</label>
+                <input type="text" readonly class="form-control" [(ngModel)]="presupuestoEdit.Firma">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group ">
+                <label class="control-label ">Teléfono:</label>
+                <input type="text" readonly class="form-control" [(ngModel)]="presupuestoEdit.Telefono">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group ">
+                <label class="control-label">Mail:</label>
+                <input type="text" readonly class="form-control" [(ngModel)]="presupuestoEdit.Mail">
+            </div>
+        </div>
+        <!-- <div class="col-md-1">
+                <div class="form-group ">
+                    <a style="margin-top: 30px;" (click)="openModal('ModalSelectProveedor');" aria-controls="example23" class="btn btn-block btn-outline-info"><span>Buscar</span></a>
+                </div>
+            </div> -->
+    </div>
+    <div class="row ">
+        <div class="col-md-8">
+            <div class="form-group ">
+                <label class="control-label ">Observación:</label>
+                <textarea class="form-control" [ngModelOptions]="{standalone:true} " [(ngModel)]="presupuestoEdit.Observacion" name="textarea" rows="4" cols="50"></textarea>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="form-group has-success">
+                    <label class="control-label">Fecha creación:</label>
+                    <input type="date" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="presupuestoEdit.FecRetiroEstimado">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Fecha vigencia:</label>
+                <input type="date" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="presupuestoEdit.FecRetiroEstimado">
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-around ">
+        <button type="button" id="btnGuardar" class="btn-ordenrep btn-success" (click)="ModificarPedido($event.target.value);">Guardar</button>
+    </div>
+
+    <!-- <div class="row ">
+            <div class="col-md-12 ">
+                <button type="button" id="btnNuevoMov" class="btn waves-effect waves-light btn-info float-right" (click)="SetNull();openModal('ModalMov');">Nuevo movimiento</button>
+                <table class="table table-bordered table-striped" id="idTableDetalle">
+                    <thead>
+                        <tr>
+                            <th width="20%">Repuesto</th>
+                            <th width="20%">Cantidad</th>
+                            <th width="60%">Observacion</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="listDetallePedido.length">
+                        <tr *ngFor="let detallepedido of listDetallePedido | paginate: {id: 'pagDetPed', itemsPerPage: 5, currentPage: pageActualDetalle}; let i = index">
+                            <td>{{detallepedido.FkRepuesto}} - {{detallepedido.Repuesto}} </td>
+                            <td>{{detallepedido.Cantidad}}</td>
+                            <td>{{detallepedido.Observacion}}</td>
+                            <td class="text-nowrap">
+                                <a data-toggle="tooltip" data-original-title="Edit"> <i (click)="modificarDetalle(detallepedido);" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Close"> <i (click)="eliminarDetallePedido(detallepedido.PkDetallePedido);" class="fa fa-close text-danger"></i> </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="dataTables_paginate paging_simple_numbers"> <span>
+                            <pagination-controls id="pagDetPed" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualDetalle = $event"></pagination-controls>
+                        </span>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row justify-content-around">
+            <button routerLink="/menupedido" type="button" class="btn-ordenrep btn-danger">Volver</button>
+        </div> -->

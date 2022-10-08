@@ -14,6 +14,7 @@ import { DetalleOrdenService } from '../../../services/detalleorden.service';
 
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../../models/estado';
+import { EstadoHis } from '../../../models/estadohis';
 
 import { ClienteService } from '../../../services/cliente.service'
 import { Cliente } from '../../../models/cliente';
@@ -53,6 +54,16 @@ export class MenuOrdenrepComponent implements OnInit {
     Activo: null
   };
 
+  listEstadoHis: EstadoHis[] = [];
+
+  estadoHis: EstadoHis = {
+    PkEstadoHis: 0,
+    Observacion: "",
+    FkOrdenRep: 0,
+    FkEstado: 0,
+    Fecha: ""
+  };
+
 
   PkOrden = 0;
   idEstado = 2;
@@ -78,6 +89,7 @@ export class MenuOrdenrepComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     //valido si existe la sesion
     let valido = localStorage.getItem('ingreso');
     if (valido != 'true') {
@@ -204,7 +216,11 @@ export class MenuOrdenrepComponent implements OnInit {
   }
 
 
-  openModal(id: string, orden: any) {   
+  openModal(id: string) {
+    this.modalService.open(id);
+  }
+
+  openModalEstados(id: string, orden: any) {
     this.idCambiarEstado = orden.Pkordenreparacion;
     this.cliTel = orden.CliTel;
     this.modalService.open(id);
@@ -226,7 +242,7 @@ export class MenuOrdenrepComponent implements OnInit {
       'PkOrdenRep': this.idCambiarEstado,
       'FkEstado': this.idEstadoActual,
       'Observacion': this.observacion,
-    }    
+    }
     Swal.fire({
       title: '¿Desea modificar el estado de la orden?',
       //text: 'Se enviara un correo al cliente notificando la modificación.',
@@ -336,7 +352,7 @@ export class MenuOrdenrepComponent implements OnInit {
     return body;
   }
 
-  table(data, columns) {    
+  table(data, columns) {
     return {
       table: {
         headerRows: 1,
@@ -368,7 +384,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
 
   async generarPdf(nroOrden: number) {
-    var encabezado: string[] = ['NombreTarea', 'NombreRep', 'Precio', 'Cantidad', 'Total'];  
+    var encabezado: string[] = ['NombreTarea', 'NombreRep', 'Precio', 'Cantidad', 'Total'];
     let docDefinition = {
       styles: {
         header: {
@@ -446,16 +462,17 @@ export class MenuOrdenrepComponent implements OnInit {
     );
   }
 
-  mostrarHistorial(nroOrden: number) {
-    // this.listArray = [];
+  mostrarHistorial(nroOrden: number) {   
     // //Trae los datos detalle de la orden
-    // this.detalleOrdenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
-    //   (res: any) => {
-    //     this.listArray = res;
-    //     this.generarPdf(nroOrden);
-    //   },
-    //   err => console.error(err)
-    // );
+    this.estadoService.obtenerEstadosHis(nroOrden).subscribe(
+      (res: any) => {
+        this.listEstadoHis = res;
+        
+        this.openModal("modalHistorialEstados");
+      },
+      err => console.error(err)
+    );
+
   }
 
 }
