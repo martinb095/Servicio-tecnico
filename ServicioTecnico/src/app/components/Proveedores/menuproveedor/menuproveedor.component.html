@@ -101,7 +101,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 ">
                         <div class="form-group ">
@@ -122,6 +121,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label class="control-label ">Calle:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Calle">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Nro:</label>
+                            <input type="number" class="form-control" [(ngModel)]="proveedor.Numero">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Piso:</label>
+                            <input type="number" class="form-control" [(ngModel)]="proveedor.Piso">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Depto:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Depto">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group ">
@@ -194,6 +220,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6 ">
                         <div class="form-group ">
@@ -211,6 +238,32 @@
                                     <option ngValue="null "></option>   
                                     <option *ngFor="let ciudad of listCiudades " value={{ciudad.PkCiudad}}>{{ciudad.Nombre}}</option>           
                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label class="control-label ">Calle:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Calle">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Nro:</label>
+                            <input type="number" class="form-control" [(ngModel)]="proveedor.Numero">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Piso:</label>
+                            <input type="number" class="form-control" [(ngModel)]="proveedor.Piso">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Depto:</label>
+                            <input type="text" class="form-control" [(ngModel)]="proveedor.Depto">
                         </div>
                     </div>
                 </div>

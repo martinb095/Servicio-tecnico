@@ -5,4 +5,5 @@ export interface DetallePresupuesto {
     Observacion: string;
     Cantidad: number;
     FkTarea: number;
+    Costo: number;
 }

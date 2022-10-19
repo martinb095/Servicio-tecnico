@@ -17,7 +17,7 @@ class ClienteController {
     getClientes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             //pool.query('Select * from cliente where Activo=1', (err: any, results: any) => {
-            database_1.default.query('Select cliente.PkCliente, cliente.Nombre, cliente.Telefono, cliente.FkCiudad, cliente.Direccion, cliente.Mail, cliente.Contrasenia, ciudad.FkProvincia as "FkProv", cliente.Apellido from cliente left join ciudad on ciudad.PkCiudad=Cliente.FkCiudad where Activo=1 order by nombre', (err, results) => {
+            database_1.default.query('Select c.PkCliente, c.Nombre, c.Telefono, c.FkCiudad, c.Calle, c.Numero, c.Depto, c.Piso, c.Mail, c.Contrasenia, ciu.FkProvincia as "FkProv", c.Apellido from cliente c left join ciudad ciu on ciu.PkCiudad=c.FkCiudad where Activo=1 order by nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "clientes no encontrado" });
                 }
@@ -81,12 +81,15 @@ class ClienteController {
             let cliente = {
                 'PkCliente': req.body.PkCliente,
                 'Nombre': req.body.Nombre,
+                'Apellido': req.body.Apellido,
                 'Telefono': req.body.Telefono,
                 'FkCiudad': req.body.FkCiudad,
-                'Direccion': req.body.Direccion,
+                'Calle': req.body.Calle,
+                'Numero': req.body.Numero,
+                'Piso': req.body.Piso,
+                'Depto': req.body.Calle,
                 'Mail': req.body.Mail,
                 'Contrasenia': req.body.Contrasenia,
-                'Apellido': req.body.Apellido,
                 'Activo': true
             };
             yield database_1.default.query('update cliente set ? Where PkCliente = ?', [cliente, req.params.PkCliente]);

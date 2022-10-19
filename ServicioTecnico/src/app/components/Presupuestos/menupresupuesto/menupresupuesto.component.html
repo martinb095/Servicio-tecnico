@@ -4,13 +4,18 @@
 
 <div class="form-group">
     <div class="row ">
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="dt-buttons">
                 <a href="menupresupuesto/nuevopresupuesto" aria-controls="example23" class="btn waves-effect waves-light btn-block btn-success"><span>Nuevo presupuesto</span></a>
             </div>
         </div>
-        <div class="col-lg-7">
+        <div class="col-lg-8">
             <div class="input-group">
+                <label style="margin-top: 5px;">Aceptado:</label>
+                <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="aceptado">                    
+                    <option value="0">No</option>       
+                    <option value="1">Si</option>   
+                </select>
                 <label style="margin-top: 5px;">Fecha desde:</label>
                 <input type="date" class="form-control" [(ngModel)]="fechaDesde" [ngModelOptions]="{standalone:true}">
                 <label style="margin-top: 5px;">Fecha hasta:</label>
@@ -29,6 +34,7 @@
             <th width="40%">Cliente</th>
             <th width="18%">Fecha creación</th>
             <th width="15%">Fecha vigencia</th>
+            <!-- <th width="1%">Aceptado</th> -->
             <th width="10%">Acción</th>
         </tr>
     </thead>
@@ -38,9 +44,25 @@
             <td>{{presupuesto.Nombre}} {{presupuesto.Apellido}}</td>
             <td>{{presupuesto.FechaCreacion | date:'dd/MM/yyyy'}}</td>
             <td>{{presupuesto.FechaVigencia | date:'dd/MM/yyyy'}}</td>
+            <!-- <div *ngIf="presupuesto.Confirmado == 1;then confirm else  noConfirm">here is ignored</div>
+            <ng-template #confirm>
+                <td>Si</td>
+            </ng-template>
+            <ng-template #noConfirm>
+                <td>No</td>
+            </ng-template> -->
+
             <td class="text-nowrap">
-                <a data-toggle="tooltip" data-original-title="Editar"> <i [routerLink]="['/menupresupuesto/modificar', presupuesto.PkPresupuesto]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarPresupuesto(presupuesto.PkPresupuesto)" class="fa fa-close text-danger"></i> </a>
+                <div *ngIf="presupuesto.Confirmado == 0;then confirm"></div>
+                <ng-template #confirm>
+                    <a data-toggle="tooltip" data-original-title="Confirmar"> <i (click)="confirmarPresup(presupuesto.PkPresupuesto)" class="fa fa-check-square m-r-10"></i> </a>
+                </ng-template>
+                <a data-toggle="tooltip" data-original-title="Imprimir"> <i (click)="createPdf(presupuesto.PkPresupuesto);" name="Imprimir" class="fa fa-print text-inverse m-r-10"></i> </a>
+                <div *ngIf="presupuesto.Confirmado == 0;then edit"></div>
+                <ng-template #edit>
+                    <a data-toggle="tooltip" data-original-title="Editar"> <i [routerLink]="['/menupresupuesto/modificar', presupuesto.PkPresupuesto]" name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                    <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarPresupuesto(presupuesto.PkPresupuesto)" class="fa fa-close text-danger"></i> </a>
+                </ng-template>
             </td>
         </tr>
     </tbody>

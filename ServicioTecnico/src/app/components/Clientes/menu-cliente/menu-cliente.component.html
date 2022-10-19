@@ -94,27 +94,32 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group ">
-                            <label class="control-label ">Dirección:</label>
-                            <input type="text" class="form-control" [(ngModel)]="cliente.Direccion">
+                            <label class="control-label ">Calle:</label>
+                            <input type="text" class="form-control" [(ngModel)]="cliente.Calle">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Nro:</label>
+                            <input type="number" class="form-control" [(ngModel)]="cliente.Numero">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Piso:</label>
+                            <input type="number" class="form-control" [(ngModel)]="cliente.Piso">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Depto:</label>
+                            <input type="text" class="form-control" [(ngModel)]="cliente.Depto">
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 ">
-                        <div class="form-group ">
-                            <label class="control-label ">Contraseña:</label>
-                            <input type="password" class="form-control" [(ngModel)]="cliente.Contrasenia">
-                        </div>
-                    </div>
-                    <div class="col-md-6 ">
-                        <div class="form-group ">
-                            <label class="control-label">Repetir contraseña:</label>
-                            <input type="password" class="form-control" [(ngModel)]="contraseniaRep">
-                        </div>
-                    </div>
-                </div>
+
                 <div class="row">
                     <div class="col-md-6 ">
                         <div class="form-group ">
@@ -134,7 +139,20 @@
                             </select>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Contraseña:</label>
+                            <input type="password" class="form-control" [(ngModel)]="cliente.Contrasenia">
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label">Repetir contraseña:</label>
+                            <input type="password" class="form-control" [(ngModel)]="contraseniaRep">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between ">
@@ -186,24 +204,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 ">
+                    <div class="col-md-6">
                         <div class="form-group ">
-                            <label class="control-label ">Direccion:</label>
-                            <input type="text" class="form-control" [(ngModel)]="cliente.Direccion">
+                            <label class="control-label ">Calle:</label>
+                            <input type="text" class="form-control" [(ngModel)]="cliente.Calle">
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 ">
+                    <div class="col-md-2">
                         <div class="form-group ">
-                            <label class="control-label ">Contraseña:</label>
-                            <input type="password" class="form-control" [(ngModel)]="cliente.Contrasenia">
+                            <label class="control-label ">Nro:</label>
+                            <input type="number" class="form-control" [(ngModel)]="cliente.Numero">
                         </div>
                     </div>
-                    <div class="col-md-6 ">
+                    <div class="col-md-2">
                         <div class="form-group ">
-                            <label class="control-label">Repetir contraseña:</label>
-                            <input type="password" class="form-control" [(ngModel)]="contraseniaRep">
+                            <label class="control-label ">Piso:</label>
+                            <input type="number" class="form-control" [(ngModel)]="cliente.Piso">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group ">
+                            <label class="control-label ">Depto:</label>
+                            <input type="text" class="form-control" [(ngModel)]="cliente.Depto">
                         </div>
                     </div>
                 </div>
@@ -226,7 +248,20 @@
                                 </select>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label ">Contraseña:</label>
+                            <input type="password" class="form-control" [(ngModel)]="cliente.Contrasenia">
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group ">
+                            <label class="control-label">Repetir contraseña:</label>
+                            <input type="password" class="form-control" [(ngModel)]="contraseniaRep">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between ">

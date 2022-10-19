@@ -7,34 +7,34 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">Cliente:</label>
-                <input type="text" readonly class="form-control" [(ngModel)]="presupuestoEdit.Nombre">
+                <input type="text" readonly class="form-control" [(ngModel)]="presupuesto.Nombre">
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="form-group ">
                 <label class="control-label ">Teléfono:</label>
-                <input type="text" readonly class="form-control" [(ngModel)]="presupuestoEdit.Telefono">
+                <input type="text" readonly class="form-control" [(ngModel)]="presupuesto.Telefono">
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group ">
                 <label class="control-label">Mail:</label>
-                <input type="text" readonly class="form-control" [(ngModel)]="presupuestoEdit.Mail">
+                <input type="text" readonly class="form-control" [(ngModel)]="presupuesto.Mail">
             </div>
         </div>
-        <!-- <div class="col-md-1">
-                <div class="form-group ">
-                    <a style="margin-top: 30px;" (click)="openModal('ModalSelectProveedor');" aria-controls="example23" class="btn btn-block btn-outline-info"><span>Buscar</span></a>
-                </div>
-            </div> -->
+        <div class="col-md-1">
+            <div class="form-group ">
+                <a style="margin-top: 30px;" (click)="openModal('ModalSelectCliente');" aria-controls="example23" class="btn btn-block btn-outline-info"><span>Buscar</span></a>
+            </div>
+        </div>
     </div>
     <div class="row ">
         <div class="col-md-8">
             <div class="form-group">
                 <label class="control-label">Observación:</label>
-                <textarea class="form-control" [ngModelOptions]="{standalone:true} " [(ngModel)]="presupuestoEdit.Observacion" name="textarea" rows="4" cols="50"></textarea>
+                <textarea class="form-control" [ngModelOptions]="{standalone:true} " [(ngModel)]="presupuesto.Observacion" name="textarea" rows="4" cols="50"></textarea>
             </div>
         </div>
 
@@ -42,18 +42,18 @@
             <div class="form-group">
                 <div class="form-group has-success">
                     <label class="control-label">Fecha creación:</label>
-                    <input type="date" disabled class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="presupuestoEdit.FechaCreacion">
+                    <input type="date" disabled class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="presupuesto.FechaCreacion">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label">Fecha vigencia:</label>
-                <input type="date" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="presupuestoEdit.FechaVigencia">
+                <input type="date" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="presupuesto.FechaVigencia">
             </div>
         </div>
     </div>
 
     <div class="row justify-content-around ">
-        <button type="button" id="btnGuardar" class="btn-ordenrep btn-success" (click)="ModificarPresupuesto($event.target.value);">Guardar</button>
+        <button type="button" id="btnGuardar" class="btn-ordenrep btn-success" (click)="GuardarPresupuesto($event.target.value);">Guardar</button>
     </div>
 
     <div class="row">
@@ -94,6 +94,45 @@
     <div class="row justify-content-around">
         <button routerLink="/menupresupuesto" type="button" class="btn-ordenrep btn-danger">Volver</button>
     </div>
+
+    <!-----------------/MODAL------------------->
+    <jw-modal id="ModalSelectCliente">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 750px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar cliente</h4>
+                    <button type="button" (click)="closeModal('ModalSelectCliente');" class="close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th width="70%">Nombre</th>
+                                <th width="14%">Teléfono</th>
+                                <th width="1%">*</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listCliente.length">
+                            <tr *ngFor="let cliente of listCliente | paginate: {itemsPerPage: 5, currentPage: pageActualCliente}; let i = index">
+                                <td>{{cliente.Nombre}} - {{cliente.Apellido}}</td>
+                                <td>{{cliente.Telefono}}</td>
+                                <i (click)="clienteSeleccionado(cliente)" class="fa fa-check"></i>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <span>
+                            <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualCliente = $event"></pagination-controls>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" (click)="closeModal('ModalSelectCliente');" class="btn waves-effect waves-light btn-danger">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </jw-modal>
+    <!----------------------- FIN MODAL -------------------------------------->
 
     <!-----------------/MODAL------------------->
     <jw-modal id="ModalMov">

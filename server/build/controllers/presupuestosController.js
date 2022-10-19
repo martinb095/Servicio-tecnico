@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class PresupuestoController {
     getPresupuestos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT p.PkPresupuesto, p.FKCliente, c.Nombre, c.Apellido, p.FechaVigencia, p.FechaCreacion, p.Observacion, p.Confirmado from presupuesto p left join cliente c on c.PkCliente = p.FkCliente where fechacreacion between ? and ? order by p.PkPresupuesto;', [req.params.FechaDesde, req.params.FechaHasta], (err, results) => {
+            database_1.default.query('SELECT p.PkPresupuesto, p.FKCliente, c.Nombre, c.Apellido, p.FechaVigencia, p.FechaCreacion, p.Observacion, p.Confirmado from presupuesto p left join cliente c on c.PkCliente = p.FkCliente where fechacreacion between ? and ? and Confirmado = ? order by p.PkPresupuesto;', [req.params.FechaDesde, req.params.FechaHasta, req.params.aceptado], (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "presup no encontrado" });
                 }
@@ -30,7 +30,7 @@ class PresupuestoController {
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT p.PkPresupuesto, p.FKCliente, c.Nombre, c.Apellido, p.FechaVigencia, p.FechaCreacion, p.Observacion, p.Confirmado from presupuesto p left join cliente c on c.PkCliente = p.FkCliente where PkPresupuesto=?;', req.params.PkPresupuesto, (err, results) => {
+            database_1.default.query('SELECT p.PkPresupuesto, p.FkCliente, concat(c.Nombre, " ", c.Apellido) "Nombre",c.Telefono, c.Mail, c.Apellido, p.FechaVigencia, p.FechaCreacion, p.Observacion, p.Confirmado from presupuesto p left join cliente c on c.PkCliente = p.FkCliente where PkPresupuesto=?;', req.params.PkPresupuesto, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "presup no encontrado" });
                 }
@@ -97,6 +97,15 @@ class PresupuestoController {
                 'Confirmado': req.body.Confirmado,
             };
             yield database_1.default.query('update presupuesto set ? Where PkPresupuesto = ?', [presupuesto, req.params.PkPresupuesto], function (err, res) {
+                if (err)
+                    throw err;
+            });
+            res.json({ text: 'OK' });
+        });
+    }
+    confirmar(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield database_1.default.query('update presupuesto set Confirmado=1 Where PkPresupuesto = ?', [req.params.PkPresupuesto], function (err, res) {
                 if (err)
                     throw err;
             });

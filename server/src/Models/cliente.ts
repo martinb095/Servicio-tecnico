@@ -4,7 +4,10 @@ export interface Cliente {
     Apellido: string;    
     Telefono: string;
     FkCiudad?: number;
-    Direccion: string;
+    Calle: string;
+    Numero: number;
+    Piso: number;
+    Depto: string;
     Mail: string;
     Contrasenia: string;     
     Activo:Boolean;    

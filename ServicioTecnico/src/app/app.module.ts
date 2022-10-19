@@ -52,9 +52,10 @@ import { ModificarPedidoComponent } from './components/Pedidos/modificar-pedido/
 import { InformesComponent } from './components/Informes/informes.component';
 
 import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.component';
-import { MenupresupuestoComponent } from './components/Presupuestos/menupresupuesto/menupresupuesto.component';
 
+import { MenupresupuestoComponent } from './components/Presupuestos/menupresupuesto/menupresupuesto.component';
 import { ModificarpresupuestoComponent } from './components/Presupuestos/modificarpresupuesto/modificarpresupuesto.component';
+import { NuevopresupuestoComponent } from './components/Presupuestos/nuevopresupuesto/nuevopresupuesto.component';
 
 
 @NgModule({
@@ -85,7 +86,8 @@ import { ModificarpresupuestoComponent } from './components/Presupuestos/modific
     InformesComponent,
     MenurubrosComponent,
     MenupresupuestoComponent,  
-    ModificarpresupuestoComponent  
+    ModificarpresupuestoComponent, 
+    NuevopresupuestoComponent  
   ],
   imports: [
     BrowserModule,

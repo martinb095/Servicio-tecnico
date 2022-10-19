@@ -48,7 +48,10 @@ export class MenuOrdenrepComponent implements OnInit {
     Apellido: "",
     Telefono: null,
     FkCiudad: null,
-    Direccion: null,
+    Calle: null,
+    Numero: 0,
+    Piso: 0,
+    Depto: null,
     Mail: null,
     Contrasenia: null,
     Activo: null
@@ -97,12 +100,12 @@ export class MenuOrdenrepComponent implements OnInit {
     }
 
     //Clientes para la seleccion
-    this.clienteService.ObtenerClientes().subscribe(
-      (res: any) => {
-        this.listCliente = res;
-      },
-      err => console.error(err)
-    );
+    // this.clienteService.ObtenerClientes().subscribe(
+    //   (res: any) => {
+    //     this.listCliente = res;
+    //   },
+    //   err => console.error(err)
+    // );
 
     this.estadoService.ObtenerEstado().subscribe(
       (res: any) => {
@@ -196,7 +199,10 @@ export class MenuOrdenrepComponent implements OnInit {
           Apellido: "",
           Telefono: null,
           FkCiudad: null,
-          Direccion: null,
+          Calle: null,
+          Numero: 0,
+          Piso: 0,
+          Depto: null,
           Mail: null,
           Contrasenia: null,
           Activo: null
@@ -462,12 +468,12 @@ export class MenuOrdenrepComponent implements OnInit {
     );
   }
 
-  mostrarHistorial(nroOrden: number) {   
+  mostrarHistorial(nroOrden: number) {
     // //Trae los datos detalle de la orden
     this.estadoService.obtenerEstadosHis(nroOrden).subscribe(
       (res: any) => {
         this.listEstadoHis = res;
-        
+
         this.openModal("modalHistorialEstados");
       },
       err => console.error(err)

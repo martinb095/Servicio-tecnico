@@ -9,4 +9,8 @@ export interface Proveedor {
     Contacto1: string;    
     Contacto2: string;   
     Activo:Boolean;    
+    Calle: string;
+    Numero: number;
+    Piso: number;
+    Depto: string;
 }

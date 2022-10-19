@@ -11,16 +11,16 @@ class PresupuestosRoutes {
         this.config();
     }
     config() {
-        this.router.get('/:FechaDesde/:FechaHasta', presupuestosController_1.default.getPresupuestos);
+        this.router.get('/:FechaDesde/:FechaHasta/:aceptado', presupuestosController_1.default.getPresupuestos);
         this.router.get('/:PkPresupuesto', presupuestosController_1.default.getOne);
         //Eliminar
         this.router.put('/eliminar/:PkPresupuesto', presupuestosController_1.default.delete);
         //Nuevo
-        this.router.post('/nuevopedido', presupuestosController_1.default.create);
+        this.router.post('/nuevopresupuesto', presupuestosController_1.default.create);
         //Actualizar
         this.router.put('/actualizar/:PkPresupuesto', presupuestosController_1.default.update);
         //Procesar
-        //this.router.put('/procesar/:PkPedProv', presupuestosRoutes.procesar);
+        this.router.put('/confirmar/:PkPresupuesto', presupuestosController_1.default.confirmar);
     }
 }
 const presupuestosRoutes = new PresupuestosRoutes();

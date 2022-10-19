@@ -13,8 +13,8 @@ export class PresupuestoService {
 
   constructor(private http: HttpClient) { }
 
-  ObtenerPresupuestos(fechaDesde: string, fechaHasta: string) {
-    return this.http.get(this.API_URI + "/presupuestos/" + fechaDesde + "/" + fechaHasta);
+  ObtenerPresupuestos(fechaDesde: string, fechaHasta: string, aceptado: number) {
+    return this.http.get(this.API_URI + "/presupuestos/" + fechaDesde + "/" + fechaHasta+ "/" + aceptado);
   }
 
   obtenerPresupuesto(idPresupuesto: number) {
@@ -23,6 +23,10 @@ export class PresupuestoService {
 
   EliminarPresupuesto(id: number) {
     return this.http.put(this.API_URI + "/presupuestos/eliminar/" + id, null);
+  }
+
+  ConfirmarPresupuesto(id: number) {
+    return this.http.put(this.API_URI + "/presupuestos/confirmar/" + id, null);
   }
 
   GuardarPresupuestos(presupuesto: Presupuesto) {

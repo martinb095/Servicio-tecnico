@@ -38,6 +38,7 @@ import { MenurubrosComponent } from './components/Rubros/menurubros/menurubros.c
 //Presupuesto
 import { MenupresupuestoComponent } from './components/Presupuestos/menupresupuesto/menupresupuesto.component';
 import { ModificarpresupuestoComponent } from './components/Presupuestos/modificarpresupuesto/modificarpresupuesto.component';
+import { NuevopresupuestoComponent } from './components/Presupuestos/nuevopresupuesto/nuevopresupuesto.component';
 
 export const appRoutes: Routes = [
 
@@ -87,6 +88,7 @@ export const appRoutes: Routes = [
       //presupuestos
       { path: 'menupresupuesto', component: MenupresupuestoComponent },
       { path: 'menupresupuesto/modificar/:idpresupuesto', component: ModificarpresupuestoComponent },
+      { path: 'menupresupuesto/nuevopresupuesto', component: NuevopresupuestoComponent },
 
       { path: '**', redirectTo: '/login' },
     ]

@@ -7,7 +7,7 @@ import { Proveedor } from '../Models/proveedor'
 class ProveedorController {
     
      public async getProveedores(req: Request, res: Response) {
-        pool.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Contacto1, p.Contacto2 from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
+        pool.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.Calle, p.Numero, p.Depto, p.Piso, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Contacto1, p.Contacto2 from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "proveedores no encontrado" });
             }
@@ -71,6 +71,10 @@ class ProveedorController {
             'Cuit': req.body.Cuit,   
             'Contacto1': req.body.Contacto1,
             'Contacto2': req.body.Contacto2,
+            'Calle': req.body.Calle,        
+            'Numero': req.body.Numero,         
+            'Piso': req.body.Piso,         
+            'Depto': req.body.Calle,   
             'Activo': true 
         }       
 

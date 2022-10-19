@@ -18,6 +18,7 @@ export class MenupresupuestoComponent implements OnInit {
   listPresupuesto: Presupuesto[] = [];
   fechaDesde: string = "";
   fechaHasta: string = "";
+  aceptado: number = 0;
 
   constructor(
     private datePipe: DatePipe,
@@ -39,11 +40,11 @@ export class MenupresupuestoComponent implements OnInit {
   }
 
   ObtenerPresupuestos() {
-    this.listPresupuesto = [];  
-    this.presupuestoService.ObtenerPresupuestos(this.fechaDesde, this.fechaHasta).subscribe(
+    this.listPresupuesto = [];
+    this.presupuestoService.ObtenerPresupuestos(this.fechaDesde, this.fechaHasta, this.aceptado).subscribe(
       (res: any) => {
         this.listPresupuesto = res;
-        
+
       },
       err => console.error(err)
     );
@@ -71,4 +72,28 @@ export class MenupresupuestoComponent implements OnInit {
       }
     })
   }
+
+  confirmarPresup(id: number) {
+    Swal.fire({
+      title: '¿Desea confirmar el presupuesto Nro. ' + id + ' ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Si, confirmar.',
+      cancelButtonText: 'No, cancelar.'
+    }).then((result) => {
+      if (result.value) {
+        this.presupuestoService.ConfirmarPresupuesto(id).subscribe(res => {
+          var result = Object.values(res);
+          if (result[0] == "OK") {
+            this.ObtenerPresupuestos();
+            //Mensaje informando el eliminado     
+            Swal.fire({ icon: 'success', title: "Presupuesto nro. " + id + " confirmado correctamente." })
+          }
+        },
+          err => console.error(err)
+        );
+      }
+    })
+  }
+
 }

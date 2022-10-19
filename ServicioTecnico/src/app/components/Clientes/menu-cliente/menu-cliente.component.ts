@@ -37,7 +37,10 @@ export class MenuClienteComponent implements OnInit {
     Apellido: "",
     Telefono: null,
     FkCiudad: null,
-    Direccion: null,
+    Calle: null,
+    Numero: 0,
+    Piso: 0,
+    Depto: null,
     Mail: null,
     Contrasenia: null,
     Activo: null
@@ -65,7 +68,7 @@ export class MenuClienteComponent implements OnInit {
     this.listCliente = [];
     this.clienteService.ObtenerClientes().subscribe(
       (res: any) => {
-        this.listCliente = res;        
+        this.listCliente = res;
       },
       err => console.error(err)
     );
@@ -82,11 +85,17 @@ export class MenuClienteComponent implements OnInit {
   }
 
   onSelectCiudad(idCiudad: number) {
+    if (idCiudad == null) {
+      return;
+    }
     this.listCiudades = [];
     this.ciudadService.ObtenerCiudadesXCod(idCiudad).subscribe(
       (res: any) => {
         this.listCiudades = res;
-        this.idProvincia = res[0].FkProvincia;
+        if (res[0].FkProvincia != null) {
+          this.idProvincia = res[0].FkProvincia;
+        }
+
       },
       err => console.error(err)
     );
@@ -162,14 +171,17 @@ export class MenuClienteComponent implements OnInit {
   }
 
   //Obtiene el cliente de la fila y la asigna al objeto que despues actualiza
-  SetValores(cliente: Cliente) {
+  SetValores(cliente: Cliente) {  
     this.cliente = {
       PkCliente: cliente.PkCliente,
       Nombre: cliente.Nombre,
       Apellido: cliente.Apellido,
       Telefono: cliente.Telefono,
       FkCiudad: cliente.FkCiudad,
-      Direccion: cliente.Direccion,
+      Calle: cliente.Calle,
+      Numero: cliente.Numero,
+      Piso: cliente.Piso,
+      Depto: cliente.Depto,
       Mail: cliente.Mail,
       Contrasenia: cliente.Contrasenia,
       Activo: cliente.Activo
@@ -209,7 +221,10 @@ export class MenuClienteComponent implements OnInit {
       this.cliente.Apellido = "",
       this.cliente.Telefono = null,
       this.cliente.FkCiudad = null,
-      this.cliente.Direccion = null,
+      this.cliente.Calle = null,
+      this.cliente.Numero = null,
+      this.cliente.Piso = null,
+      this.cliente.Depto = null,
       this.cliente.Mail = null,
       this.cliente.Contrasenia = null,
       this.cliente.Activo = null
@@ -224,7 +239,6 @@ export class MenuClienteComponent implements OnInit {
   closeModal(id: string) {
     this.modalService.close(id);
   }
-
 
   exportexcel() {
     this.sharedService.exportexcel("Clientes", this.listCliente);

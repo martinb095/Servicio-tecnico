@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class ProveedorController {
     getProveedores(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Contacto1, p.Contacto2 from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err, results) => {
+            database_1.default.query('Select p.PkProveedor, p.Nombre, p.Firma, p.Cuit, p.Calle, p.Numero, p.Depto, p.Piso, p.FkCiudad, p.Telefono, p.Mail, c.FkProvincia as "FkProv", p.Contacto1, p.Contacto2 from proveedor p left join ciudad c on c.PkCiudad=p.FkCiudad where Activo=1 order by nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "proveedores no encontrado" });
                 }
@@ -87,6 +87,10 @@ class ProveedorController {
                 'Cuit': req.body.Cuit,
                 'Contacto1': req.body.Contacto1,
                 'Contacto2': req.body.Contacto2,
+                'Calle': req.body.Calle,
+                'Numero': req.body.Numero,
+                'Piso': req.body.Piso,
+                'Depto': req.body.Calle,
                 'Activo': true
             };
             yield database_1.default.query('update proveedor set ? Where PkProveedor = ?', [proveedor, req.params.PkProveedor]);

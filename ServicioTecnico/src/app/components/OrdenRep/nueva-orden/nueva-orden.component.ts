@@ -310,7 +310,7 @@ export class NuevaOrdenComponent implements OnInit {
 
   SetNull() {
     this.detalleOrden.PkDetalleOrden = null;
-    this.detalleOrden.Cantidad = null;
+    this.detalleOrden.Cantidad = 1;
     this.detalleOrden.FkRepuesto = null;
     this.detalleOrden.Precio = null;
     this.detalleOrden.Observacion = null;

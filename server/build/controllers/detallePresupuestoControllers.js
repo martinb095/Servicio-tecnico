@@ -17,7 +17,7 @@ class DetallePresupuestoController {
         return __awaiter(this, void 0, void 0, function* () {
             //const FkPedProv = [req.params.FkPedProv];     
             //console.log(FkPedProv);
-            database_1.default.query('select dp.PkDetallePresup, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad,dp.Precio, dp.FkPresupuesto, dp.FkTarea, t.Nombre "Tarea" from detallepresupuesto dp left join tarea t on t.PkTarea=dp.FkTarea left join repuesto r on r.PkRepuesto=dp.FkRepuesto where dp.FkPresupuesto = ?', req.params.FkPresupuesto, (err, results) => {
+            database_1.default.query('select dp.PkDetallePresup, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad, dp.Precio, (dp.Precio*dp.Cantidad) "Total", dp.FkPresupuesto, dp.FkTarea, t.Nombre "Tarea", dp.Costo from detallepresupuesto dp left join tarea t on t.PkTarea=dp.FkTarea left join repuesto r on r.PkRepuesto=dp.FkRepuesto where dp.FkPresupuesto = ?', req.params.FkPresupuesto, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detallepresu no encontrado" });
                 }
@@ -33,12 +33,13 @@ class DetallePresupuestoController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let detallePresupuesto = {
-                'FkPedProv': req.body.FkRepuesto,
+                'FkRepuesto': req.body.FkRepuesto,
                 'Precio': req.body.Precio,
                 'Cantidad': req.body.Cantidad,
                 'Observacion': req.body.Observacion,
                 'FkPresupuesto': req.body.FkPresupuesto,
                 'FkTarea': req.body.FkTarea,
+                'Costo': req.body.Costo,
             };
             yield database_1.default.query('INSERT INTO detallepresupuesto set ?', [detallePresupuesto], function (err) {
                 if (err)
@@ -54,8 +55,6 @@ class DetallePresupuestoController {
         });
     }
     update(req, res) {
-        console.log("req.body");
-        console.log(req.body);
         database_1.default.query('update detallepresupuesto set ? Where PkDetallePresup = ?', [req.body, req.body.PkDetallePresup]);
         res.json({ text: 'OK' });
     }

@@ -4,25 +4,25 @@ import { ModalService } from 'src/app/_modal';
 import Swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
 
-import { PresupuestoService } from '../../../services/presupuesto.service';
-;
+import { PresupuestoService } from '../../../services/presupuesto.service';;
 import { DetallePresupuestoService } from '../../../services/detallepresupuesto.service';
-
 import { RepuestoService } from '../../../services/repuesto.service';
 import { Repuesto } from 'src/app/models/repuesto';
-
 import { TareaService } from '../../../services/tarea.service';
+import { Cliente } from 'src/app/models/cliente';
+import { ClienteService } from '../../../services/cliente.service';
 
 @Component({
-  selector: 'app-modificarpresupuesto',
-  templateUrl: './modificarpresupuesto.component.html',
-  styleUrls: ['./modificarpresupuesto.component.css']
+  selector: 'app-nuevopresupuesto',
+  templateUrl: './nuevopresupuesto.component.html',
+  styleUrls: ['./nuevopresupuesto.component.css']
 })
-export class ModificarpresupuestoComponent implements OnInit {
+export class NuevopresupuestoComponent implements OnInit {
 
   listTarea: any[] = [];
   pageActualDetalle: number = 1;
   pageActualTarea: number = 1;
+  pageActualCliente: number = 1;
   idPresupuesto: number = 1;
   pagDetPres: number = 1;
   listRepuesto: Repuesto[] = [];
@@ -30,12 +30,15 @@ export class ModificarpresupuestoComponent implements OnInit {
   listDetallePresupuesto: any = {};
   presupuestoEdit: any;
   detallePresupuesto: any = {};
-
+  pageActualProv: number = 1;
+  listCliente: Cliente[] = [];
+  idUltimoPres: number = 1;
   constructor(
-    private route: ActivatedRoute,
+
     private modalService: ModalService,
     private datePipe: DatePipe,
     private presupuestoService: PresupuestoService,
+    private clienteService: ClienteService,
     private detallePresupuestoService: DetallePresupuestoService,
     private repuestoService: RepuestoService,
     private tareaService: TareaService,
@@ -48,18 +51,36 @@ export class ModificarpresupuestoComponent implements OnInit {
     if (valido != "true") {
       this.router.navigate(['/login'])
     }
+    this.presupuesto.FechaCreacion = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.presupuesto.FechaVigencia = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
-    //Obtiene el idorden de la URL
-    this.idPresupuesto = +this.route.snapshot.paramMap.get('idpresupuesto');
-
-    this.obtenerPresupuesto();
-    this.obtenerDetallePresupuesto();
+    this.ObtenerClientes();
   }
+
+
+  ObtenerClientes() {
+    this.listCliente = [];
+    this.clienteService.ObtenerClientes().subscribe(
+      (res: any) => {
+        this.listCliente = res;
+      },
+      err => console.error(err)
+    );
+  }
+
+  clienteSeleccionado(cliente: Cliente) {
+    this.presupuesto.FkCliente = cliente.PkCliente;
+    this.presupuesto.Nombre = cliente.Nombre;
+    this.presupuesto.Telefono = cliente.Telefono;
+    this.presupuesto.Mail = cliente.Mail;
+    this.closeModal('ModalSelectCliente');
+  }
+
 
   obtenerDetallePresupuesto() {
     this.listDetallePresupuesto = {};
     //Trae los datos detalle de la orden
-    this.detallePresupuestoService.ObtenerDetallePresupuestoDePresup(this.idPresupuesto).subscribe(
+    this.detallePresupuestoService.ObtenerDetallePresupuestoDePresup(this.idUltimoPres).subscribe(
       (res: any) => {
         this.listDetallePresupuesto = res;
       },
@@ -67,39 +88,29 @@ export class ModificarpresupuestoComponent implements OnInit {
     );
   }
 
-  obtenerPresupuesto() {
-    this.presupuestoEdit = {};
-    //Trae los datos detalle de la orden
-    this.presupuestoService.obtenerPresupuesto(this.idPresupuesto).subscribe(
-      (res: any) => {
-        this.presupuestoEdit = res;
-        this.presupuestoEdit.FechaCreacion = this.datePipe.transform(this.presupuestoEdit.FechaCreacion, 'yyyy-MM-dd');
-        this.presupuestoEdit.FechaVigencia = this.datePipe.transform(this.presupuestoEdit.FechaVigencia, 'yyyy-MM-dd');
-      },
-      err => console.error(err)
-    );
-  }
-
-  ModificarPresupuesto() {
-
-    if (this.datePipe.transform(this.presupuestoEdit.FechaCreacion, 'yyyy-MM-dd') > this.datePipe.transform(this.presupuestoEdit.FechaVigencia, 'yyyy-MM-dd')) {
-      Swal.fire({ title: "La fecha vigencia no puede ser menor a la fecha de creacion.", icon: "warning" });
+  GuardarPresupuesto() {
+    if (this.presupuesto.FkCliente == null || this.presupuesto.FkCliente == 0) {
+      Swal.fire({ title: "Debe seleccionar un cliente.", icon: "warning" });
       return;
     }
-
-    this.presupuestoService.ActualizarPresupuestos(this.idPresupuesto, this.presupuestoEdit).subscribe(
+    if (this.presupuesto.Observacion == null) {
+      this.presupuesto.Observacion = "";
+    }
+    //Almacena datos orden
+    this.presupuestoService.GuardarPresupuestos(this.presupuesto).subscribe(
       res => {
         var result = Object.values(res);
-        if (result[0] == "OK") {
-          //Mensaje informando el almacenado y redirecciona    
-          Swal.fire({ title: "Presupuesto modificado correctamente.", icon: "success" }).then(function () {
-            window.location.href = "/menupresupuesto";
-          },
-            err => console.error(err)
-          )
+        if (result[0] != "0") {
+          this.idUltimoPres = result[0];        
+          document.getElementById("btnGuardar").style.display = "none";
+          document.getElementById("btnNuevoMov").style.display = "inline-block";
+          Swal.fire({ title: "Presupuesto guardado correctamente.", icon: "success" })
         }
-      });
+      },
+      err => console.error(err)
+    )
   }
+
 
   modificarDetalle(detallePresupuestoMod: any) {
     this.SetNull();
@@ -158,8 +169,7 @@ export class ModificarpresupuestoComponent implements OnInit {
   }
 
   repuestoSeleccionado(repuesto: any) {
-    this.detallePresupuesto.FkRepuesto = repuesto.PkRepuesto;
-    console.log(repuesto);
+    this.detallePresupuesto.FkRepuesto = repuesto.PkRepuesto;  
     this.detallePresupuesto.Precio = repuesto.PrecioVenta;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");
@@ -181,7 +191,7 @@ export class ModificarpresupuestoComponent implements OnInit {
     if (this.detallePresupuesto.Observacion == null) {
       this.detallePresupuesto.Observacion = "";
     }
-    this.detallePresupuesto.FkPresupuesto = this.idPresupuesto;
+    this.detallePresupuesto.FkPresupuesto = this.idUltimoPres;
 
     if (this.detallePresupuesto.PkDetallePresup != null) {
       this.detallePresupuestoService.ActualizarDetallePresupuesto(this.detallePresupuesto.PkDetallePresup, this.detallePresupuesto).subscribe(
@@ -240,4 +250,5 @@ export class ModificarpresupuestoComponent implements OnInit {
   closeModal(id: string) {
     this.modalService.close(id);
   }
+
 }

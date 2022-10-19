@@ -88,7 +88,7 @@ export class ModificarPedidoComponent implements OnInit {
 
   SetNull() {
     this.detallePedido.PkDetallePedido = null;
-    this.detallePedido.Cantidad = null;
+    this.detallePedido.Cantidad = 1;
     this.detallePedido.FkRepuesto = null;
     this.detallePedido.Observacion = null;
     this.detallePedido.FkPedProv = null;
@@ -134,7 +134,6 @@ export class ModificarPedidoComponent implements OnInit {
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");
   }
-
 
 
   ModificarPedido() {

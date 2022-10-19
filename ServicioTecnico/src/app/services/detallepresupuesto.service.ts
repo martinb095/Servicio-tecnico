@@ -17,7 +17,7 @@ export class DetallePresupuestoService {
     return this.http.get(this.API_URI + "/detallepresupuesto/presupuesto/" + idPresupuesto);
   }
 
-  EliminarPresupuesto(id: number) {
+  EliminarDetallePresupuesto(id: number) {
     return this.http.delete(this.API_URI + "/detallepresupuesto/" + id);
   }
 

@@ -33,10 +33,14 @@ export class MenuproveedorComponent implements OnInit {
     FkCiudad: 0,
     Telefono: "",
     Mail: "",
-    Cuit: "",    
+    Cuit: "",
     Contacto1: "",
     Contacto2: "",
-    Activo:null
+    Calle: "",
+    Numero: 0,
+    Piso: 0,
+    Depto: "",
+    Activo: null
   };
 
   constructor(
@@ -48,13 +52,13 @@ export class MenuproveedorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-      //valido si existe la sesion
-      let valido = localStorage.getItem('ingreso');
-      if (valido != "true") {
-        this.router.navigate(['/login'])
-      }
-      this.ObtenerProvincias();
-      this.ObtenerProveedores();
+    //valido si existe la sesion
+    let valido = localStorage.getItem('ingreso');
+    if (valido != "true") {
+      this.router.navigate(['/login'])
+    }
+    this.ObtenerProvincias();
+    this.ObtenerProveedores();
   }
 
   ObtenerProveedores() {
@@ -78,6 +82,9 @@ export class MenuproveedorComponent implements OnInit {
   }
 
   onSelectCiudad(idCiudad: number) {
+    if (idCiudad == null) {
+      return;
+    }
     this.listCiudades = [];
     this.ciudadService.ObtenerCiudadesXCod(idCiudad).subscribe(
       (res: any) => {
@@ -128,7 +135,7 @@ export class MenuproveedorComponent implements OnInit {
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Proveedor Nro. " + id + " eliminado correctamente." })
 
-      } 
+      }
     })
   }
 
@@ -137,7 +144,7 @@ export class MenuproveedorComponent implements OnInit {
     if (this.proveedor.Nombre == "" || this.proveedor.Nombre == null) {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;
-    }  
+    }
     console.log(this.proveedor);
     //Almacena proveedor   
     this.proveedorService.GuardarProveedor(this.proveedor).subscribe(
@@ -155,20 +162,24 @@ export class MenuproveedorComponent implements OnInit {
   }
 
   //Obtiene el proveedor de la fila y la asigna al objeto que despues actualiza
-  SetValores(proveedor: Proveedor) {    
+  SetValores(proveedor: Proveedor) {
     this.proveedor = {
       PkProveedor: proveedor.PkProveedor,
       Nombre: proveedor.Nombre,
       Firma: proveedor.Firma,
       FkCiudad: proveedor.FkCiudad,
       Telefono: proveedor.Telefono,
-      Mail: proveedor.Mail, 
-      Cuit: proveedor.Cuit,    
-      Contacto1: proveedor.Contacto1,  
-      Contacto2: proveedor.Contacto2,  
-      Activo:proveedor.Activo,
+      Mail: proveedor.Mail,
+      Cuit: proveedor.Cuit,
+      Contacto1: proveedor.Contacto1,
+      Contacto2: proveedor.Contacto2,
+      Calle: proveedor.Calle,
+      Numero: proveedor.Numero,
+      Piso: proveedor.Piso,
+      Depto: proveedor.Depto,
+      Activo: proveedor.Activo,
     };
-  
+
     //Falta Obtener la Provincia 
     this.onSelectCiudad(proveedor.FkCiudad);
   }
@@ -178,7 +189,7 @@ export class MenuproveedorComponent implements OnInit {
     if (this.proveedor.Nombre == "" || this.proveedor.Nombre == null) {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;
-    }  
+    }
     this.proveedorService.ActualizarProveedor(this.proveedor.PkProveedor, this.proveedor).subscribe(
       res => {
         var result = Object.values(res);
@@ -194,16 +205,20 @@ export class MenuproveedorComponent implements OnInit {
   }
 
   SetNull() {
-      this.proveedor.PkProveedor= 0,
-      this.proveedor.Nombre= "",
-      this.proveedor.Firma= "",
-      this.proveedor.FkCiudad= 0,
-      this.proveedor.Telefono= "",
-      this.proveedor.Mail= "",
-      this.proveedor.Cuit= "",    
-      this.proveedor.Contacto1= "",  
-      this.proveedor.Contacto2= "",  
-      this.proveedor.Activo=null,
+    this.proveedor.PkProveedor = 0,
+      this.proveedor.Nombre = "",
+      this.proveedor.Firma = "",
+      this.proveedor.FkCiudad = 0,
+      this.proveedor.Telefono = "",
+      this.proveedor.Mail = "",
+      this.proveedor.Cuit = "",
+      this.proveedor.Contacto1 = "",
+      this.proveedor.Contacto2 = "",
+      this.proveedor.Calle = "",
+      this.proveedor.Numero = 0,
+      this.proveedor.Piso = 0,
+      this.proveedor.Depto = "",
+      this.proveedor.Activo = null,
       this.idProvincia = null;
   }
 
@@ -214,7 +229,7 @@ export class MenuproveedorComponent implements OnInit {
   closeModal(id: string) {
     this.modalService.close(id);
   }
-  
+
   exportexcel() {
     this.sharedService.exportexcel("Proveedores", this.listProveedor);
   }

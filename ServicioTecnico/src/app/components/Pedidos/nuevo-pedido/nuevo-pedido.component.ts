@@ -46,6 +46,10 @@ export class NuevoPedidoComponent implements OnInit {
     Cuit: "",
     Contacto1: "",
     Contacto2: "",
+    Calle: "",
+    Numero: 0,
+    Piso: 0,
+    Depto:  "",
     Activo: null
   };
 
@@ -95,7 +99,7 @@ export class NuevoPedidoComponent implements OnInit {
 
   SetNull() {
     this.detallePedido.PkDetallePedido = null;
-    this.detallePedido.Cantidad = null;
+    this.detallePedido.Cantidad = 1;
     this.detallePedido.FkRepuesto = null;
     this.detallePedido.Observacion = null;
     this.detallePedido.FkPedProv = null;

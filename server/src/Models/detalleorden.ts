@@ -7,4 +7,5 @@ export interface DetalleOrden {
     Fktarea: number;
     FechaCreacion: Date;
     FkOrden: number;
+    Costo: number;  
 }

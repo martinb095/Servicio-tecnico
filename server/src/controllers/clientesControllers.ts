@@ -8,7 +8,7 @@ class ClienteController {
     //listado de clientes
     public async getClientes(req: Request, res: Response) {
         //pool.query('Select * from cliente where Activo=1', (err: any, results: any) => {
-        pool.query('Select cliente.PkCliente, cliente.Nombre, cliente.Telefono, cliente.FkCiudad, cliente.Direccion, cliente.Mail, cliente.Contrasenia, ciudad.FkProvincia as "FkProv", cliente.Apellido from cliente left join ciudad on ciudad.PkCiudad=Cliente.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
+        pool.query('Select c.PkCliente, c.Nombre, c.Telefono, c.FkCiudad, c.Calle, c.Numero, c.Depto, c.Piso, c.Mail, c.Contrasenia, ciu.FkProvincia as "FkProv", c.Apellido from cliente c left join ciudad ciu on ciu.PkCiudad=c.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "clientes no encontrado" });
             }
@@ -64,12 +64,15 @@ class ClienteController {
         let cliente: Cliente = {
             'PkCliente': req.body.PkCliente,
             'Nombre': req.body.Nombre,
+            'Apellido': req.body.Apellido,
             'Telefono': req.body.Telefono,
             'FkCiudad': req.body.FkCiudad,
-            'Direccion': req.body.Direccion,
-            'Mail': req.body.Mail,
-            'Contrasenia': req.body.Contrasenia,
-            'Apellido': req.body.Apellido,
+            'Calle': req.body.Calle,        
+            'Numero': req.body.Numero,         
+            'Piso': req.body.Piso,         
+            'Depto': req.body.Calle,       
+            'Mail': req.body.Mail,      
+            'Contrasenia': req.body.Contrasenia,           
             'Activo': true
         }       
 
