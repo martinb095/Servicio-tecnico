@@ -21,8 +21,8 @@
                 <label style="margin-top: 5px;">Fecha hasta:</label>
                 <input type="date" class="form-control" [(ngModel)]="fechaHasta" [ngModelOptions]="{standalone:true}">
                 <span class="input-group-btn">
-                             <button class="btn btn-info" type="button" (click)="ObtenerPresupuestos()">Buscar</button>
-                          </span>
+                <button class="btn btn-info" type="button" (click)="ObtenerPresupuestos()">Buscar</button>
+                </span>
             </div>
         </div>
     </div>
@@ -44,14 +44,6 @@
             <td>{{presupuesto.Nombre}} {{presupuesto.Apellido}}</td>
             <td>{{presupuesto.FechaCreacion | date:'dd/MM/yyyy'}}</td>
             <td>{{presupuesto.FechaVigencia | date:'dd/MM/yyyy'}}</td>
-            <!-- <div *ngIf="presupuesto.Confirmado == 1;then confirm else  noConfirm">here is ignored</div>
-            <ng-template #confirm>
-                <td>Si</td>
-            </ng-template>
-            <ng-template #noConfirm>
-                <td>No</td>
-            </ng-template> -->
-
             <td class="text-nowrap">
                 <div *ngIf="presupuesto.Confirmado == 0;then confirm"></div>
                 <ng-template #confirm>

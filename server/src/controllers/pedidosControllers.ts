@@ -70,8 +70,7 @@ class PedidoController {
         });
     }
 
-    public async update(req: Request, res: Response) {
-        console.log(req.body.Observacion)
+    public async update(req: Request, res: Response) {  
         let pedido = {           
             'Observacion': req.body.Observacion,        
         }        

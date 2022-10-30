@@ -32,7 +32,7 @@ class DetalleOrdenController {
     getFindByOrden(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const fkOrden = [req.params.FkOrdenRep];
-            database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "NombreRep", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre "NombreTarea", (deo.Precio*deo.Cantidad) as "Total" from detalleorden  deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err, results) => {
+            database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre "Tarea", deo.Costo, ((deo.Precio * deo.Cantidad) + deo.Costo) as "Total" from detalleorden deo left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detalleorden no encontrado" });
                 }
@@ -63,7 +63,7 @@ class DetalleOrdenController {
     }
     GetDetallesFindByOrden(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err, results) => {
+            database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", deo.Costo, FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detallerepuestos no encontrado" });
                 }
@@ -87,6 +87,7 @@ class DetalleOrdenController {
                 'Fktarea': item.Fktarea,
                 'FechaCreacion': item.FechaCreacion,
                 'FkOrden': item.FkOrden,
+                'Costo': item.Costo,
             };
             yield database_1.default.query('INSERT INTO detalleorden set ?', [detalleOrden]);
         });
@@ -106,8 +107,8 @@ class DetalleOrdenController {
             //    if (err) throw err;
             //    res.json({ text: 'OK' });
             //});  
-            const stringSQL = "call insertDetalleOrden(?,?,?,?,?,?,?);";
-            database_1.default.query(stringSQL, [req.body.Cantidad, req.body.FkRepuesto, req.body.Precio, req.body.Observacion, req.body.FkTarea, req.body.FechaCreacion, req.body.FkOrden], function (err, results) {
+            const stringSQL = "call insertDetalleOrden(?,?,?,?,?,?,?,?);";
+            database_1.default.query(stringSQL, [req.body.Cantidad, req.body.FkRepuesto, req.body.Precio, req.body.Observacion, req.body.FkTarea, req.body.FechaCreacion, req.body.FkOrden, req.body.Costo], function (err, results) {
                 if (err)
                     throw err;
                 try {

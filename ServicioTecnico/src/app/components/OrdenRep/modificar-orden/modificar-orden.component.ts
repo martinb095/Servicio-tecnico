@@ -153,6 +153,7 @@ export class ModificarOrdenComponent implements OnInit {
     //Trae los datos detalle de la orden
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(this.idOrdeRep).subscribe(
       (res: any) => {       
+        console.log(res);
         this.listDetalleOrden = res;     
       },
       err => console.error(err)
@@ -171,6 +172,7 @@ export class ModificarOrdenComponent implements OnInit {
     document.getElementById("lblNombreTarea").innerHTML = detalleOrdenMod.NombreTarea;
     this.detalleOrden.FechaCreacion = detalleOrdenMod.FechaCreacion;
     this.detalleOrden.FkOrden = detalleOrdenMod.FkOrden;
+    this.detalleOrden.Costo = detalleOrdenMod.Costo;
     this.openModal("ModalMov");
   }
 
@@ -186,6 +188,7 @@ export class ModificarOrdenComponent implements OnInit {
   }
   repuestoSeleccionado(repuesto: any) {
     this.detalleOrden.FkRepuesto = repuesto.PkRepuesto;
+    this.detalleOrden.Precio = repuesto.PrecioVenta;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");
   }
@@ -201,6 +204,7 @@ export class ModificarOrdenComponent implements OnInit {
   }
   tareaSeleccionada(tarea: any) {
     this.detalleOrden.FkTarea = tarea.PkTarea;
+    this.detalleOrden.Costo = tarea.Costo;
     document.getElementById("lblNombreTarea").innerHTML = tarea.Nombre;
     this.closeModal("ModalSelectTarea");
   }
@@ -272,6 +276,7 @@ export class ModificarOrdenComponent implements OnInit {
     this.detalleOrden.FkTarea = null;
     this.detalleOrden.FechaCreacion = null;
     this.detalleOrden.FkOrden = null;
+    this.detalleOrden.Costo = null;
   }
 
   //Registra detalle orden
@@ -289,7 +294,9 @@ export class ModificarOrdenComponent implements OnInit {
     if (this.detalleOrden.Observacion == null) {
       this.detalleOrden.Observacion = "";
     }
-
+    if (this.detalleOrden.Costo == null) {
+      this.detalleOrden.Costo = 0;
+    }
     this.detalleOrden.FkOrden = this.idOrdeRep;
     this.detalleOrden.FechaCreacion = this.datepipe.transform(this.date, "yyyy-MM-dd");
 

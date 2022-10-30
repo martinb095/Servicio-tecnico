@@ -32,7 +32,7 @@ export class MenupedidoComponent implements OnInit {
     if (valido != "true") {
       this.router.navigate(['/login'])
     }
-    this.fechaDesde = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.fechaDesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
     this.fechaHasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
     this.ObtenerPedidos();

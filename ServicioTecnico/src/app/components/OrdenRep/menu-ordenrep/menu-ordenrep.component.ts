@@ -390,7 +390,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
 
   async generarPdf(nroOrden: number) {
-    var encabezado: string[] = ['NombreTarea', 'NombreRep', 'Precio', 'Cantidad', 'Total'];
+    var encabezado: string[] = ['Tarea', 'Costo', 'Repuesto', 'Precio', 'Cantidad', 'Total'];
     let docDefinition = {
       styles: {
         header: {
@@ -400,6 +400,14 @@ export class MenuOrdenrepComponent implements OnInit {
           alignment: 'center',
           margin: [20, 20],
         },
+      },
+      footer: (currentPage: number, pageCount: number) => {
+        return [{
+          margin: [20, 20, 20, 20],
+          text: 'Página ' + currentPage + ' de ' + pageCount,
+          alignment: 'right'
+        }
+        ];
       },
       content: [
         {

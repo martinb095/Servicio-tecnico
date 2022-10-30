@@ -93,7 +93,6 @@ class PedidoController {
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body.Observacion);
             let pedido = {
                 'Observacion': req.body.Observacion,
             };

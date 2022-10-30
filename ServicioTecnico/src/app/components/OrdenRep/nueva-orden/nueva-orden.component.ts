@@ -203,6 +203,7 @@ export class NuevaOrdenComponent implements OnInit {
   }
   repuestoSeleccionado(repuesto: any) {
     this.detalleOrden.FkRepuesto = repuesto.PkRepuesto;
+    this.detalleOrden.Precio = repuesto.PrecioVenta;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");
   }

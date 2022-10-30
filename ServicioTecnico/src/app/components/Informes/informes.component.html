@@ -1,16 +1,28 @@
-<h1>Informes</h1>
+<h2>Reportes:</h2>
 <div class="row button-group">
-    <div class="col-lg-3 col-md-4">
+    <div class="col-lg-3 col-md-3">
         <button type="button" (click)="clientesMasOrdenes();" class="btn btn-block btn-lg btn-info">Clientes con mas ordenes</button>
     </div>
-    <div class="col-lg-3 col-md-4">
+    <div class="col-lg-3 col-md-3">
         <button type="button" (click)="openModal('ModalInfOrden');" class="btn btn-block btn-lg btn-info">Ordenes rep. entre fechas</button>
     </div>
-    <div class="col-lg-2 col-md-4">
+    <div class="col-lg-3 col-md-3">
         <button type="button" (click)="openModal('ModalStockRep');" class="btn btn-block btn-lg btn-info">Stock de repuestos</button>
     </div>
 </div>
 
+<h2>Reportes estadisticos:</h2>
+<div class="row button-group">
+    <div class="col-lg-3 col-md-3">
+        <button type="button" class="btn btn-block btn-lg btn-info">Estado de pedidos</button>
+    </div>
+    <div class="col-lg-3 col-md-3">
+        <button type="button" class="btn btn-block btn-lg btn-info">Repuestos mas utilizados</button>
+    </div>
+    <div class="col-lg-3 col-md-3">
+        <button type="button" class="btn btn-block btn-lg btn-info">Estado ordenes rep.</button>
+    </div>
+</div>
 <!-----------------/MODAL------------------->
 <jw-modal id="ModalInfOrden">
     <div class="modal-dialog">
@@ -132,3 +144,32 @@
         </div>
     </div>
 </jw-modal>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><span class="lstick"></span>Visit Separation</h4>
+                <div id="visitor" style="height:290px; width:100%;"></div>
+                <table class="table vm font-14">
+                    <tr>
+                        <td class="b-0">Mobile</td>
+                        <td class="text-right font-medium b-0">38.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Tablet</td>
+                        <td class="text-right font-medium">30.8%</td>
+                    </tr>
+                    <tr>
+                        <td>Desktop</td>
+                        <td class="text-right font-medium">7.7%</td>
+                    </tr>
+                    <tr>
+                        <td>Other</td>
+                        <td class="text-right font-medium">23.1%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

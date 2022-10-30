@@ -3,9 +3,14 @@ import { Router } from '@angular/router';
 import { ModalService } from 'src/app/_modal';
 import Swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import { Presupuesto } from 'src/app/models/presupuesto';
 import { PresupuestoService } from 'src/app/services/presupuesto.service';
+
+import { DetallePresupuestoService } from 'src/app/services/detallepresupuesto.service';
 
 @Component({
   selector: 'app-menupresupuesto',
@@ -14,17 +19,22 @@ import { PresupuestoService } from 'src/app/services/presupuesto.service';
 })
 export class MenupresupuestoComponent implements OnInit {
 
+  list: any;
+  listArray: any[] = [];
   pageActual: number = 1;
   listPresupuesto: Presupuesto[] = [];
   fechaDesde: string = "";
   fechaHasta: string = "";
   aceptado: number = 0;
+  confirmado: string = "";
 
   constructor(
     private datePipe: DatePipe,
     private modalService: ModalService,
     private router: Router,
-    private presupuestoService: PresupuestoService, ) { }
+    private presupuestoService: PresupuestoService,
+    private detallePresupuestoService: DetallePresupuestoService,
+  ) { }
 
   ngOnInit() {
 
@@ -33,7 +43,7 @@ export class MenupresupuestoComponent implements OnInit {
     if (valido != "true") {
       this.router.navigate(['/login'])
     }
-    this.fechaDesde = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.fechaDesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
     this.fechaHasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
     this.ObtenerPresupuestos();
@@ -94,6 +104,148 @@ export class MenupresupuestoComponent implements OnInit {
         );
       }
     })
+  }
+
+  async createPdf(id: number) {
+    this.GetPresup(id);
+  }
+
+  GetPresup(nroPresup: number) {
+    this.list = [];
+    this.presupuestoService.obtenerPresupuesto(nroPresup).subscribe(
+      (res: any) => {
+        this.list = res;
+        console.log(this.list);
+        this.list.FechaCreacion = this.datePipe.transform(this.list.FechaCreacion, "dd-MM-yyyy");
+        this.list.FechaVigencia = this.datePipe.transform(this.list.FechaVigencia, "dd-MM-yyyy");
+        if (this.list.Confirmado == 1) {
+          this.confirmado = "Si."
+        } else {
+          this.confirmado = "No."
+        }
+
+        this.GetDetallePresup(nroPresup);
+
+      },
+      err => console.error(err)
+    );
+  }
+
+  GetDetallePresup(nroPresup: number) {
+    this.listArray = [];
+    //Trae los datos detalle de la orden
+    this.detallePresupuestoService.ObtenerDetallePresupuestoDePresup(nroPresup).subscribe(
+      (res: any) => {
+        this.listArray = res;
+        console.log(res);
+        this.generarPdf(nroPresup);
+      },
+      err => console.error(err)
+    );
+  }
+
+
+  async generarPdf(nroOrden: number) {
+    var encabezado: string[] = ['Tarea', 'Costo', 'Repuesto', 'Precio', 'Cantidad', 'Total'];
+    let docDefinition = {
+      styles: {
+        header: {
+          font: 'Roboto',
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          margin: [20, 20],
+        },
+      },
+      footer: (currentPage: number, pageCount: number) => {
+        return [{
+          margin: [20, 20, 20, 20],
+          text: 'Página ' + currentPage + ' de ' + pageCount,
+          alignment: 'right'
+        }
+        ];
+      },
+      content: [
+        {
+          image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png")
+        },
+        { text: "Presupuesto Nro. " + nroOrden, style: 'header' },
+        {
+          columns: [
+            [
+              {
+                text: "Cliente: " + this.list.Nombre + "  -  Mail: " + this.list.Mail + "  -  Teléfono: " + this.list.Telefono,
+                heights: 160,
+                alignment: 'left',
+                margin: [5, 5]
+              },
+              {
+                text: "Fecha creación: " + this.list.FechaCreacion + "                                                     Fecha vigencia: " + this.list.FechaVigencia + "",
+                alignment: 'left',
+                margin: [5, 5]
+              },
+              {
+                text: "Confirmado: " + this.confirmado + "",
+                alignment: 'left',
+                margin: [5, 5]
+              },
+              {
+                text: "Observacion: " + this.list.Observacion,
+                alignment: 'left',
+                margin: [5, 5, 5, 15]
+              }
+            ]
+          ],
+          columnGap: 30
+        },
+        this.table(this.listArray, encabezado)
+      ],
+
+    }
+
+    pdfMake.createPdf(docDefinition).open();
+  }
+  buildTableBody(data, columns) {
+    var body = [];
+    body.push(columns);
+    data.forEach(function (row) {
+      var dataRow = [];
+      columns.forEach(function (column) {
+        dataRow.push(row[column].toString());
+      })
+      body.push(dataRow);
+    });
+    return body;
+  }
+
+  table(data, columns) {
+    return {
+      table: {
+        headerRows: 1,
+        body: this.buildTableBody(data, columns)
+      },
+      layout: 'headerLineOnly',
+    };
+  }
+
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = 50;
+        canvas.height = 45;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL);
+      };
+      img.onerror = error => {
+        reject(error);
+      };
+      img.src = url;
+    });
   }
 
 }

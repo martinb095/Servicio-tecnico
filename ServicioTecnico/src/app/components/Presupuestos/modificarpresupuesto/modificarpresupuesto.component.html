@@ -67,7 +67,7 @@
                         <th width="10%">Cantidad</th>
                         <th width="10%">Precio $</th>
                         <th width="10%">Total $</th>
-                        <th width="1%">*</th>
+                        <th width="1%">Acción</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="listDetallePresupuesto.length">
@@ -120,7 +120,7 @@
                         </div>
                         <div class="col-md-10">
                             <div class="form-group">
-                                <label class="control-label">Costo:</label>
+                                <label class="control-label">Costo: $</label>
                                 <div class="col-md-10">
                                     <input type="number" class="form-control col-md-3" [ngModelOptions]="{standalone:true}" [(ngModel)]="detallePresupuesto.Costo">
                                 </div>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Precio:</label>
+                                <label class="control-label">Precio: $</label>
                                 <input type="number" [min]="1" [ngModelOptions]="{standalone:true}" class="form-control" [value]="1" [(ngModel)]="detallePresupuesto.Precio">
                             </div>
                         </div>

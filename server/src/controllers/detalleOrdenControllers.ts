@@ -21,7 +21,7 @@ class DetalleOrdenController {
 
     public async getFindByOrden(req: Request, res: Response) {    
         const fkOrden = [req.params.FkOrdenRep];     
-        pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "NombreRep", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre "NombreTarea", (deo.Precio*deo.Cantidad) as "Total" from detalleorden  deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err: any, results: any) => {
+        pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre "Tarea", deo.Costo, ((deo.Precio * deo.Cantidad) + deo.Costo) as "Total" from detalleorden deo left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detalleorden no encontrado" });
             }
@@ -49,7 +49,7 @@ class DetalleOrdenController {
     }
 
     public async GetDetallesFindByOrden(req: Request, res: Response) {        
-        pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err: any, results: any) => {
+        pool.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre as "Repuesto", deo.Precio, deo.Observacion, deo.FkTarea, t.Nombre as "Tarea", deo.Costo, FechaCreacion from detalleorden deo  left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden= ?', req.params.FkOrdenrep, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detallerepuestos no encontrado" });
             }
@@ -71,6 +71,7 @@ class DetalleOrdenController {
             'Fktarea': item.Fktarea,
             'FechaCreacion': item.FechaCreacion,
             'FkOrden': item.FkOrden,
+            'Costo': item.Costo,
         }
         await pool.query('INSERT INTO detalleorden set ?', [detalleOrden]);
 
@@ -90,8 +91,8 @@ class DetalleOrdenController {
         //    if (err) throw err;
         //    res.json({ text: 'OK' });
         //});  
-        const stringSQL = "call insertDetalleOrden(?,?,?,?,?,?,?);";
-        pool.query(stringSQL, [req.body.Cantidad, req.body.FkRepuesto, req.body.Precio, req.body.Observacion, req.body.FkTarea, req.body.FechaCreacion, req.body.FkOrden], function (err: any, results: any) {
+        const stringSQL = "call insertDetalleOrden(?,?,?,?,?,?,?,?);";
+        pool.query(stringSQL, [req.body.Cantidad, req.body.FkRepuesto, req.body.Precio, req.body.Observacion, req.body.FkTarea, req.body.FechaCreacion, req.body.FkOrden, req.body.Costo], function (err: any, results: any) {
             if (err) throw err;                  
             try {
                 return res.json({ text: 'OK' });
