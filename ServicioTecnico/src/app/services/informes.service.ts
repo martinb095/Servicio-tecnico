@@ -22,4 +22,24 @@ export class InformesService {
   StockRepuestos(filtro: any) {   
     return this.http.post(this.API_URI + "/informes/stockrepuestos", filtro);
   }
+
+  ordenesRepEstados(filtro: any) {   
+    return this.http.post(this.API_URI + "/informes/ordenesrepestados", filtro);
+  }
+
+  repMasUtilizados(filtro: any) {   
+    return this.http.post(this.API_URI + "/informes/repmasutilizados", filtro);
+  }
+
+  ObtenerDetalleOrdenDeOR(idOrden: number) {
+    return this.http.get(this.API_URI + "/informes/detalleorden/" + idOrden);
+  }
+
+  ObtenerDatosOrdenRep(idOrdenRep: number) {
+    return this.http.get(this.API_URI + "/informes/detalleestado/" + idOrdenRep);
+  }
+
+  ObtenerDetallePresupuestoDePresup(idPresupuesto: number) {
+    return this.http.get(this.API_URI + "/informes/detallepresupuesto/" + idPresupuesto);
+  }
 }

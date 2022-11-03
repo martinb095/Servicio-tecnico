@@ -318,6 +318,8 @@ export class NuevaOrdenComponent implements OnInit {
     this.detalleOrden.FkTarea = null;
     this.detalleOrden.FechaCreacion = null;
     this.detalleOrden.FkOrden = null;
+    document.getElementById("lblNombreRepuesto").innerHTML = "";
+    document.getElementById("lblNombreTarea").innerHTML = "";
   }
 
   modificarDetalle(detalleOrdenMod: any) {

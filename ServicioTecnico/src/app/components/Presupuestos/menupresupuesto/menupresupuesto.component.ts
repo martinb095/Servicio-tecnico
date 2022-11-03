@@ -11,7 +11,7 @@ import { Presupuesto } from 'src/app/models/presupuesto';
 import { PresupuestoService } from 'src/app/services/presupuesto.service';
 
 import { DetallePresupuestoService } from 'src/app/services/detallepresupuesto.service';
-
+import { InformesService } from 'src/app/services/informes.service';
 @Component({
   selector: 'app-menupresupuesto',
   templateUrl: './menupresupuesto.component.html',
@@ -34,6 +34,7 @@ export class MenupresupuestoComponent implements OnInit {
     private router: Router,
     private presupuestoService: PresupuestoService,
     private detallePresupuestoService: DetallePresupuestoService,
+    private informesService:InformesService
   ) { }
 
   ngOnInit() {
@@ -134,7 +135,7 @@ export class MenupresupuestoComponent implements OnInit {
   GetDetallePresup(nroPresup: number) {
     this.listArray = [];
     //Trae los datos detalle de la orden
-    this.detallePresupuestoService.ObtenerDetallePresupuestoDePresup(nroPresup).subscribe(
+    this.informesService.ObtenerDetallePresupuestoDePresup(nroPresup).subscribe(
       (res: any) => {
         this.listArray = res;
         console.log(res);
@@ -146,7 +147,11 @@ export class MenupresupuestoComponent implements OnInit {
 
 
   async generarPdf(nroOrden: number) {
-    var encabezado: string[] = ['Tarea', 'Costo', 'Repuesto', 'Precio', 'Cantidad', 'Total'];
+    var encabezado: string[] = ['Tarea', 'Costo $', 'Repuesto', 'Precio $', 'Cantidad', 'Total $'];
+    var totalOrden = 0;
+    for (var i = 0; i < this.listArray.length; i++) {
+      totalOrden += this.listArray[i]['Total $'];
+    }
     let docDefinition = {
       styles: {
         header: {
@@ -198,7 +203,9 @@ export class MenupresupuestoComponent implements OnInit {
           ],
           columnGap: 30
         },
-        this.table(this.listArray, encabezado)
+        this.table(this.listArray, encabezado),
+        { canvas: [{ type: 'line', x1: 0, y1: 20, x2: 520, y2: 20, lineWidth: 2 }] },
+        { text: "Total del presupuesto: $ " + totalOrden + "  ", alignment: 'right', margin: [5, 5, 5, 5] },
       ],
 
     }
@@ -221,6 +228,7 @@ export class MenupresupuestoComponent implements OnInit {
   table(data, columns) {
     return {
       table: {
+        widths: ['29%', '10%', '29%', '11%', '11%', '10%'],
         headerRows: 1,
         body: this.buildTableBody(data, columns)
       },

@@ -14,6 +14,11 @@ class InformesRoutes {
         this.router.get('/clientestop/', informesControllers_1.default.clientesMasVentas);
         this.router.post('/ordenesfechas', informesControllers_1.default.repEntreFechas);
         this.router.post('/stockrepuestos', informesControllers_1.default.stockRepuestos);
+        this.router.post('/ordenesrepestados', informesControllers_1.default.ordenRepEstados);
+        this.router.post('/repmasutilizados', informesControllers_1.default.repMasUtilizados);
+        this.router.get('/detalleorden/:FkOrdenRep', informesControllers_1.default.getDetalleOrden);
+        this.router.get('/detalleestado/:PkOrdenRep', informesControllers_1.default.getDetalleEstadoOrden);
+        this.router.get('/detallepresupuesto/:FkPresupuesto', informesControllers_1.default.getDetallePresupuesto);
     }
 }
 const informesRoutes = new InformesRoutes();

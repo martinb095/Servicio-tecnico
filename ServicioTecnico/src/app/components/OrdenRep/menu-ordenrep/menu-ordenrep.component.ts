@@ -19,6 +19,7 @@ import { EstadoHis } from '../../../models/estadohis';
 import { ClienteService } from '../../../services/cliente.service'
 import { Cliente } from '../../../models/cliente';
 
+import { InformesService } from '../../../services/informes.service'
 import { MailService } from 'src/app/services/mail.service';
 
 @Component({
@@ -88,7 +89,8 @@ export class MenuOrdenrepComponent implements OnInit {
     private clienteService: ClienteService,
     private router: Router,
     private modalService: ModalService,
-    private detalleOrdenService: DetalleOrdenService
+    private detalleOrdenService: DetalleOrdenService,
+    private informenService: InformesService
   ) { }
 
   ngOnInit() {
@@ -98,14 +100,6 @@ export class MenuOrdenrepComponent implements OnInit {
     if (valido != 'true') {
       this.router.navigate(['/login'])
     }
-
-    //Clientes para la seleccion
-    // this.clienteService.ObtenerClientes().subscribe(
-    //   (res: any) => {
-    //     this.listCliente = res;
-    //   },
-    //   err => console.error(err)
-    // );
 
     this.estadoService.ObtenerEstado().subscribe(
       (res: any) => {
@@ -217,10 +211,8 @@ export class MenuOrdenrepComponent implements OnInit {
       if (this.listEstado[i].PkEstado >= this.idEstadoActual) {
         this.listEstadoPosible.push(this.listEstado[i]);
       }
-
     }
   }
-
 
   openModal(id: string) {
     this.modalService.open(id);
@@ -239,11 +231,6 @@ export class MenuOrdenrepComponent implements OnInit {
   NotificarCliente() {
     let enviarMail = document.getElementById("cbEnviarMail") as HTMLInputElement;
     let enviarWsp = document.getElementById("cbEnviarWsp") as HTMLInputElement;
-    //Datos de la orden para actualizar
-    // let DatosOrden = {
-    //   'PkOrdenRep': this.idCambiarEstado,
-    //   'FkEstado': this.idEstadoActual,
-    // }
     let DatosCambioEstado = {
       'PkOrdenRep': this.idCambiarEstado,
       'FkEstado': this.idEstadoActual,
@@ -360,7 +347,8 @@ export class MenuOrdenrepComponent implements OnInit {
 
   table(data, columns) {
     return {
-      table: {
+      table: {         
+        widths: ['29%', '10%', '29%', '11%', '11%', '10%'],
         headerRows: 1,
         body: this.buildTableBody(data, columns)
       },
@@ -390,7 +378,12 @@ export class MenuOrdenrepComponent implements OnInit {
 
 
   async generarPdf(nroOrden: number) {
-    var encabezado: string[] = ['Tarea', 'Costo', 'Repuesto', 'Precio', 'Cantidad', 'Total'];
+    var encabezado: string[] = ['Tarea', 'Costo $', 'Repuesto', 'Precio $', 'Cantidad', 'Total $'];
+    var totalOrden = 0;
+    for (var i = 0; i < this.listArray.length; i++) {
+      totalOrden += this.listArray[i]['Total $'];
+    }
+
     let docDefinition = {
       styles: {
         header: {
@@ -442,7 +435,9 @@ export class MenuOrdenrepComponent implements OnInit {
           ],
           columnGap: 30
         },
-        this.table(this.listArray, encabezado)
+        this.table(this.listArray, encabezado),
+        { canvas: [{ type: 'line', x1: 0, y1: 20, x2: 520, y2: 20, lineWidth: 2 }] },
+        { text: "Total de la orden: $ " + totalOrden + "  ", alignment: 'right', margin: [5, 5, 5, 5] },
       ],
 
     }
@@ -452,7 +447,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
   GetDetalleOrden(nroOrden: number) {
     this.list = [];
-    this.ordenesRepService.ObtenerDatosOrdenRep(nroOrden).subscribe(
+    this.informenService.ObtenerDatosOrdenRep(nroOrden).subscribe(
       (res: any) => {
         this.list = res;
         this.list.FechaInicio = this.datePipe.transform(this.list.FechaInicio, "dd-MM-yyyy");
@@ -467,7 +462,7 @@ export class MenuOrdenrepComponent implements OnInit {
   GetDetalleRepOrden(nroOrden: number) {
     this.listArray = [];
     //Trae los datos detalle de la orden
-    this.detalleOrdenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
+    this.informenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
       (res: any) => {
         this.listArray = res;
         this.generarPdf(nroOrden);

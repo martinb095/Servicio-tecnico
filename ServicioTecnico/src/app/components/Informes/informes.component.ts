@@ -3,6 +3,9 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { ModalService } from 'src/app/_modal';
+import { Chart } from 'chart.js';
+import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 import { EstadoService } from '../../services/estado.service';
 import { Estado } from '../../models/estado';
@@ -19,6 +22,12 @@ import { Repuesto } from 'src/app/models/repuesto';
 })
 export class InformesComponent implements OnInit {
 
+  time: any[] = [];
+  humidity: any[] = [];
+  pressure: any[] = [];
+  temperature: any[] = [];
+  chart: any = [];
+
   listRepuesto: Repuesto[] = [];
   list: any[] = [];
   listEstado: any[] = [];
@@ -32,16 +41,140 @@ export class InformesComponent implements OnInit {
   rephasta: number = 99999;
 
   constructor(
+    private datePipe: DatePipe,
     private repuestoService: RepuestoService,
     private estadoService: EstadoService,
     private modalService: ModalService,
     private informeService: InformesService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    //valido si existe la sesion
+    let valido = localStorage.getItem('ingreso');
+    if (valido != "true") {
+      this.router.navigate(['/login'])
+    }
     this.obtenerEstados();
+    this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   }
 
+  mostrarGrafOrdenRep() {
+    document.getElementById("grafOrdenRep").style.display = "block";
+    document.getElementById("grafRepUti").style.display = "none";
+    this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.ObtenerGraficoOrdenRep();
+  }
+
+  mostrarRepMasUti() {
+    document.getElementById("grafRepUti").style.display = "block";
+    document.getElementById("grafOrdenRep").style.display = "none";
+    this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');   
+  }
+
+  ObtenerGraficoRepMasUti() {
+    this.filtro.FechaDesde = this.fechadesde;
+    this.filtro.FechaHasta = this.fechahasta;   
+    let labels = [];
+    let dataCant = [];
+    this.informeService.repMasUtilizados(this.filtro).subscribe(
+      (res: any) => {     
+        for (let i = 0; i < res.length; i++) {
+          labels.push('Repuestos mas utilizados.');
+          dataCant.push(res[i].Cantidad );
+        }
+        const data = {
+          labels: labels,
+          
+          datasets: [{
+            label: (res[0].FkRepuesto + " - " + res[0].Nombre),
+            data: dataCant,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 205, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)'
+            ],
+            borderWidth: 1
+          }]
+        };
+        this.chart = new Chart('canvasRepUti', {
+          type: 'bar',
+          data: data,
+        });
+
+      },
+      err => console.error(err)
+    );
+
+  }
+
+  ObtenerGraficoOrdenRep() {
+    this.filtro.FechaDesde = this.fechadesde;
+    this.filtro.FechaHasta = this.fechahasta;
+    this.list = [];
+    let labels = [];
+    this.informeService.ordenesRepEstados(this.filtro).subscribe(
+      (res: any) => {
+        for (let i = 0; i < res.length; i++) {
+          switch (res[i].FkEstado) {
+            case 1:
+              this.list.splice(0, 0, res[i].Cantidad);
+              labels.splice(0, 0, 'Pendiente');
+              break;
+            case 2:
+              this.list.splice(1, 0, res[i].Cantidad);
+              labels.splice(1, 0, 'Reparando');
+              break;
+            case 3:
+              this.list.splice(2, 0, res[i].Cantidad);
+              labels.splice(2, 0, 'Reparado');
+              break;
+            case 4:
+              this.list.splice(3, 0, res[i].Cantidad);
+              labels.splice(3, 0, 'Entregado');
+              break;
+            case 5:
+              this.list.splice(4, 0, res[i].Cantidad);
+              labels.splice(4, 0, 'Cancelado');
+              break;
+            default:
+              break;
+          }
+        }
+        const data = {
+          labels: labels,
+          datasets: [{
+            data: this.list,
+            backgroundColor: [
+              '#e11a29',
+              '#db5252',
+              '#6fc6d7',
+              '#65af30',
+              '#D9E42D'
+            ],
+            hoverOffset: 4
+          }]
+        };
+        this.chart = new Chart('canvas', {
+          type: 'pie',
+          data: data,
+        });
+      },
+      err => console.error(err)
+    );
+  }
 
   stockDeRepuestos() {
     this.list = [];
@@ -148,13 +281,15 @@ export class InformesComponent implements OnInit {
     }
     this.closeModal('ModalSelectRepuesto');
   }
-  
+
   closeModal(id: string) {
+    this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');   
     this.modalService.close(id);
   }
 
 
-  
+
   async createpdf(list: any[], titulo: string, encabezado: string[]) {
     var dd = {
       styles: {
@@ -163,21 +298,21 @@ export class InformesComponent implements OnInit {
           fontSize: 18,
           bold: true,
           alignment: 'center',
-          margin: [20, 20],       
+          margin: [20, 20],
         },
       },
       content: [
         {
-          image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png")               
-        },        
+          image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png")
+        },
         { text: titulo, style: 'header' },
         this.table(list, encabezado)
-      ],   
+      ],
     }
     pdfMake.createPdf(dd).open();
   }
 
-  
+
   buildTableBody(data, columns) {
     var body = [];
     body.push(columns);
@@ -204,21 +339,22 @@ export class InformesComponent implements OnInit {
   getBase64ImageFromURL(url) {
     return new Promise((resolve, reject) => {
       var img = new Image();
-      img.setAttribute("crossOrigin", "anonymous");    
+      img.setAttribute("crossOrigin", "anonymous");
       img.onload = () => {
         var canvas = document.createElement("canvas");
         canvas.width = 50;
-        canvas.height = 45;    
+        canvas.height = 45;
         var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);    
-        var dataURL = canvas.toDataURL("image/png");    
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
         resolve(dataURL);
-      };    
+      };
       img.onerror = error => {
         reject(error);
-      };    
+      };
       img.src = url;
-    });}
+    });
+  }
 
-  
+
 }

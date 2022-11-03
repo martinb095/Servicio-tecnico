@@ -19,7 +19,7 @@ class DetallePresupuestoRoutes {
         this.router.post('/', detallePresupuestoControllers_1.default.create);
         //Eliminar
         this.router.delete('/:PkDetallePresup', detallePresupuestoControllers_1.default.delete);
-        //Lista detalles por orden
+        //Lista detalles
         this.router.get('/presupuesto/:FkPresupuesto', detallePresupuestoControllers_1.default.getFindByPresupuesto);
         //Actualizar
         this.router.put('/:PkDetallePresup', detallePresupuestoControllers_1.default.update);

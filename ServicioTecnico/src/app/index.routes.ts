@@ -41,7 +41,7 @@ import { ModificarpresupuestoComponent } from './components/Presupuestos/modific
 import { NuevopresupuestoComponent } from './components/Presupuestos/nuevopresupuesto/nuevopresupuesto.component';
 
 export const appRoutes: Routes = [
-
+  
   { path: 'login', component: LoginComponent },
   { path: 'registrarusuario', component: RegistrarUsuarioComponent },
   { path: 'consultaestado', component: ConsultaestadoComponent },

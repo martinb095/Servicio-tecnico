@@ -58,6 +58,7 @@ import { ModificarpresupuestoComponent } from './components/Presupuestos/modific
 import { NuevopresupuestoComponent } from './components/Presupuestos/nuevopresupuesto/nuevopresupuesto.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,

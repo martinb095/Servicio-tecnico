@@ -277,6 +277,8 @@ export class ModificarOrdenComponent implements OnInit {
     this.detalleOrden.FechaCreacion = null;
     this.detalleOrden.FkOrden = null;
     this.detalleOrden.Costo = null;
+    document.getElementById("lblNombreRepuesto").innerHTML = "";
+    document.getElementById("lblNombreTarea").innerHTML = "";
   }
 
   //Registra detalle orden
