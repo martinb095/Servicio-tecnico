@@ -14,7 +14,7 @@
 <h2>Reportes estadistícos:</h2>
 <div class="row button-group" style="margin-bottom: 20px;">
     <div class="col-lg-3 col-md-3">
-        <button type="button" class="btn btn-block btn-lg btn-info"></button>
+        <button type="button" (click)="mostrarCliMasORPresup()" class="btn btn-block btn-lg btn-info">Clientes con mas OR y presup.</button>
     </div>
     <div class="col-lg-3 col-md-3">
         <button type="button" (click)="mostrarRepMasUti()" class="btn btn-block btn-lg btn-info">Repuestos mas utilizados</button>
@@ -182,8 +182,8 @@
                 <label style="margin-top: 5px;">Fecha hasta:</label>
                 <input type="date" class="form-control" [(ngModel)]="fechahasta" [ngModelOptions]="{standalone:true}">
                 <span class="input-group-btn">
-                        <button class="btn btn-info" type="button" (click)="ObtenerGraficoRepMasUti()">Buscar</button>
-                        </span>
+                <button class="btn btn-info" type="button" (click)="ObtenerGraficoRepMasUti()">Buscar</button>
+                </span>
             </div>
         </div>
     </div>
@@ -193,6 +193,32 @@
         <div class="col-lg-9">
             <div class="chart-container" style="position: relative; height:400px; width:700px">
                 <canvas id="canvasRepUti">{{chart}}</canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="grafClientesTop" style="display: none;">
+    <h3>Gráfico clientes con mas presup. y ordenes rep.:</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <label style="margin-top: 5px;">Fecha desde:</label>
+                <input type="date" class="form-control" [(ngModel)]="fechadesde" [ngModelOptions]="{standalone:true}">
+                <label style="margin-top: 5px;">Fecha hasta:</label>
+                <input type="date" class="form-control" [(ngModel)]="fechahasta" [ngModelOptions]="{standalone:true}">
+                <span class="input-group-btn">
+                <button class="btn btn-info" type="button" (click)="ObtenerGraficoClientesTop()">Buscar</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-9">
+            <div class="chart-container" style="position: relative; height:400px; width:700px">
+                <canvas id="canvasClientesTop">{{chart}}</canvas>
             </div>
         </div>
     </div>

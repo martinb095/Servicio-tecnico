@@ -19,6 +19,7 @@ class InformesRoutes {
         this.router.get('/detalleorden/:FkOrdenRep', informesControllers_1.default.getDetalleOrden);
         this.router.get('/detalleestado/:PkOrdenRep', informesControllers_1.default.getDetalleEstadoOrden);
         this.router.get('/detallepresupuesto/:FkPresupuesto', informesControllers_1.default.getDetallePresupuesto);
+        this.router.post('/repormasutilizados', informesControllers_1.default.getPresORMasUti);
     }
 }
 const informesRoutes = new InformesRoutes();

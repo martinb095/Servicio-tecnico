@@ -112,8 +112,6 @@ class InformesController {
     }
     getDetallePresupuesto(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            //const FkPedProv = [req.params.FkPedProv];     
-            //console.log(FkPedProv);
             database_1.default.query('select dp.PkDetallePresup, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad, dp.Precio as "Precio $", (dp.Precio*dp.Cantidad) "Total $", dp.FkPresupuesto, dp.FkTarea, t.Nombre "Tarea", dp.Costo as "Costo $" from detallepresupuesto dp left join tarea t on t.PkTarea=dp.FkTarea left join repuesto r on r.PkRepuesto=dp.FkRepuesto where dp.FkPresupuesto = ?', req.params.FkPresupuesto, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detallepresu no encontrado" });
@@ -124,6 +122,16 @@ class InformesController {
                 else {
                     return res.status(404).json({ text: "detallepresu no encontrado" });
                 }
+            });
+        });
+    }
+    getPresORMasUti(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stringSQL = "call repPresMasUtilizados(?,?);";
+            database_1.default.query(stringSQL, [req.body.FechaDesde, req.body.FechaHasta], function (err, result) {
+                if (err)
+                    throw err;
+                return res.json(result[0]);
             });
         });
     }

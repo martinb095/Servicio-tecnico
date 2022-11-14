@@ -21,11 +21,12 @@ class InformesRoutes {
         this.router.post('/repmasutilizados', informesControllers.repMasUtilizados);
 
         this.router.get('/detalleorden/:FkOrdenRep', informesControllers.getDetalleOrden);
-
        
         this.router.get('/detalleestado/:PkOrdenRep', informesControllers.getDetalleEstadoOrden);
 
         this.router.get('/detallepresupuesto/:FkPresupuesto', informesControllers.getDetallePresupuesto);
+
+        this.router.post('/repormasutilizados', informesControllers.getPresORMasUti);
     }
 
 }

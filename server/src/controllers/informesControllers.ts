@@ -90,9 +90,7 @@ class InformesController {
 
     }
 
-    public async getDetallePresupuesto(req: Request, res: Response) {    
-        //const FkPedProv = [req.params.FkPedProv];     
-        //console.log(FkPedProv);
+    public async getDetallePresupuesto(req: Request, res: Response) {           
         pool.query('select dp.PkDetallePresup, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad, dp.Precio as "Precio $", (dp.Precio*dp.Cantidad) "Total $", dp.FkPresupuesto, dp.FkTarea, t.Nombre "Tarea", dp.Costo as "Costo $" from detallepresupuesto dp left join tarea t on t.PkTarea=dp.FkTarea left join repuesto r on r.PkRepuesto=dp.FkRepuesto where dp.FkPresupuesto = ?', req.params.FkPresupuesto, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detallepresu no encontrado" });
@@ -102,6 +100,14 @@ class InformesController {
             } else {
                 return res.status(404).json({ text: "detallepresu no encontrado" });
             }
+        });
+    }
+    
+    public async getPresORMasUti(req: Request, res: Response) {           
+        const stringSQL = "call repPresMasUtilizados(?,?);";
+        pool.query(stringSQL, [req.body.FechaDesde, req.body.FechaHasta], function (err: any, result: any) {
+            if (err) throw err;
+            return res.json(result[0]);
         });
     }
 }

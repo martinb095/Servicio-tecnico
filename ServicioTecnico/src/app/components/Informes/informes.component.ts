@@ -63,6 +63,7 @@ export class InformesComponent implements OnInit {
   mostrarGrafOrdenRep() {
     document.getElementById("grafOrdenRep").style.display = "block";
     document.getElementById("grafRepUti").style.display = "none";
+    document.getElementById("grafClientesTop").style.display = "none";
     this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
     this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.ObtenerGraficoOrdenRep();
@@ -71,26 +72,80 @@ export class InformesComponent implements OnInit {
   mostrarRepMasUti() {
     document.getElementById("grafRepUti").style.display = "block";
     document.getElementById("grafOrdenRep").style.display = "none";
+    document.getElementById("grafClientesTop").style.display = "none";
     this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
-    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');   
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+  }
+
+  mostrarCliMasORPresup() {
+    document.getElementById("grafClientesTop").style.display = "block";
+    document.getElementById("grafOrdenRep").style.display = "none";
+    document.getElementById("grafRepUti").style.display = "none";
+    this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+  }
+
+
+  ObtenerGraficoClientesTop() {
+    this.filtro.FechaDesde = this.fechadesde;
+    this.filtro.FechaHasta = this.fechahasta;
+    let labels = [];
+    let dataCant = [];
+    this.informeService.obtenerClientesTop(this.filtro).subscribe(
+      (res: any) => {       
+        for (let i = 0; i < res.length; i++) {
+          labels.push(res[i].FkCliente + " - " + res[i].Nombre);
+          dataCant.push(res[i].Cantidad);
+        }
+        const data = {
+          labels: labels,
+          datasets: [{
+            label: ('Cantidad'),
+            data: dataCant,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 205, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)'
+            ],
+            borderWidth: 1
+          }]
+        };
+        this.chart = new Chart('canvasClientesTop', {
+          type: 'bar',
+          data: data,
+        });
+
+      },
+      err => console.error(err)
+    );
+
   }
 
   ObtenerGraficoRepMasUti() {
     this.filtro.FechaDesde = this.fechadesde;
-    this.filtro.FechaHasta = this.fechahasta;   
+    this.filtro.FechaHasta = this.fechahasta;
     let labels = [];
     let dataCant = [];
     this.informeService.repMasUtilizados(this.filtro).subscribe(
-      (res: any) => {     
+      (res: any) => {
+        console.log(res);
         for (let i = 0; i < res.length; i++) {
-          labels.push('Repuestos mas utilizados.');
-          dataCant.push(res[i].Cantidad );
+          labels.push(res[i].FkRepuesto + " - " + res[i].Nombre);
+          dataCant.push(res[i].Cantidad);
         }
         const data = {
           labels: labels,
-          
           datasets: [{
-            label: (res[0].FkRepuesto + " - " + res[0].Nombre),
+            label: ('Cantidad'),
             data: dataCant,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
@@ -117,7 +172,6 @@ export class InformesComponent implements OnInit {
       },
       err => console.error(err)
     );
-
   }
 
   ObtenerGraficoOrdenRep() {
@@ -284,7 +338,7 @@ export class InformesComponent implements OnInit {
 
   closeModal(id: string) {
     this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
-    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');   
+    this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.modalService.close(id);
   }
 

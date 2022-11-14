@@ -42,4 +42,9 @@ export class InformesService {
   ObtenerDetallePresupuestoDePresup(idPresupuesto: number) {
     return this.http.get(this.API_URI + "/informes/detallepresupuesto/" + idPresupuesto);
   }
+
+  obtenerClientesTop(filtro: any) {    
+    return this.http.post(this.API_URI + "/informes/repormasutilizados", filtro);
+  }
+  
 }
