@@ -81,7 +81,7 @@ export class MenumarcaComponent implements OnInit {
           if (result[0] == "OK") {
             //Mensaje informando el almacenado
             Swal.fire({ title: "Marca eliminada correctamente.", icon: "success" });
-            this.ObtenerMarca();
+            window.setTimeout(() => this.ObtenerMarca(), 500);
           }         
         },
           err => console.error(err)
@@ -105,7 +105,7 @@ export class MenumarcaComponent implements OnInit {
           this.closeModal('ModalNuevaMarca');
           //Mensaje informando el almacenado
           Swal.fire({ title: "Marca guardada correctamente.", icon: "success" });
-          this.ObtenerMarca();
+          window.setTimeout(() => this.ObtenerMarca(), 500);
         }
       },
       err => console.error(err)
@@ -122,9 +122,10 @@ export class MenumarcaComponent implements OnInit {
       res => {
         var result = Object.values(res);
         if (result[0] == "OK") {
+          this.closeModal('ModalEditarMarca');
           //Mensaje informando el almacenado
           Swal.fire({ title: "Marca modificada correctamente.", icon: "success" });
-          this.ObtenerMarca();
+          window.setTimeout(() => this.ObtenerMarca(), 500);      
         }
       },
       err => console.error(err)

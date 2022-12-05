@@ -97,7 +97,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">¿Desea cambiar el estado?</label>
-                            <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoActual"> 
+                            <select required class="form-control custom-select" data-placeholder="Estado" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstadoPosible"> 
                                 <option *ngFor="let estado of listEstadoPosible" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
                             </select>
                         </div>

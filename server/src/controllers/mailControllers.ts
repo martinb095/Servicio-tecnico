@@ -3,7 +3,7 @@ import pool from '../database';
 import transporter from '../mailer';
 
 const TWILIO_ID = 'ACd645517d385bbd78deda0200b9eb7818'
-const TWILIO_SK = 'f543f9207b42fbe2e33c6fafeb842a94'
+const TWILIO_SK = '5fd03e9c5522ae4f27d95732b8a4e61a'
 const client = require('twilio')(TWILIO_ID, TWILIO_SK);
 
 class UsuarioController {
@@ -26,10 +26,10 @@ class UsuarioController {
         var mailOptions = {
             from: 'softwaremarbal_soporte@outlook.com',
             to: req.body.mail,
-            subject: 'Recuperar contraseña',
+            subject: 'Software Marbal',
             html: "<html>" +
-                "<h2>Recuperar contraseña</h2>" +
-                "<h3>Su contraseña es:</h3>" +
+                "<h3></h3>" +
+                "<h3>Recientemente has solicitado la contraseña de ingreso la misma es:</h3>" +
                 "<h3>" + req.body.contrasenia + "</h3>" +
                 "</html>",
         };
@@ -57,15 +57,17 @@ class UsuarioController {
     }
     public enviarWsp(req: Request, res: Response) {
 
-        let datosWsp = {
-            'Nro': req.body.Nro,
-            'Mensaje': req.body.FecRetiroEstimado,
-        }       
+        // let datosWsp = {
+        //     'Nro': req.body.Nro,
+        //     'Mensaje': req.body.FecRetiroEstimado,
+        // }       
+        //body: req.body.Mensaje,
+        console.log(req.body);
         client.messages
             .create({
                 from: 'whatsapp:+14155238886',
                 body: req.body.Mensaje,
-                to: 'whatsapp:' + req.body.Nro
+                to: 'whatsapp:+5493537665239'// + req.body.Nro
             }).then();
     }
 

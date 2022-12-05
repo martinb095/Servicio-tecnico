@@ -73,6 +73,7 @@ export class MenuOrdenrepComponent implements OnInit {
   idEstado = 2;
   pkCliente = 0;
   idEstadoActual = 2;
+  idEstadoPosible = 2;
   cliTel = "";
   estadoWsp = "";
   CantidadActual = 0;
@@ -207,11 +208,12 @@ export class MenuOrdenrepComponent implements OnInit {
 
   estadosPosibles() {
     this.listEstadoPosible = [];
-    for (var i = 0; i < this.listEstado.length; i++) {
-      if (this.listEstado[i].PkEstado >= this.idEstadoActual) {
+    for (var i = 1; i < this.listEstado.length; i++) {
+      if (this.listEstado[i].PkEstado > this.idEstadoActual) {
         this.listEstadoPosible.push(this.listEstado[i]);
       }
     }
+    this.idEstadoPosible = this.idEstadoActual + 1;
   }
 
   openModal(id: string) {
@@ -233,12 +235,11 @@ export class MenuOrdenrepComponent implements OnInit {
     let enviarWsp = document.getElementById("cbEnviarWsp") as HTMLInputElement;
     let DatosCambioEstado = {
       'PkOrdenRep': this.idCambiarEstado,
-      'FkEstado': this.idEstadoActual,
+      'FkEstado': this.idEstadoPosible,
       'Observacion': this.observacion,
     }
     Swal.fire({
       title: '¿Desea modificar el estado de la orden?',
-      //text: 'Se enviara un correo al cliente notificando la modificación.',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Si, modificar',
@@ -253,8 +254,8 @@ export class MenuOrdenrepComponent implements OnInit {
               this.closeModal('ModalConfirmarEstado');
               //Mensaje informando el almacenado     
               Swal.fire({ title: "Estado actualizado de la orden Nro. " + this.idCambiarEstado, icon: "success" });
-              //Obtiene los datos de la orden modificada para el envio del mail
-              this.OrdenesSegunEstado(this.idEstadoActual);
+              //Obtiene los datos de la orden modificada para el envio del mail              
+              window.setTimeout(() => this.OrdenesSegunEstado(this.idEstadoActual), 500);
               this.idEstado = this.idEstadoActual;
               if (enviarWsp.checked) {
                 this.enviarWsp();
@@ -347,7 +348,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
   table(data, columns) {
     return {
-      table: {         
+      table: {
         widths: ['29%', '10%', '29%', '11%', '11%', '10%'],
         headerRows: 1,
         body: this.buildTableBody(data, columns)

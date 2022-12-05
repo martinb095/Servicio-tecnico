@@ -117,16 +117,15 @@ export class NuevoPedidoComponent implements OnInit {
     if (this.detallePedido.Observacion == null) {
       this.detallePedido.Observacion = "";
     }
-    this.detallePedido.FkPedProv = this.idUltimoPed;
-
+    this.detallePedido.FkPedProv = this.idUltimoPed;   
     if (this.detallePedido.PkDetallePedido != null) {
       this.detallePedidoService.ActualizarDetallePedido(this.detallePedido.PkDetallePedido, this.detallePedido).subscribe(
         res => {
-          var result = Object.values(res);
+          var result = Object.values(res);   
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallesPedido();
+            window.setTimeout(() => this.obtenerDetallesPedido(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+            this.closeModal('ModalMov');
           }
         },
         err => console.error(err)
@@ -134,16 +133,17 @@ export class NuevoPedidoComponent implements OnInit {
     } else {
       this.detallePedidoService.GuardarDetallePedido(this.detallePedido).subscribe(
         res => {
-          var result = Object.values(res);
+          var result = Object.values(res);   
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallesPedido();
+            window.setTimeout(() => this.obtenerDetallesPedido(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+            this.closeModal('ModalMov');
           }
         },
         err => console.error(err)
       )
     }
+  
   }
 
   eliminarDetallePedido(idDetallePedido: number) {

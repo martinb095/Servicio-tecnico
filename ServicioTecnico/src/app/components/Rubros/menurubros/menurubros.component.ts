@@ -62,15 +62,15 @@ export class MenurubrosComponent implements OnInit {
     if (this.rubro.Nombre == "" || this.rubro.Nombre == null) {
       Swal.fire({ title: "El nombre del rubro no puede estar vacio.", icon: "warning" });
       return;
-    }   
+    }
     this.rubroService.GuardarRubro(this.rubro).subscribe(
-      res => {       
+      res => {
         var result = Object.values(res);
         if (result[0] == "OK") {
           //Mensaje informando el almacenado
           this.closeModal('ModalNuevoRubro');
           Swal.fire({ title: "Rubro guardado correctamente.", icon: "success" });
-          this.ObtenerRubros();
+          window.setTimeout(() => this.ObtenerRubros(), 500);
         }
       },
       err => console.error(err)
@@ -81,7 +81,7 @@ export class MenurubrosComponent implements OnInit {
     if (this.rubro.Nombre == "" || this.rubro.Nombre == null) {
       Swal.fire({ title: "El nombre del rubro no puede estar vacio.", icon: "warning" });
       return;
-    }     
+    }
     this.rubroService.ActualizarRubro(this.rubro.PkRubro, this.rubro).subscribe(
       res => {
         var result = Object.values(res);
@@ -89,7 +89,7 @@ export class MenurubrosComponent implements OnInit {
           //Mensaje informando el almacenado
           this.closeModal('ModalEditarRubro');
           Swal.fire({ title: "Rubro modificado correctamente.", icon: "success" });
-          this.ObtenerRubros();
+          window.setTimeout(() => this.ObtenerRubros(), 500);
         }
       },
       err => console.error(err)
@@ -106,15 +106,15 @@ export class MenurubrosComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-          this.rubroService.EliminarRubros(id).subscribe(res => {
-          this.ObtenerRubros();
+        this.rubroService.EliminarRubros(id).subscribe(res => {
+          window.setTimeout(() => this.ObtenerRubros(), 500);
         },
           err => console.error(err)
         );
         //Mensaje informando el eliminado     
         Swal.fire({ icon: 'success', title: "Rubro nro. " + id + " eliminado correctamente." })
 
-      } 
+      }
     })
   }
 

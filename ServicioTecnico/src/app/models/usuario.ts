@@ -4,5 +4,5 @@ export interface Usuario {
     Contrasenia: string;
     Mail: string;
     FkTipoUsuario: number;
-    UltimoIngreso:Date;
+    //UltimoIngreso:Date;
 }

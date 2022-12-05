@@ -17,7 +17,8 @@ class ModeloController {
     }
 
     public async getModelosFindByNombre(req: Request, res: Response) {
-        pool.query("Select m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, ma.Nombre as 'Marca', m.FkRubro r.Nombre as 'Rubro' FROM modelo m inner join marca ma on ma.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro WHERE m.Nombre like '%" + req.params.Valor + "%' and m.Activo=1 order by m.nombre", (err: any, results: any) => {
+        console.log(req.params.Valor);
+        pool.query("Select m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, ma.Nombre as 'Marca', m.FkRubro, r.Nombre as 'Rubro' FROM modelo m inner join marca ma on ma.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro WHERE m.Nombre like '%" + req.params.Valor + "%' and m.Activo=1 order by m.nombre", (err: any, results: any) => {
 
             if (err) {
                 res.status(404).json({ text: "modelo no encontrado" });

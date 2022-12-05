@@ -36,7 +36,7 @@ import { DetalleOrden } from 'src/app/models/detalleorden';
 })
 
 export class NuevaOrdenComponent implements OnInit {
-  
+
   listMarca: Marca[] = [];
   listModelo: Modelo[] = [];
   listEstado: Estado[] = [];
@@ -76,7 +76,7 @@ export class NuevaOrdenComponent implements OnInit {
     Observacion: null,
     NroSerie: null,
     FkTipoRepuesto: null,
-    FkMarca: null,    
+    FkMarca: null,
     Activo: true,
   };
 
@@ -150,7 +150,7 @@ export class NuevaOrdenComponent implements OnInit {
     this.estadoService.ObtenerEstado().subscribe(
       (res: any) => {
         this.listEstado = res;
-        this.ordenRep.FkEstado=1;
+        this.ordenRep.FkEstado = 1;
       },
       err => console.error(err)
     );
@@ -219,6 +219,7 @@ export class NuevaOrdenComponent implements OnInit {
   }
   tareaSeleccionada(tarea: any) {
     this.detalleOrden.FkTarea = tarea.PkTarea;
+    this.detalleOrden.Costo = tarea.Costo;
     document.getElementById("lblNombreTarea").innerHTML = tarea.Nombre;
     this.closeModal("ModalSelectTarea");
   }
@@ -228,7 +229,7 @@ export class NuevaOrdenComponent implements OnInit {
     if (this.ordenRep.FecRetiroEstimado == "" || this.ordenRep.FecRetiroEstimado == null) {
       Swal.fire({ title: "Debe seleccionar una fecha estimada de retiro.", icon: "warning" });
       return;
-    }   
+    }
     if (this.datePipe.transform(this.ordenRep.FecRetiroEstimado, 'yyyy-MM-dd') < this.datePipe.transform(this.date, 'yyyy-MM-dd')) {
       Swal.fire({ title: "La fecha de retiro debe ser mayor a la de emision.", icon: "warning" });
       return;
@@ -236,23 +237,23 @@ export class NuevaOrdenComponent implements OnInit {
     if (this.ordenRep.FkModelo == 0 || this.ordenRep.FkModelo == null) {
       Swal.fire({ title: "Debe seleccionar un modelo a reparar.", icon: "warning" });
       return;
-    }   
+    }
     //obtiene el id del cliente y se lo asigna a la orden
     this.ordenRep.FkCliente = this.idCliente;
     //Almacena datos orden
-    console.log("this.ordenRep",this.ordenRep.FkEstado)
+    console.log("this.ordenRep", this.ordenRep.FkEstado)
     this.ordenesService.GuardarOrdenRep(this.ordenRep).subscribe(
-        res => {
-          var result = Object.values(res);
-          if (result[0] != "0") {
-            this.idUltimaOR = result[0];
-            document.getElementById("btnGuardar").style.display = "none";
-            document.getElementById("btnNuevoMov").style.display = "inline-block";
-            Swal.fire({ title: "Orden de reparación guardada correctamente.", icon: "success" })
-          }
-        },
-        err => console.error(err)
-      )
+      res => {
+        var result = Object.values(res);
+        if (result[0] != "0") {
+          this.idUltimaOR = result[0];
+          document.getElementById("btnGuardar").style.display = "none";
+          document.getElementById("btnNuevoMov").style.display = "inline-block";
+          Swal.fire({ title: "Orden de reparación guardada correctamente.", icon: "success" })
+        }
+      },
+      err => console.error(err)
+    )
   }
 
   //Registra detalle orden
@@ -261,7 +262,7 @@ export class NuevaOrdenComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar al menos un repuesto o tarea.", icon: "warning" });
       return;
     }
-    
+
     if (this.detalleOrden.Cantidad == null) {
       this.detalleOrden.Cantidad = 0;
     }
@@ -281,7 +282,7 @@ export class NuevaOrdenComponent implements OnInit {
           var result = Object.values(res);
           if (result[0] == "OK") {
             this.closeModal('ModalMov');
-            this.obtenerDetallesOrden();
+            window.setTimeout(() => this.obtenerDetallesOrden(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
           }
         },
@@ -292,8 +293,8 @@ export class NuevaOrdenComponent implements OnInit {
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallesOrden();
+            this.closeModal('ModalMov');        
+            window.setTimeout(() => this.obtenerDetallesOrden(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
           }
         },
@@ -306,6 +307,9 @@ export class NuevaOrdenComponent implements OnInit {
     this.modalService.open(id);
   }
   closeModal(id: string) {
+    this.pageActualRep = 1;
+    this.pageActualTarea = 1;
+    this.pageActualDetalle = 1;
     this.modalService.close(id);
   }
 
@@ -318,6 +322,7 @@ export class NuevaOrdenComponent implements OnInit {
     this.detalleOrden.FkTarea = null;
     this.detalleOrden.FechaCreacion = null;
     this.detalleOrden.FkOrden = null;
+    this.detalleOrden.Costo = null;
     document.getElementById("lblNombreRepuesto").innerHTML = "";
     document.getElementById("lblNombreTarea").innerHTML = "";
   }
@@ -356,7 +361,7 @@ export class NuevaOrdenComponent implements OnInit {
         },
           err => console.error(err)
         );
-      } 
+      }
     })
   }
 

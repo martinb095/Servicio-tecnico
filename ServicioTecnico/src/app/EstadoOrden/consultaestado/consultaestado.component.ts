@@ -13,7 +13,7 @@ import { OrdenesReparacionService } from '../../services/ordenesreparacion.servi
 export class ConsultaestadoComponent implements OnInit {
 
   tel = '[5493537665239]';
-  mensaje = 'Hola, queria hacer una consulta respecto a mi orden de reparación.';
+  mensaje = 'Hola, queria hacer una consulta.';
 
   datosOrden: any = {
     PkOrdenRep: "",
@@ -47,6 +47,7 @@ export class ConsultaestadoComponent implements OnInit {
       (res: any) => {
         var valido = res.exist;
         if (valido == true) {
+          localStorage.setItem('ingresoDetalle', 'true');
           this.router.navigate(["/detalleestadoorden", this.datosOrden.PkOrdenRep])
         }
         else {

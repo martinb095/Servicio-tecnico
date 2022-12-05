@@ -62,7 +62,7 @@ export class ModificarOrdenComponent implements OnInit {
     CantidadStock: null,
     Observacion: null,
     NroSerie: null,
-    FkTipoRepuesto: null,  
+    FkTipoRepuesto: null,
     FkMarca: null,
     Activo: true,
   };
@@ -88,7 +88,7 @@ export class ModificarOrdenComponent implements OnInit {
     private tareaService: TareaService,
     private repuestoService: RepuestoService,
     private detalleOrdenService: DetalleOrdenService,
-    private router: Router,    
+    private router: Router,
     private modalService: ModalService
   ) { }
 
@@ -137,6 +137,10 @@ export class ModificarOrdenComponent implements OnInit {
         this.ordenRep.FecRetiroEstimado = this.datepipe.transform(this.ordenRep.FecRetiroEstimado, 'yyyy-MM-dd');
         this.ordenRep.FechaInicio = this.datepipe.transform(this.ordenRep.FechaInicio, 'yyyy-MM-dd');
         this.onSelectMarca(this.ordenRep.FkMarca);
+        
+        if (this.ordenRep.FkEstado == "5" || this.ordenRep.FkEstado == "4" || this.ordenRep.FkEstado == "3") {
+          document.getElementById("btnNuevoMov").style.display = 'none';
+        }
       },
       err => console.error(err)
     );
@@ -149,12 +153,11 @@ export class ModificarOrdenComponent implements OnInit {
   //----------------------
 
   obtenerDetallesOrden() {
-    this.listDetalleOrden = {};    
+    this.listDetalleOrden = {};
     //Trae los datos detalle de la orden
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(this.idOrdeRep).subscribe(
-      (res: any) => {       
-        console.log(res);
-        this.listDetalleOrden = res;     
+      (res: any) => {
+        this.listDetalleOrden = res;
       },
       err => console.error(err)
     );
@@ -178,7 +181,7 @@ export class ModificarOrdenComponent implements OnInit {
 
   obtenerRepuestos() {
     //Carga los repuestos con stock
-     this.listRepuesto = [];
+    this.listRepuesto = [];
     this.repuestoService.ObtenerRepuestos(0).subscribe(
       (res: any) => {
         this.listRepuesto = res;
@@ -237,7 +240,11 @@ export class ModificarOrdenComponent implements OnInit {
         });
   }
 
-  eliminarDetalleOrden(idDetalleOrden: number) {   
+  eliminarDetalleOrden(idDetalleOrden: number) {
+    if (this.ordenRep.FkEstado == "5" || this.ordenRep.FkEstado == "4" || this.ordenRep.FkEstado == "3") {
+      Swal.fire({ icon: 'warning', title: "No se puede eliminar movimientos con la orden en este estado." })
+      return;
+    }
     Swal.fire({
       title: '¿Desea eliminar el movimiento?',
       icon: 'question',
@@ -246,7 +253,7 @@ export class ModificarOrdenComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-        this.detalleOrdenService.EliminarDetalleOrden(idDetalleOrden).subscribe(res => {         
+        this.detalleOrdenService.EliminarDetalleOrden(idDetalleOrden).subscribe(res => {
           var rest = Object.values(res);
           if (rest[0] == "OK") {
             //Mensaje informando el eliminado     
@@ -256,7 +263,7 @@ export class ModificarOrdenComponent implements OnInit {
         },
           err => console.error(err)
         );
-      } 
+      }
     })
   }
 
@@ -302,33 +309,30 @@ export class ModificarOrdenComponent implements OnInit {
     this.detalleOrden.FkOrden = this.idOrdeRep;
     this.detalleOrden.FechaCreacion = this.datepipe.transform(this.date, "yyyy-MM-dd");
 
-    if (this.detalleOrden.PkDetalleOrden != null) {
-      this.detalleOrdenService.ActualizarDetalleOrden(this.detalleOrden.PkDetalleOrden, this.detalleOrden).subscribe(
-        res => {
-          var result = Object.values(res);
-          if (result[0] == "OK") {            
-            this.closeModal('ModalMov');
-            this.obtenerDetallesOrden();
-            Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
-          }
-        },
-        err => console.error(err)
-      )
-    } else {
-      this.detalleOrdenService.GuardarDetalleOrden(this.detalleOrden).subscribe(
-        res => {
-          var result = Object.values(res);
-          if (result[0] == "OK") {
-            document.getElementById("lblNombreRepuesto").innerHTML = "";
-            document.getElementById("lblNombreTarea").innerHTML = "";
-            this.closeModal('ModalMov');
-            this.obtenerDetallesOrden();
-            Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
-          }
-        },
-        err => console.error(err)
-      )
-    }
-
+    //if (this.detalleOrden.PkDetalleOrden != null) {
+    //  this.detalleOrdenService.ActualizarDetalleOrden(this.detalleOrden.PkDetalleOrden, this.detalleOrden).subscribe(
+    //    res => {
+    //      var result = Object.values(res);
+    //      if (result[0] == "OK") {
+    //        this.closeModal('ModalMov');
+    //        window.setTimeout(() => this.obtenerDetallesOrden(), 500);
+    //        Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+    //      }
+    //    },
+    //    err => console.error(err)
+    //  )
+    //} else {
+    this.detalleOrdenService.GuardarDetalleOrden(this.detalleOrden).subscribe(
+      res => {
+        var result = Object.values(res);
+        if (result[0] == "OK") {
+          this.closeModal('ModalMov');
+          window.setTimeout(() => this.obtenerDetallesOrden(), 500);
+          Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+        }
+      },
+      err => console.error(err)
+    )
+    //}
   }
 }

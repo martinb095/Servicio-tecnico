@@ -26,7 +26,7 @@ export class DetallePresupuestoService {
   }
   
   ActualizarDetallePresupuesto(id: number, updateDetallePresupuesto: DetallePresupuesto) {
-    return this.http.put(this.API_URI + "/detallepresupuesto/" + { id }, updateDetallePresupuesto);
+    return this.http.put(this.API_URI + "/detallepresupuesto/" + { id }, updateDetallePresupuesto); 
   }
 
 

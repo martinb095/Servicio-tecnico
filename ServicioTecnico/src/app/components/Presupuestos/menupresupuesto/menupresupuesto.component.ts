@@ -116,7 +116,7 @@ export class MenupresupuestoComponent implements OnInit {
     this.presupuestoService.obtenerPresupuesto(nroPresup).subscribe(
       (res: any) => {
         this.list = res;
-        console.log(this.list);
+     
         this.list.FechaCreacion = this.datePipe.transform(this.list.FechaCreacion, "dd-MM-yyyy");
         this.list.FechaVigencia = this.datePipe.transform(this.list.FechaVigencia, "dd-MM-yyyy");
         if (this.list.Confirmado == 1) {
@@ -137,8 +137,7 @@ export class MenupresupuestoComponent implements OnInit {
     //Trae los datos detalle de la orden
     this.informesService.ObtenerDetallePresupuestoDePresup(nroPresup).subscribe(
       (res: any) => {
-        this.listArray = res;
-        console.log(res);
+        this.listArray = res;       
         this.generarPdf(nroPresup);
       },
       err => console.error(err)

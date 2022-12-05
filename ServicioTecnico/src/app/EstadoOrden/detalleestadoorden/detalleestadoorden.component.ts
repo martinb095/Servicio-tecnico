@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { OrdenesReparacionService } from '../../services/ordenesreparacion.service'
-
 import { DetalleOrdenService } from '../../services/detalleorden.service';
 import { DetalleOrden } from 'src/app/models/detalleorden';
 
@@ -16,7 +16,7 @@ export class DetalleestadoordenComponent implements OnInit {
 
   tel = '[5493537665239]';
   mensaje = 'Hola, queria hacer una consulta respecto a mi orden de reparación.';
-  
+
   pageActualDetalle = 0;
   total = 0;
 
@@ -32,21 +32,27 @@ export class DetalleestadoordenComponent implements OnInit {
     private datePipe: DatePipe,
     private ordenesrepService: OrdenesReparacionService,
     private detalleOrdenService: DetalleOrdenService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
 
   ngOnInit() {
+    let valido = localStorage.getItem('ingresoDetalle');
+    if (valido != "true") {
+      this.router.navigate(['/consultaestado'])
+    }
+
     this.idOrden = +this.route.snapshot.paramMap.get('idOrden');
     this.GetDetalleOrden(this.idOrden);
-    this.GetDetalleRepOrden(this.idOrden);  
+    this.GetDetalleRepOrden(this.idOrden);
   }
 
 
   GetDetalleOrden(nroOrden: number) {
     this.ordenesrepService.ObtenerDatosOrdenRep(nroOrden).subscribe(
       (res: any) => {
-        this.ordenreparacion = res;   
+        this.ordenreparacion = res;
         //transforma las fechas a un formato para mostrar
         this.ordenreparacion.FechaInicio = this.datePipe.transform(this.ordenreparacion.FechaInicio, "dd-MM-yyyy");
         this.ordenreparacion.FecRetiroEstimado = this.datePipe.transform(this.ordenreparacion.FecRetiroEstimado, "dd-MM-yyyy");
@@ -71,18 +77,23 @@ export class DetalleestadoordenComponent implements OnInit {
       err => console.error(err)
     );
   }
-  
+
   GetDetalleRepOrden(nroOrden: number) {
-    this.listDetalleOrden = {};    
+    this.listDetalleOrden = {};
     //Trae los datos detalle de la orden
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
-      (res: any) => {       
-        this.listDetalleOrden = res;     
+      (res: any) => {
+        this.listDetalleOrden = res;
       },
       err => console.error(err)
     );
   }
 
+  volver() {
+    localStorage.setItem('ingresoDetalle', 'false');
+    this.router.navigate(['/consultaestado'])
+  }
 
-  
+
+
 }

@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class UsuarioController {
     getUsuarios(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT * FROM usuario where Activo = 1 order by nombre', (err, results) => {
+            database_1.default.query('SELECT us.PkUsuario, us.Nombre, us.Contrasenia, us.FkTipoUsuario, tu.TipoUsuario "Tipo", us.UltimoIngreso, us.Mail FROM usuario us left join tipousuario tu on tu.PkTipoUsuario =  us.FkTipoUsuario where us.Activo = 1 order by nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "usuario no encontrada." });
                 }
@@ -59,6 +59,7 @@ class UsuarioController {
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body, req.params.PkUsuario);
             yield database_1.default.query('update usuario set ? Where PkUsuario = ?', [req.body, req.params.PkUsuario]);
             res.json({ text: 'OK' });
         });

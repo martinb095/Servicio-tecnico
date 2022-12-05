@@ -4,13 +4,10 @@ import { ModalService } from 'src/app/_modal';
 import Swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
 
-import { PresupuestoService } from '../../../services/presupuesto.service';
-;
+import { PresupuestoService } from '../../../services/presupuesto.service';;
 import { DetallePresupuestoService } from '../../../services/detallepresupuesto.service';
-
 import { RepuestoService } from '../../../services/repuesto.service';
 import { Repuesto } from 'src/app/models/repuesto';
-
 import { TareaService } from '../../../services/tarea.service';
 
 @Component({
@@ -165,7 +162,7 @@ export class ModificarpresupuestoComponent implements OnInit {
     this.closeModal("ModalSelectRepuesto");
   }
 
-  GuardarDetallePresupuesto() {
+  GuardarDetallePresupuesto() {   
     if (this.detallePresupuesto.FkRepuesto == null) {
       Swal.fire({ title: "Debe seleccionar un repuesto.", icon: "warning" });
       return;
@@ -182,32 +179,30 @@ export class ModificarpresupuestoComponent implements OnInit {
       this.detallePresupuesto.Observacion = "";
     }
     this.detallePresupuesto.FkPresupuesto = this.idPresupuesto;
-
+   
     if (this.detallePresupuesto.PkDetallePresup != null) {
       this.detallePresupuestoService.ActualizarDetallePresupuesto(this.detallePresupuesto.PkDetallePresup, this.detallePresupuesto).subscribe(
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallePresupuesto();
+            window.setTimeout(() => this.obtenerDetallePresupuesto(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+            this.closeModal('ModalMov');
           }
-        },
-        err => console.error(err)
-      )
+        });
     } else {
       this.detallePresupuestoService.GuardarDetallePresupuesto(this.detallePresupuesto).subscribe(
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallePresupuesto();
+            window.setTimeout(() => this.obtenerDetallePresupuesto(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+            this.closeModal('ModalMov');
           }
         },
         err => console.error(err)
       )
-    }
+    }   
   }
 
 

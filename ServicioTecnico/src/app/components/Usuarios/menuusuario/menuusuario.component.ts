@@ -23,7 +23,7 @@ export class MenuusuarioComponent implements OnInit {
     Nombre: "",
     Contrasenia: "",
     FkTipoUsuario: 1,
-    UltimoIngreso: null,
+    //UltimoIngreso: null,
     Mail: "",
   };
 
@@ -52,9 +52,7 @@ export class MenuusuarioComponent implements OnInit {
     this.listUsuarios = [];
     this.usuarioService.ObtenerUsuario().subscribe(
       (res: any) => {
-        this.listUsuarios = res;
-        // console.log(moment(res.UltimoIngreso).utc().format('DD-MM-YYYY HH:mm:ss'));
-
+        this.listUsuarios = res;        
       },
       err => console.error(err)
     );
@@ -68,7 +66,7 @@ export class MenuusuarioComponent implements OnInit {
       Nombre: usuario.Nombre,
       Contrasenia: usuario.Contrasenia,
       FkTipoUsuario: usuario.FkTipoUsuario,
-      UltimoIngreso: usuario.UltimoIngreso,
+      //UltimoIngreso: usuario.UltimoIngreso,
       Mail: usuario.Mail,
     };
     this.passRepe = usuario.Contrasenia;
@@ -79,13 +77,12 @@ export class MenuusuarioComponent implements OnInit {
     this.usuario.Nombre = null;
     this.usuario.Contrasenia = null;
     this.usuario.FkTipoUsuario = null;
-    this.usuario.UltimoIngreso = null;
+    //this.usuario.UltimoIngreso = null;
     this.usuario.Mail = null;
     this.passRepe = null;
   }
 
-  GuardarUsuario() {
-   
+  GuardarUsuario() {   
     //Almacena usuario   
     if (this.usuario.Nombre == "" || this.usuario.Nombre == null) {
       Swal.fire({ title: "Debe ingresar un nombre.", icon: "error" });
@@ -94,8 +91,7 @@ export class MenuusuarioComponent implements OnInit {
     if (this.usuario.Contrasenia == "" || this.usuario.Contrasenia == null) {
       Swal.fire({ title: "Debe ingresar una contraseña.", icon: "error" });
       return;
-    }      
-   
+    }         
     if (this.passRepe != this.usuario.Contrasenia) {
       Swal.fire({ title: "Las contraseñas no son iguales.", icon: "error" });
       return;
@@ -103,7 +99,11 @@ export class MenuusuarioComponent implements OnInit {
     if (this.usuario.FkTipoUsuario == null) {
       Swal.fire({ title: "Debe seleccionar un tipo de usuario.", icon: "error" });
       return;
-    }   
+    }  
+    if (this.usuario.Mail == "" || this.usuario.Mail == null) {
+      Swal.fire({ title: "Debe ingresar un mail.", icon: "error" });
+      return;
+    }  
     this.usuarioService.GuardarUsuario(this.usuario).subscribe(
       res => {
         Swal.fire({ title: "Usuario guardado correctamente.", icon: "success" });
@@ -111,13 +111,32 @@ export class MenuusuarioComponent implements OnInit {
         this.ObtenerUsuarios();
       },
       err => console.error(err)
-    )
+    ) 
+   }
 
-
-  }
 
   ModificarUsuario() {
     //Almacena usuario     
+    if (this.usuario.Nombre == "" || this.usuario.Nombre == null) {
+      Swal.fire({ title: "Debe ingresar un nombre.", icon: "error" });
+      return;
+    }   
+    if (this.usuario.Contrasenia == "" || this.usuario.Contrasenia == null) {
+      Swal.fire({ title: "Debe ingresar una contraseña.", icon: "error" });
+      return;
+    }         
+    if (this.passRepe != this.usuario.Contrasenia) {
+      Swal.fire({ title: "Las contraseñas no son iguales.", icon: "error" });
+      return;
+    }   
+    if (this.usuario.FkTipoUsuario == null) {
+      Swal.fire({ title: "Debe seleccionar un tipo de usuario.", icon: "error" });
+      return;
+    }  
+    if (this.usuario.Mail == "" || this.usuario.Mail == null) {
+      Swal.fire({ title: "Debe ingresar un mail.", icon: "error" });
+      return;
+    }     
     this.usuarioService.ActualizarUsuario(this.usuario.PkUsuario, this.usuario).subscribe(
       res => {
         var result = Object.values(res);

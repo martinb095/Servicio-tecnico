@@ -36,7 +36,6 @@ class ProveedorController {
                     res.status(404).json({ text: "proveedores no encontrado" });
                 }
                 if (results) {
-                    console.log(results[0]);
                     return res.json(results[0]);
                 }
                 else {
@@ -63,7 +62,6 @@ class ProveedorController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
             yield database_1.default.query('INSERT INTO proveedor set ?', [req.body]);
             res.json({ text: 'OK' });
         });
@@ -71,7 +69,7 @@ class ProveedorController {
     //Para ver q nro esta eliminando
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('UPDATE proveedor set Activo = 0 WHERE PkProveedor = ?', req.params.PkCliente);
+            yield database_1.default.query('UPDATE proveedor set Activo = 0 WHERE PkProveedor = ?', req.params.PkProveedor);
             res.json({ text: 'OK' });
         });
     }
@@ -95,7 +93,6 @@ class ProveedorController {
             };
             yield database_1.default.query('update proveedor set ? Where PkProveedor = ?', [proveedor, req.params.PkProveedor]);
             res.json({ text: 'OK' });
-            // res.json({ text: 'actualizado cliente' + req.params.PkCliente });
         });
     }
 }

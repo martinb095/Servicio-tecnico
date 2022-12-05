@@ -25,8 +25,7 @@ class ProveedorController {
             if (err) {
                 res.status(404).json({ text: "proveedores no encontrado" });
             }
-            if (results) {
-                console.log(results[0]);
+            if (results) {                
                 return res.json(results[0]);
             } else {
                 return res.status(404).json({ text: "proveedores no encontrado" });
@@ -49,14 +48,14 @@ class ProveedorController {
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     public async create(req: Request, res: Response) {       
-        console.log(req.body);
+       
         await pool.query('INSERT INTO proveedor set ?', [req.body]);        
         res.json({ text: 'OK' });
     }
 
     //Para ver q nro esta eliminando
     public async delete(req: Request, res: Response) {
-        await pool.query('UPDATE proveedor set Activo = 0 WHERE PkProveedor = ?', req.params.PkCliente);
+        await pool.query('UPDATE proveedor set Activo = 0 WHERE PkProveedor = ?', req.params.PkProveedor);
         res.json({ text: 'OK' });
     }
 
@@ -77,10 +76,8 @@ class ProveedorController {
             'Depto': req.body.Calle,   
             'Activo': true 
         }       
-
         await pool.query('update proveedor set ? Where PkProveedor = ?', [proveedor, req.params.PkProveedor]);
-        res.json({ text: 'OK' });
-        // res.json({ text: 'actualizado cliente' + req.params.PkCliente });
+        res.json({ text: 'OK' });        
     }
 }
 

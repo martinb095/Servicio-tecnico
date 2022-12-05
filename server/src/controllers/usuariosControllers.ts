@@ -5,7 +5,7 @@ import pool from '../database';
 class UsuarioController {
 
     public async getUsuarios(req: Request, res: Response) {
-        pool.query('SELECT * FROM usuario where Activo = 1 order by nombre', (err: any, results: any) => {
+        pool.query('SELECT us.PkUsuario, us.Nombre, us.Contrasenia, us.FkTipoUsuario, tu.TipoUsuario "Tipo", us.UltimoIngreso, us.Mail FROM usuario us left join tipousuario tu on tu.PkTipoUsuario =  us.FkTipoUsuario where us.Activo = 1 order by nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "usuario no encontrada." });
             }
@@ -45,6 +45,7 @@ class UsuarioController {
     }
 
     public async update(req: Request, res: Response) {     
+        console.log(req.body, req.params.PkUsuario);
         await pool.query('update usuario set ? Where PkUsuario = ?',[req.body, req.params.PkUsuario]);       
         res.json({ text: 'OK' });
         

@@ -6,7 +6,7 @@ class OrdenesRepController {
 
     //listado de ordenes para mostrar en el menu ordenes
     public async getOrdenes(req: Request, res: Response) {
-        pool.query('Select Pkordenreparacion, cliente.Nombre as "Cliente", FecRetiroEstimado, estado.nombre as "Estado" from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente inner join estado on estado.PkEstado = ordenreparacion.FkEstado order by FecRetiroEstimado', (err: any, results: any) => {
+        pool.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, estado.nombre as "Estado" from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente inner join estado on estado.PkEstado = ordenreparacion.FkEstado order by FecRetiroEstimado', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "OR no encontrado" });
             }
@@ -50,9 +50,9 @@ class OrdenesRepController {
     public async getOrdenesFindByEstado(req: Request, res: Response) {
         let stringSQL: string = "";
         if (req.params.FkEstado != "T") {
-            stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
+            stringSQL = "Select Pkordenreparacion, concat(c.Nombre, ' ', c.Apellido) Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente WHERE FkEstado = ? order by FecRetiroEstimado Desc";
         } else {
-            stringSQL = "Select Pkordenreparacion, c.Nombre Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
+            stringSQL = "Select Pkordenreparacion, concat(c.Nombre, ' ', c.Apellido) Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado left join cliente c on c.PkCliente = OrR.FkCliente order by FecRetiroEstimado Desc";
         }
         pool.query(stringSQL, req.params.FkEstado, (err: any, results: any) => {
             if (err) {
@@ -68,7 +68,7 @@ class OrdenesRepController {
     }
 
     public async getOrdenesFindByNro(req: Request, res: Response) {
-        pool.query('Select OrR.Pkordenreparacion, cliente.Nombre as "Cliente", FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado inner join cliente on cliente.PkCliente = OrR.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err: any, results: any) => {
+        pool.query('Select OrR.Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado inner join cliente on cliente.PkCliente = OrR.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "OR no encontrado" });
             }
@@ -88,8 +88,7 @@ class OrdenesRepController {
         let FkCliente = parseInt(req.params.FkCliente);
         if (req.params.FkCliente > 0 && req.params.FkEstado > 0) {
             //En caso de que exista cliente y estado
-            pool.query('Select Pkordenreparacion, cliente.Nombre as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente WHERE ordenreparacion.FkCliente = ? and ordenreparacion.FkEstado = ? ', [FkCliente, FkEstado], (err: any, results: any) => {
-
+            pool.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion ore inner join cliente c on c.PkCliente = ore.FkCliente WHERE ordenreparacion.FkCliente = ? and ordenreparacion.FkEstado = ? ', [FkCliente, FkEstado], (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -101,7 +100,7 @@ class OrdenesRepController {
             });
         } else if (req.params.FkCliente > 0) {
             //En caso de que exista cliente
-            pool.query('Select Pkordenreparacion, cliente.Nombre as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente WHERE ordenreparacion.FkCliente = ?; ', FkCliente, (err: any, results: any) => {
+            pool.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente WHERE ordenreparacion.FkCliente = ?; ', FkCliente, (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -144,7 +143,6 @@ class OrdenesRepController {
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     public async create(req: Request, res: Response) {
-
         let ordenRep = {
             'FechaInicio': req.body.FechaInicio,
             'FecRetiroEstimado': req.body.FecRetiroEstimado,
@@ -153,32 +151,27 @@ class OrdenesRepController {
             'FkCliente': req.body.FkCliente,
             'FkEstado': req.body.FkEstado,
             'FkUsuario': req.body.FkUsuario,
+            'Observacion': req.body.Observacion,
         }
-
         //Registro la orden          
         await pool.query('INSERT INTO ordenreparacion SET ?', [ordenRep], function (err: any, resultInserOrd: any) {
             if (err) throw err;
             const ultimaOrden = resultInserOrd.insertId;
             res.json({ message: ultimaOrden });
         });
-
     }
 
-    //Para ver q nro esta eliminando
-    // public async delete(req: Request, res: Response) {
-    //     await pool.query('DELETE FROM ordenreparacion WHERE PkOrdenreparacion = ?', [req.params.PkOrdenRep]);
-    // }
-    public async delete(req: Request, res: Response) {   
-        console.log(req.params.PkOrden); 
+    //Para ver q nro esta eliminando 
+    public async delete(req: Request, res: Response) {
         const stringSQL = "call eliminarOrden(?);";
         pool.query(stringSQL, [req.params.PkOrden], function (err: any, results: any) {
-            if (err) throw err;                  
+            if (err) throw err;
             try {
                 return res.json({ text: 'OK' });
             } catch (error) {
                 return res.status(200).json({ exist: false });
             }
-        });        
+        });
     }
 
 
@@ -192,35 +185,26 @@ class OrdenesRepController {
             'FkCliente': req.body.FkCliente,
             'FkEstado': req.body.FkEstado,
             'FkUsuario': req.body.FkUsuario,
-        }
-        console.log(ordenRep, req.params.PkOrdenRep);
+            'Observacion': req.body.Observacion,
+        }        
         await pool.query('update ordenreparacion set ? Where PkOrdenreparacion = ?', [ordenRep, req.params.PkOrdenRep], function (err: Error, res: Response) {
             if (err) throw err;
         });
-
         res.json({ text: 'OK' });
     }
 
     //Actuliza unicamente el estado
-    public updateEstado(req: Request, res: Response) {
-        // pool.query('UPDATE ordenreparacion SET FkEstado = ? WHERE PkOrdenreparacion = ?;', [req.body.FkEstado, req.params.PkOrdenRep], function (err: Error, resSql: Response) {
-        //     if (err) {
-        //         return res.status(200).json({ exist: false });
-        //     };
-        //     return res.status(200).json({ exist: true });
-        // });
-        console.log(req.params); 
-        console.log("req.body"); 
-        console.log(req.body); 
+    public updateEstado(req: Request, res: Response) {       
+        console.log([req.body.PkOrdenRep, req.body.FkEstado, req.body.Observacion]); 
         const stringSQL = "call actualizarEstadoOrden(?,?,?);";
         pool.query(stringSQL, [req.body.PkOrdenRep, req.body.FkEstado, req.body.Observacion], function (err: any, results: any) {
-            if (err) throw err;                  
+            if (err) throw err;
             try {
                 return res.json({ text: 'OK' });
             } catch (error) {
                 return res.status(200).json({ exist: false });
             }
-        });        
+        });
     }
 
     //Valida que la orden ingresada por el cliente sea valida

@@ -145,7 +145,6 @@ export class MenuproveedorComponent implements OnInit {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;
     }
-    console.log(this.proveedor);
     //Almacena proveedor   
     this.proveedorService.GuardarProveedor(this.proveedor).subscribe(
       res => {

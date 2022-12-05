@@ -101,7 +101,7 @@ export class NuevopresupuestoComponent implements OnInit {
       res => {
         var result = Object.values(res);
         if (result[0] != "0") {
-          this.idUltimoPres = result[0];        
+          this.idUltimoPres = result[0];
           document.getElementById("btnGuardar").style.display = "none";
           document.getElementById("btnNuevoMov").style.display = "inline-block";
           Swal.fire({ title: "Presupuesto guardado correctamente.", icon: "success" })
@@ -169,7 +169,7 @@ export class NuevopresupuestoComponent implements OnInit {
   }
 
   repuestoSeleccionado(repuesto: any) {
-    this.detallePresupuesto.FkRepuesto = repuesto.PkRepuesto;  
+    this.detallePresupuesto.FkRepuesto = repuesto.PkRepuesto;
     this.detallePresupuesto.Precio = repuesto.PrecioVenta;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");
@@ -198,9 +198,9 @@ export class NuevopresupuestoComponent implements OnInit {
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallePresupuesto();
+            window.setTimeout(() => this.obtenerDetallePresupuesto(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+            this.closeModal('ModalMov');
           }
         },
         err => console.error(err)
@@ -210,14 +210,15 @@ export class NuevopresupuestoComponent implements OnInit {
         res => {
           var result = Object.values(res);
           if (result[0] == "OK") {
-            this.closeModal('ModalMov');
-            this.obtenerDetallePresupuesto();
+            window.setTimeout(() => this.obtenerDetallePresupuesto(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
+            this.closeModal('ModalMov');
           }
         },
         err => console.error(err)
       )
     }
+
   }
 
 

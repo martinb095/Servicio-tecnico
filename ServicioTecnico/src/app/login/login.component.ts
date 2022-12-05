@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       'Contrasenia': null,
       'PkUsuario': null,
       'FkTipoUsuario': null,
-      'UltimoIngreso': null,
+      //'UltimoIngreso': null,
       'Mail': null,
     };
     this.datosMail = {
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/menuordenrep']);
         }
         else {
-          Swal.fire({ icon: 'error', title: "El usuario ingresado no es valido." })
+          Swal.fire({ icon: 'error', title: "Los datos ingresados no son validos." })
         }
       },
       err => console.error(err)
