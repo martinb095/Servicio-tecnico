@@ -16,7 +16,6 @@ class ClienteController {
     //listado de clientes
     getClientes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            //pool.query('Select * from cliente where Activo=1', (err: any, results: any) => {
             database_1.default.query('Select c.PkCliente, c.Nombre, c.Telefono, c.FkCiudad, c.Calle, c.Numero, c.Depto, c.Piso, c.Mail, c.Contrasenia, ciu.FkProvincia as "FkProv", c.Apellido from cliente c left join ciudad ciu on ciu.PkCiudad=c.FkCiudad where Activo=1 order by nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "clientes no encontrado" });

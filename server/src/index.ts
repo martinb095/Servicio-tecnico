@@ -25,6 +25,7 @@ import informesRoutes from './routes/informesRoutes';
 import rubrosRoutes from './routes/rubrosRoutes';
 import presupuestosRoutes from './routes/presupuestosRoutes';
 import detallePresupuestoRoutes from './routes/detallepresupuesto';
+import excelRoutes from './routes/excelRoutes';
 
 class Server {
 
@@ -71,7 +72,7 @@ class Server {
         this.app.use('/estados/', estadosRoutes); 
         this.app.use('/presupuestos/', presupuestosRoutes);  
         this.app.use('/detallepresupuesto/', detallePresupuestoRoutes);  
-        
+        this.app.use('/excel/', excelRoutes);  
     }
 
     start(): void {

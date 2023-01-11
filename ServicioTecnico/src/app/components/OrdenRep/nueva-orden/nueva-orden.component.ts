@@ -86,6 +86,7 @@ export class NuevaOrdenComponent implements OnInit {
     Costo: null,
     Observacion: "",
   };
+
   date = new Date();
   idUltimaOR = 0;
   idultimoRep = 0;
@@ -93,6 +94,7 @@ export class NuevaOrdenComponent implements OnInit {
   selectedMarca = 0;
   selectedProducto = 0;
   idCliente = 0;
+  totalOrden = 0;
 
   pageActualRep: number = 1;
   pageActualTarea: number = 1;
@@ -172,8 +174,10 @@ export class NuevaOrdenComponent implements OnInit {
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(this.idUltimaOR).subscribe(
       (res: any) => {
         this.listDetalleOrden = res;
-        console.log("Lleno");
-        console.log(this.listDetalleOrden);
+        this.totalOrden=0;
+        for (let i = 0; i < this.listDetalleOrden.length; i++) {        
+          this.totalOrden += this.listDetalleOrden[i].Total;
+        }
       },
       err => console.error(err)
     );
@@ -240,8 +244,7 @@ export class NuevaOrdenComponent implements OnInit {
     }
     //obtiene el id del cliente y se lo asigna a la orden
     this.ordenRep.FkCliente = this.idCliente;
-    //Almacena datos orden
-    console.log("this.ordenRep", this.ordenRep.FkEstado)
+    //Almacena datos orden   
     this.ordenesService.GuardarOrdenRep(this.ordenRep).subscribe(
       res => {
         var result = Object.values(res);

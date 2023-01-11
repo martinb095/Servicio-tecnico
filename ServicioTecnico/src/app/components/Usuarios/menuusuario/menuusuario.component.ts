@@ -9,6 +9,8 @@ import Swal from 'sweetalert2'
 import { Usuario } from 'src/app/models/usuario';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
+import { ExcelService } from 'src/app/services/excel.service';
+
 @Component({
   selector: 'app-menuusuario',
   templateUrl: './menuusuario.component.html',
@@ -17,6 +19,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class MenuusuarioComponent implements OnInit {
 
   listUsuarios: Usuario[] = [];
+  listExcel: any[] = [];
 
   usuario: Usuario = {
     PkUsuario: 0,
@@ -36,7 +39,8 @@ export class MenuusuarioComponent implements OnInit {
     private modalService: ModalService,
     private usuarioService: UsuarioService,
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private excelService: ExcelService
   ) { }
 
   ngOnInit() {
@@ -171,8 +175,16 @@ export class MenuusuarioComponent implements OnInit {
     })
   }
 
+
   exportexcel() {
-    this.sharedService.exportexcel("Usuarios", this.listUsuarios);
+    this.listExcel = [];
+    this.excelService.obtenerExcelUsuarios().subscribe(
+      (res: any) => {
+        this.listExcel = res;
+        this.sharedService.exportexcel("Usuarios", this.listExcel);
+      },
+      err => console.error(err)
+    );
   }
 
   openModal(id: string) {

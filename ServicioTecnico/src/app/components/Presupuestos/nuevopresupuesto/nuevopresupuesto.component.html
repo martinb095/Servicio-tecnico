@@ -58,21 +58,23 @@
 
     <div class="row">
         <div class="col-md-12 ">
-            <button type="button" id="btnNuevoMov" class="btn waves-effect waves-light btn-info float-right" (click)="SetNull();openModal('ModalMov');">Nuevo movimiento</button>
+            <button type="button" id="btnNuevoMov" style="display: none" class="btn waves-effect waves-light btn-info float-right" (click)="SetNull();openModal('ModalMov');">Nuevo movimiento</button>
             <table class="table table-bordered table-striped" id="idTableDetalle">
                 <thead>
                     <tr>
                         <th width="35%">Tarea</th>
-                        <th width="34%">Repuesto</th>
+                        <th width="7%">Costo $</th>
+                        <th width="31%">Repuesto</th>
                         <th width="10%">Cantidad</th>
                         <th width="10%">Precio $</th>
-                        <th width="10%">Total $</th>
+                        <th width="13%">Subtotal $</th>
                         <th width="1%">Acción</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="listDetallePresupuesto.length">
                     <tr *ngFor="let detallepresupuesto of listDetallePresupuesto | paginate: {id: 'pagDetPres', itemsPerPage: 5, currentPage: pageActualDetalle}; let i = index">
                         <td>{{detallepresupuesto.FkTarea}} - {{detallepresupuesto.Tarea}} </td>
+                        <td>{{detallepresupuesto.Costo}}</td>
                         <td>{{detallepresupuesto.FkRepuesto}} - {{detallepresupuesto.Repuesto}} </td>
                         <td>{{detallepresupuesto.Cantidad}}</td>
                         <td>{{detallepresupuesto.Precio}}</td>
@@ -84,6 +86,7 @@
                     </tr>
                 </tbody>
             </table>
+            <h4 class="text-right">Total presupuesto: $ {{totalPresup}}</h4>
             <div class="dataTables_paginate paging_simple_numbers"> <span>
                             <pagination-controls id="pagDetPres" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualDetalle = $event"></pagination-controls>
                         </span>

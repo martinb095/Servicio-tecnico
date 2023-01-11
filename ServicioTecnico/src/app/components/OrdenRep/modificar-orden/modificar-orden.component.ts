@@ -40,6 +40,7 @@ export class ModificarOrdenComponent implements OnInit {
   listRepuesto: Repuesto[] = [];
   listDetOrden: DetalleOrden[] = [];
 
+  totalOrden = 0;
   selectedMarca = 0;
   selectedProducto = 0;
   date = new Date();
@@ -156,8 +157,12 @@ export class ModificarOrdenComponent implements OnInit {
     this.listDetalleOrden = {};
     //Trae los datos detalle de la orden
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(this.idOrdeRep).subscribe(
-      (res: any) => {
+      (res: any) => {     
         this.listDetalleOrden = res;
+        this.totalOrden=0;
+        for (let i = 0; i < this.listDetalleOrden.length; i++) {     
+          this.totalOrden += this.listDetalleOrden[i].Total;
+        }
       },
       err => console.error(err)
     );

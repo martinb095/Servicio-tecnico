@@ -17,6 +17,7 @@ import { TareaService } from '../../../services/tarea.service';
 })
 export class ModificarpresupuestoComponent implements OnInit {
 
+  totalPresup: number = 0;
   listTarea: any[] = [];
   pageActualDetalle: number = 1;
   pageActualTarea: number = 1;
@@ -59,6 +60,10 @@ export class ModificarpresupuestoComponent implements OnInit {
     this.detallePresupuestoService.ObtenerDetallePresupuestoDePresup(this.idPresupuesto).subscribe(
       (res: any) => {
         this.listDetallePresupuesto = res;
+        this.totalPresup = 0;
+        for (let i = 0; i < this.listDetallePresupuesto.length; i++) {
+          this.totalPresup += this.listDetallePresupuesto[i].Total;
+        }
       },
       err => console.error(err)
     );
@@ -107,6 +112,7 @@ export class ModificarpresupuestoComponent implements OnInit {
     this.detallePresupuesto.Precio = detallePresupuestoMod.Precio;
     this.detallePresupuesto.FkTarea = detallePresupuestoMod.FkTarea;
     this.detallePresupuesto.FkPresupuesto = detallePresupuestoMod.FkPresupuesto;
+    this.detallePresupuesto.Costo = detallePresupuestoMod.Costo;
     document.getElementById("lblNombreRepuesto").innerHTML = detallePresupuestoMod.Repuesto;
     document.getElementById("lblNombreTarea").innerHTML = detallePresupuestoMod.Tarea;
     this.openModal("ModalMov");
@@ -120,6 +126,7 @@ export class ModificarpresupuestoComponent implements OnInit {
     this.detallePresupuesto.Precio = null;
     this.detallePresupuesto.FkTarea = null;
     this.detallePresupuesto.FkPresupuesto = null;
+    this.detallePresupuesto.Costo = null;
     document.getElementById("lblNombreRepuesto").innerHTML = "";
     document.getElementById("lblNombreTarea").innerHTML = "";
   }
@@ -162,7 +169,7 @@ export class ModificarpresupuestoComponent implements OnInit {
     this.closeModal("ModalSelectRepuesto");
   }
 
-  GuardarDetallePresupuesto() {   
+  GuardarDetallePresupuesto() {
     if (this.detallePresupuesto.FkRepuesto == null) {
       Swal.fire({ title: "Debe seleccionar un repuesto.", icon: "warning" });
       return;
@@ -179,7 +186,7 @@ export class ModificarpresupuestoComponent implements OnInit {
       this.detallePresupuesto.Observacion = "";
     }
     this.detallePresupuesto.FkPresupuesto = this.idPresupuesto;
-   
+
     if (this.detallePresupuesto.PkDetallePresup != null) {
       this.detallePresupuestoService.ActualizarDetallePresupuesto(this.detallePresupuesto.PkDetallePresup, this.detallePresupuesto).subscribe(
         res => {
@@ -202,7 +209,7 @@ export class ModificarpresupuestoComponent implements OnInit {
         },
         err => console.error(err)
       )
-    }   
+    }
   }
 
 

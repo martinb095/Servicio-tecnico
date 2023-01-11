@@ -7,7 +7,6 @@ class ClienteController {
    
     //listado de clientes
     public async getClientes(req: Request, res: Response) {
-        //pool.query('Select * from cliente where Activo=1', (err: any, results: any) => {
         pool.query('Select c.PkCliente, c.Nombre, c.Telefono, c.FkCiudad, c.Calle, c.Numero, c.Depto, c.Piso, c.Mail, c.Contrasenia, ciu.FkProvincia as "FkProv", c.Apellido from cliente c left join ciudad ciu on ciu.PkCiudad=c.FkCiudad where Activo=1 order by nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "clientes no encontrado" });

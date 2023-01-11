@@ -28,6 +28,7 @@ const informesRoutes_1 = __importDefault(require("./routes/informesRoutes"));
 const rubrosRoutes_1 = __importDefault(require("./routes/rubrosRoutes"));
 const presupuestosRoutes_1 = __importDefault(require("./routes/presupuestosRoutes"));
 const detallepresupuesto_1 = __importDefault(require("./routes/detallepresupuesto"));
+const excelRoutes_1 = __importDefault(require("./routes/excelRoutes"));
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -68,6 +69,7 @@ class Server {
         this.app.use('/estados/', estadosRoutes_1.default);
         this.app.use('/presupuestos/', presupuestosRoutes_1.default);
         this.app.use('/detallepresupuesto/', detallepresupuesto_1.default);
+        this.app.use('/excel/', excelRoutes_1.default);
     }
     start() {
         this.app.disable('etag');

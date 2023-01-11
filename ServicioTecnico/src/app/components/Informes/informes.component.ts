@@ -22,10 +22,10 @@ import { Repuesto } from 'src/app/models/repuesto';
 })
 export class InformesComponent implements OnInit {
 
-  time: any[] = [];
-  humidity: any[] = [];
-  pressure: any[] = [];
-  temperature: any[] = [];
+  // time: any[] = [];
+  // humidity: any[] = [];
+  // pressure: any[] = [];
+  // temperature: any[] = [];
   chart: any = [];
 
   listRepuesto: Repuesto[] = [];
@@ -39,6 +39,7 @@ export class InformesComponent implements OnInit {
   ran: string;
   repdesde: number = 1;
   rephasta: number = 99999;
+  date = new Date();
 
   constructor(
     private datePipe: DatePipe,
@@ -92,7 +93,7 @@ export class InformesComponent implements OnInit {
     let labels = [];
     let dataCant = [];
     this.informeService.obtenerClientesTop(this.filtro).subscribe(
-      (res: any) => {       
+      (res: any) => {
         for (let i = 0; i < res.length; i++) {
           labels.push(res[i].FkCliente + " - " + res[i].Nombre);
           dataCant.push(res[i].Cantidad);
@@ -238,7 +239,7 @@ export class InformesComponent implements OnInit {
     this.informeService.StockRepuestos(this.filtro).subscribe(
       (res: any) => {
         this.list = res[0];
-        var encabezado: string[] = ['Nro.', 'Nombre', 'Stock', 'Precio Costo', 'Precio Venta'];
+        var encabezado: string[] = ['Nro.', 'Nombre', 'Stock', 'Precio Costo $', 'Precio Venta $'];
         this.createpdf(this.list, 'Software Marbal - Stock de repuestos', encabezado);
         this.closeModal('ModalStockRep')
       },
@@ -267,7 +268,7 @@ export class InformesComponent implements OnInit {
           estado = "entregadas.";
         }
         this.list = res[0];
-        var encabezado: string[] = ['Nro', 'FechaInicio', 'FechaRetiro', 'Marca', 'Modelo', 'Cliente'];
+        var encabezado: string[] = ['Nro', 'Fecha Inicio', 'Fecha Retiro', 'Marca', 'Modelo', 'Cliente'];
 
         this.createpdf(this.list, 'Software Marbal - Ordenes de reparaciones ' + estado, encabezado);
         this.closeModal('ModalInfOrden')
@@ -282,7 +283,7 @@ export class InformesComponent implements OnInit {
     this.informeService.ClientesMasOrdenes().subscribe(
       (res: any) => {
         this.list = res;
-        var encabezado: string[] = ['Nro', 'Nombre', 'Apellido', 'Telefono', 'Mail', 'Cantidad'];
+        var encabezado: string[] = ['Nro', 'Nombre', 'Apellido', 'Teléfono', 'Mail', 'Cantidad'];
         this.createpdf(this.list, 'Software Marbal - Clientes con mas ordenes', encabezado);
       },
       err => console.error(err)
@@ -342,8 +343,6 @@ export class InformesComponent implements OnInit {
     this.modalService.close(id);
   }
 
-
-
   async createpdf(list: any[], titulo: string, encabezado: string[]) {
     var dd = {
       styles: {
@@ -354,11 +353,33 @@ export class InformesComponent implements OnInit {
           alignment: 'center',
           margin: [20, 20],
         },
+      },   
+      footer: function (currentPage, pageCount) {
+        return {
+            table: {
+                widths: '*',
+                body: [
+                    [
+                        { text: "Página " + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'normalText', margin: [20, 20, 50, 20], aligment: 'left' }
+                    ]
+                ]
+            },
+            layout: 'noBorders'
+        };
       },
       content: [
         {
-          image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png")
+          columns: [
+            {
+              image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png"),
+            },
+            {
+              width: 'auto',
+              text: "Fecha emisión: " + this.datePipe.transform(this.date, "dd-MM-yyyy"), alignment: 'right', bold: true,
+            }
+          ]
         },
+
         { text: titulo, style: 'header' },
         this.table(list, encabezado)
       ],

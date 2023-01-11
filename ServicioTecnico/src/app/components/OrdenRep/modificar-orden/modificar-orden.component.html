@@ -100,10 +100,10 @@
                     <tr>
                         <th width="35%">Tarea</th>
                         <th width="7%">Costo $</th>
-                        <th width="35%">Repuesto</th>
+                        <th width="32%">Repuesto</th>
                         <th width="7%">Precio $</th>
                         <th width="7%">Cantidad</th>
-                        <th width="7%">Total $</th>
+                        <th width="10%">Subtotal $</th>
                         <th width="2%">Acción</th>
                     </tr>
                 </thead>
@@ -122,6 +122,7 @@
                     </tr>
                 </tbody>
             </table>
+            <h4 class="text-right">Total orden: $ {{totalOrden}}</h4>
             <div class="dataTables_paginate paging_simple_numbers">
                 <span>
                         <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualDetalle = $event"></pagination-controls>

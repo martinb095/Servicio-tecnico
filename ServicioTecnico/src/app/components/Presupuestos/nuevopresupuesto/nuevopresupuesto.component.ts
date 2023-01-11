@@ -19,6 +19,7 @@ import { ClienteService } from '../../../services/cliente.service';
 })
 export class NuevopresupuestoComponent implements OnInit {
 
+  totalPresup: number = 0;
   listTarea: any[] = [];
   pageActualDetalle: number = 1;
   pageActualTarea: number = 1;
@@ -33,8 +34,8 @@ export class NuevopresupuestoComponent implements OnInit {
   pageActualProv: number = 1;
   listCliente: Cliente[] = [];
   idUltimoPres: number = 1;
-  constructor(
 
+  constructor(
     private modalService: ModalService,
     private datePipe: DatePipe,
     private presupuestoService: PresupuestoService,
@@ -83,6 +84,10 @@ export class NuevopresupuestoComponent implements OnInit {
     this.detallePresupuestoService.ObtenerDetallePresupuestoDePresup(this.idUltimoPres).subscribe(
       (res: any) => {
         this.listDetallePresupuesto = res;
+        this.totalPresup = 0;
+        for (let i = 0; i < this.listDetallePresupuesto.length; i++) {
+          this.totalPresup += this.listDetallePresupuesto[i].Total;
+        }
       },
       err => console.error(err)
     );
@@ -121,6 +126,7 @@ export class NuevopresupuestoComponent implements OnInit {
     this.detallePresupuesto.Precio = detallePresupuestoMod.Precio;
     this.detallePresupuesto.FkTarea = detallePresupuestoMod.FkTarea;
     this.detallePresupuesto.FkPresupuesto = detallePresupuestoMod.FkPresupuesto;
+    this.detallePresupuesto.Costo = detallePresupuestoMod.Costo;
     document.getElementById("lblNombreRepuesto").innerHTML = detallePresupuestoMod.Repuesto;
     document.getElementById("lblNombreTarea").innerHTML = detallePresupuestoMod.Tarea;
     this.openModal("ModalMov");
@@ -134,6 +140,7 @@ export class NuevopresupuestoComponent implements OnInit {
     this.detallePresupuesto.Precio = null;
     this.detallePresupuesto.FkTarea = null;
     this.detallePresupuesto.FkPresupuesto = null;
+    this.detallePresupuesto.Costo = null;
     document.getElementById("lblNombreRepuesto").innerHTML = "";
     document.getElementById("lblNombreTarea").innerHTML = "";
   }

@@ -8,6 +8,7 @@ import { Proveedor } from 'src/app/models/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
 
 import { CiudadService } from 'src/app/services/ciudad.service';
+import { ExcelService } from 'src/app/services/excel.service';
 
 @Component({
   selector: 'app-menuproveedor',
@@ -16,6 +17,8 @@ import { CiudadService } from 'src/app/services/ciudad.service';
 })
 export class MenuproveedorComponent implements OnInit {
 
+  expression: RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
+  listExcel: any[] = [];
   listProveedor: Proveedor[] = [];
   listProvincias: any[] = [];
   listCiudades: any[] = [];
@@ -48,7 +51,8 @@ export class MenuproveedorComponent implements OnInit {
     private proveedorService: ProveedorService,
     private ciudadService: CiudadService,
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private excelService: ExcelService
   ) { }
 
   ngOnInit() {
@@ -145,6 +149,17 @@ export class MenuproveedorComponent implements OnInit {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;
     }
+    if (this.proveedor.Mail != "") {
+      const result: boolean = this.expression.test(this.proveedor.Mail);
+      if (result == false) {
+        Swal.fire({ title: "El formato del mail no es el correcto.", icon: "warning" });
+        return;
+      }
+    }
+    if (this.proveedor.Cuit.length != 11) {
+      Swal.fire({ title: "El formato del cuit no es valido.", icon: "warning" });
+      return;
+    }
     //Almacena proveedor   
     this.proveedorService.GuardarProveedor(this.proveedor).subscribe(
       res => {
@@ -189,6 +204,19 @@ export class MenuproveedorComponent implements OnInit {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;
     }
+    if (this.proveedor.Mail != "") {
+      const result: boolean = this.expression.test(this.proveedor.Mail);
+      if (result == false) {
+        Swal.fire({ title: "El formato del mail no es válido.", icon: "warning" });
+        return;
+      }
+    }
+    if (this.proveedor.Cuit != "") {
+      if (this.proveedor.Cuit.length != 11) {
+        Swal.fire({ title: "El formato del cuit no es válido.", icon: "warning" });
+        return;
+      }
+    }
     this.proveedorService.ActualizarProveedor(this.proveedor.PkProveedor, this.proveedor).subscribe(
       res => {
         var result = Object.values(res);
@@ -230,6 +258,14 @@ export class MenuproveedorComponent implements OnInit {
   }
 
   exportexcel() {
-    this.sharedService.exportexcel("Proveedores", this.listProveedor);
+    this.listExcel = [];
+    this.excelService.obtenerExcelProveedores().subscribe(
+      (res: any) => {
+        this.listExcel = res;
+        this.sharedService.exportexcel("Proveedores", this.listExcel);
+      },
+      err => console.error(err)
+    );
   }
+
 }

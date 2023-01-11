@@ -8,8 +8,7 @@ import { Cliente } from 'src/app/models/cliente';
 import { ClienteService } from 'src/app/services/cliente.service';
 
 import { CiudadService } from 'src/app/services/ciudad.service';
-import { Ciudad } from 'src/app/models/ciudad';
-
+import { ExcelService } from 'src/app/services/excel.service';
 
 @Component({
   selector: 'app-menu-cliente',
@@ -18,6 +17,7 @@ import { Ciudad } from 'src/app/models/ciudad';
 })
 export class MenuClienteComponent implements OnInit {
 
+  listExcel: any[] = [];
   listCliente: Cliente[] = [];
   listProvincias: any[] = [];
   listCiudades: any[] = [];
@@ -51,7 +51,8 @@ export class MenuClienteComponent implements OnInit {
     private clienteService: ClienteService,
     private ciudadService: CiudadService,
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private excelService: ExcelService
   ) { }
 
   ngOnInit() {
@@ -241,6 +242,13 @@ export class MenuClienteComponent implements OnInit {
   }
 
   exportexcel() {
-    this.sharedService.exportexcel("Clientes", this.listCliente);
+    this.listExcel = [];
+    this.excelService.obtenerExcelProveedores().subscribe(
+      (res: any) => {
+        this.listExcel = res;
+        this.sharedService.exportexcel("Clientes", this.listExcel);
+      },
+      err => console.error(err)
+    );
   }
 }
