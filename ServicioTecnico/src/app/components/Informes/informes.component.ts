@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 import { EstadoService } from '../../services/estado.service';
-import { Estado } from '../../models/estado';
 
 import { InformesService } from 'src/app/services/informes.service';
 
@@ -22,10 +21,6 @@ import { Repuesto } from 'src/app/models/repuesto';
 })
 export class InformesComponent implements OnInit {
 
-  // time: any[] = [];
-  // humidity: any[] = [];
-  // pressure: any[] = [];
-  // temperature: any[] = [];
   chart: any = [];
 
   listRepuesto: Repuesto[] = [];
@@ -85,7 +80,6 @@ export class InformesComponent implements OnInit {
     this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
     this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   }
-
 
   ObtenerGraficoClientesTop() {
     this.filtro.FechaDesde = this.fechadesde;
@@ -180,6 +174,7 @@ export class InformesComponent implements OnInit {
     this.filtro.FechaHasta = this.fechahasta;
     this.list = [];
     let labels = [];
+    let totalCantidad = 0; 
     this.informeService.ordenesRepEstados(this.filtro).subscribe(
       (res: any) => {
         for (let i = 0; i < res.length; i++) {
@@ -207,9 +202,11 @@ export class InformesComponent implements OnInit {
             default:
               break;
           }
+          totalCantidad += res[i].Cantidad; 
         }
+        const porcentajes = this.list.map(cantidad => (cantidad / totalCantidad) * 100);
         const data = {
-          labels: labels,
+          labels: labels.map((label, index) => `${label} (${porcentajes[index].toFixed(2)}%)`), 
           datasets: [{
             data: this.list,
             backgroundColor: [
@@ -240,7 +237,7 @@ export class InformesComponent implements OnInit {
       (res: any) => {
         this.list = res[0];
         var encabezado: string[] = ['Nro.', 'Nombre', 'Stock', 'Precio Costo $', 'Precio Venta $'];
-        this.createpdf(this.list, 'Software Marbal - Stock de repuestos', encabezado);
+        this.createpdfStock(this.list, 'Software Marbal - Stock de repuestos', encabezado);
         this.closeModal('ModalStockRep')
       },
       err => console.error(err)
@@ -254,24 +251,25 @@ export class InformesComponent implements OnInit {
     this.filtro.FkEstado = this.idEstado;
     this.informeService.OrdenesFechas(this.filtro).subscribe(
       (res: any) => {
-
         var estado: string;
         if (this.idEstado == 1) {
-          estado = "pendientes.";
+          estado = " pendientes.";
         } else if (this.idEstado == 2) {
-          estado = "reparando.";
+          estado = " reparando.";
         } else if (this.idEstado == 3) {
-          estado = "reparadas.";
+          estado = " reparadas.";
         } else if (this.idEstado == 4) {
-          estado = "canceladas.";
+          estado = " canceladas.";
         } else if (this.idEstado == 5) {
-          estado = "entregadas.";
+          estado = " entregadas.";
+        } else {
+          estado = ".";
         }
         this.list = res[0];
         var encabezado: string[] = ['Nro', 'Fecha Inicio', 'Fecha Retiro', 'Marca', 'Modelo', 'Cliente'];
 
-        this.createpdf(this.list, 'Software Marbal - Ordenes de reparaciones ' + estado, encabezado);
-        this.closeModal('ModalInfOrden')
+        this.createpdf(this.list, 'Software Marbal - Ordenes de reparaciones' + estado, encabezado);
+        this.closeModal('ModalInfOrden');
       },
       err => console.error(err)
     );
@@ -290,7 +288,6 @@ export class InformesComponent implements OnInit {
     );
   }
 
-
   obtenerRepuestos() {
     //Carga los repuestos con stock
     this.listRepuesto = [];
@@ -302,11 +299,10 @@ export class InformesComponent implements OnInit {
     );
   }
 
-
   obtenerEstados() {
     this.estadoService.ObtenerEstado().subscribe(
-      (res: any) => {
-        this.listEstado = res;
+      (res: any) => {         
+        this.listEstado = res;          
       },
       err => console.error(err)
     );
@@ -341,6 +337,77 @@ export class InformesComponent implements OnInit {
     this.fechadesde = this.datePipe.transform(new Date(), 'yyyy-MM-01');
     this.fechahasta = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.modalService.close(id);
+  }
+
+  async createpdfStock(list: any[], titulo: string, encabezado: string[]) {
+    var totalC=0;
+    var totalV=0;
+    var Diferencia=0;    
+    for (let index = 0; index < list.length; index++) {
+       totalC =+ list[index][3];
+       console.log(index);
+       console.log(list[0]);
+       console.log(list[0][3]);
+       console.log(list[index][3]);
+    }  
+
+
+    var dd = {
+      styles: {
+        header: {
+          font: 'Roboto',
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+          margin: [20, 20],
+        },
+      },   
+      footer: function (currentPage, pageCount) {
+        return {
+            table: {
+                widths: '*',
+                body: [
+                    [
+                        { text: "Página " + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'normalText', margin: [20, 20, 50, 20], aligment: 'left' }
+                    ]
+                ]
+            },
+            layout: 'noBorders'
+        };
+      },
+      content: [
+        {
+          columns: [
+            {
+              image: await this.getBase64ImageFromURL("../assets/images/107721_original2Md - peque.png"),
+            },
+            {
+              width: 'auto',
+              text: "Fecha emisión: " + this.datePipe.transform(this.date, "dd-MM-yyyy"), alignment: 'right', bold: true,
+            }
+          ],         
+        },
+        { text: titulo, style: 'header' },     
+        this.tableStoVal(list, encabezado),   
+      
+        { canvas: [{ type: 'line', x1: 0, y1: 20, x2: 520, y2: 20, lineWidth: 2 }] },
+        { text: "Total Costo: $ " + totalC + "  ", alignment: 'right', margin: [5, 2, 65, 5] },       
+        { text: "Total Venta: $ " + 50 + "  ", alignment: 'right', margin: [5, 2, 65, 5] },   
+        { text: "Total Diferencia: $ " + 50 + "  ", alignment: 'right', margin: [5, 2, 65, 5] },   
+      ],     
+    }
+    pdfMake.createPdf(dd).open();
+  }
+
+  tableStoVal(data, columns) {
+    return {
+      table: {
+        widths: ['5%', '49%', '10%', '18%', '18%'],
+        headerRows: 1,
+        body: this.buildTableBody(data, columns)
+      },
+      layout: 'headerLineOnly',
+    };
   }
 
   async createpdf(list: any[], titulo: string, encabezado: string[]) {
@@ -397,7 +464,7 @@ export class InformesComponent implements OnInit {
         dataRow.push(row[column].toString());
       })
       body.push(dataRow);
-    });
+    });    
     return body;
   }
 
@@ -430,6 +497,5 @@ export class InformesComponent implements OnInit {
       img.src = url;
     });
   }
-
 
 }

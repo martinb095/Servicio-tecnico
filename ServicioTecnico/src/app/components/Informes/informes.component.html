@@ -7,7 +7,7 @@
         <button type="button" (click)="openModal('ModalInfOrden');" class="btn btn-block btn-lg btn-info">Ordenes rep. entre fechas</button>
     </div>
     <div class="col-lg-3 col-md-3">
-        <button type="button" (click)="openModal('ModalStockRep');" class="btn btn-block btn-lg btn-info">Stock de repuestos</button>
+        <button type="button" (click)="openModal('ModalStockRep');" class="btn btn-block btn-lg btn-info">Stock de rep. valorizados</button>
     </div>
 </div>
 
@@ -38,6 +38,7 @@
                             <label class="control-label">Estado:</label>
                             <select required class="form-control custom-select" [ngModelOptions]="{standalone:true}" [(ngModel)]="idEstado"> 
                                 <option *ngFor="let estado of listEstado" value={{estado.PkEstado}}>{{estado.Nombre}}</option>       
+                                <option value=0>Todos</option>       
                             </select>
                         </div>
                     </div>

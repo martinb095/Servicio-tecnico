@@ -198,8 +198,7 @@ export class MenuproveedorComponent implements OnInit {
     this.onSelectCiudad(proveedor.FkCiudad);
   }
 
-  ModificarProveedor() {
-    //Modifica proveedor   
+  ModificarProveedor() {   
     if (this.proveedor.Nombre == "" || this.proveedor.Nombre == null) {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
       return;

@@ -330,7 +330,6 @@ export class MenuOrdenrepComponent implements OnInit {
 
   async createPdf(id: number) {
     this.GetDetalleOrden(id);
-
   }
 
   buildTableBody(data, columns) {
