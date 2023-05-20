@@ -6,7 +6,7 @@ import { DetalleOrden } from '../Models/detalleorden';
 class DetallePedidoController {
     
     public async getFindByPedido(req: Request, res: Response) {          
-        pool.query('Select dp.PkDetallePedido, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad from detallepedido dp left join Repuesto r on r.PkRepuesto=dp.FkRepuesto where FkPedProv = ?', req.params.FkPedProv, (err: any, results: any) => {
+        pool.query('Select dp.PkDetallePedido, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad, dp.Precio from detallepedido dp left join Repuesto r on r.PkRepuesto=dp.FkRepuesto where FkPedProv = ?', req.params.FkPedProv, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detalleorden no encontrado" });
             }
@@ -24,7 +24,8 @@ class DetallePedidoController {
             'FkPedProv': req.body.FkPedProv,
             'FkRepuesto': req.body.FkRepuesto,
             'Cantidad': req.body.Cantidad, 
-            'Observacion': req.body.Observacion,         
+            'Observacion': req.body.Observacion,      
+            'Precio': req.body.Precio,    
         }       
         await pool.query('INSERT INTO detallepedido set ?', [detallePedido], function (err: any) {
             if (err) throw err;

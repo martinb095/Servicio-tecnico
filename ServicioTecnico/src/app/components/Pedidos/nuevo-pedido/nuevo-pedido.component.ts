@@ -50,7 +50,7 @@ export class NuevoPedidoComponent implements OnInit {
     Calle: "",
     Numero: 0,
     Piso: 0,
-    Depto:  "",
+    Depto: "",
     Activo: null
   };
 
@@ -94,6 +94,7 @@ export class NuevoPedidoComponent implements OnInit {
     this.detallePedido.FkRepuesto = detallePedidoMod.FkRepuesto;
     this.detallePedido.Observacion = detallePedidoMod.Observacion;
     this.detallePedido.FkPedProv = detallePedidoMod.FkPedProv;
+    this.detallePedido.Precio = detallePedidoMod.Precio;
     document.getElementById("lblNombreRepuesto").innerHTML = detallePedidoMod.Repuesto;
     this.openModal("ModalMov");
   }
@@ -104,6 +105,8 @@ export class NuevoPedidoComponent implements OnInit {
     this.detallePedido.FkRepuesto = null;
     this.detallePedido.Observacion = null;
     this.detallePedido.FkPedProv = null;
+    this.detallePedido.Precio = null;
+    document.getElementById("lblNombreRepuesto").innerHTML = "";
   }
 
   //Registra detalle pedido
@@ -112,17 +115,20 @@ export class NuevoPedidoComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar un repuesto.", icon: "warning" });
       return;
     }
-    if (this.detallePedido.Cantidad == null || this.detallePedido.Cantidad=="") {
+    if (this.detallePedido.Cantidad == null || this.detallePedido.Cantidad == "") {
       this.detallePedido.Cantidad = 0;
+    }
+    if (this.detallePedido.Precio == null || this.detallePedido.Precio == "") {
+      this.detallePedido.Precio = 0;
     }
     if (this.detallePedido.Observacion == null) {
       this.detallePedido.Observacion = "";
     }
-    this.detallePedido.FkPedProv = this.idUltimoPed;   
+    this.detallePedido.FkPedProv = this.idUltimoPed;
     if (this.detallePedido.PkDetallePedido != null) {
       this.detallePedidoService.ActualizarDetallePedido(this.detallePedido.PkDetallePedido, this.detallePedido).subscribe(
         res => {
-          var result = Object.values(res);   
+          var result = Object.values(res);
           if (result[0] == "OK") {
             window.setTimeout(() => this.obtenerDetallesPedido(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
@@ -134,7 +140,7 @@ export class NuevoPedidoComponent implements OnInit {
     } else {
       this.detallePedidoService.GuardarDetallePedido(this.detallePedido).subscribe(
         res => {
-          var result = Object.values(res);   
+          var result = Object.values(res);
           if (result[0] == "OK") {
             window.setTimeout(() => this.obtenerDetallesPedido(), 500);
             Swal.fire({ title: "Datos guardados correctamente.", icon: "success" })
@@ -144,7 +150,7 @@ export class NuevoPedidoComponent implements OnInit {
         err => console.error(err)
       )
     }
-  
+
   }
 
   eliminarDetallePedido(idDetallePedido: number) {
@@ -188,9 +194,10 @@ export class NuevoPedidoComponent implements OnInit {
       err => console.error(err)
     );
   }
-  repuestoSeleccionado(repuesto: any) {
+  repuestoSeleccionado(repuesto: Repuesto) {
     this.detallePedido.FkRepuesto = repuesto.PkRepuesto;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
+    this.detallePedido.Precio = repuesto.PrecioVenta;
     this.closeModal("ModalSelectRepuesto");
   }
 
@@ -211,8 +218,7 @@ export class NuevoPedidoComponent implements OnInit {
       res => {
         var result = Object.values(res);
         if (result[0] != "0") {
-          this.idUltimoPed = result[0];
-          console.log(this.idUltimoPed);
+          this.idUltimoPed = result[0];      
           document.getElementById("btnGuardar").style.display = "none";
           document.getElementById("btnNuevoMov").style.display = "inline-block";
           Swal.fire({ title: "Pedido guardado correctamente.", icon: "success" })

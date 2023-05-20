@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class DetallePedidoController {
     getFindByPedido(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select dp.PkDetallePedido, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad from detallepedido dp left join Repuesto r on r.PkRepuesto=dp.FkRepuesto where FkPedProv = ?', req.params.FkPedProv, (err, results) => {
+            database_1.default.query('Select dp.PkDetallePedido, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad, dp.Precio from detallepedido dp left join Repuesto r on r.PkRepuesto=dp.FkRepuesto where FkPedProv = ?', req.params.FkPedProv, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detalleorden no encontrado" });
                 }
@@ -35,6 +35,7 @@ class DetallePedidoController {
                 'FkRepuesto': req.body.FkRepuesto,
                 'Cantidad': req.body.Cantidad,
                 'Observacion': req.body.Observacion,
+                'Precio': req.body.Precio,
             };
             yield database_1.default.query('INSERT INTO detallepedido set ?', [detallePedido], function (err) {
                 if (err)

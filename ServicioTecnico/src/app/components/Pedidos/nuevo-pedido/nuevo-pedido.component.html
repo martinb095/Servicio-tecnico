@@ -58,7 +58,8 @@
                     <tr>
                         <th width="20%">Repuesto</th>
                         <th width="20%">Cantidad</th>
-                        <th width="60%">Observacion</th>
+                        <th width="20%">Precio $</th>
+                        <th width="40%">Observacion</th>
                         <th width="10%">Acción</th>
                     </tr>
                 </thead>
@@ -66,6 +67,7 @@
                     <tr *ngFor="let detallepedido of listDetallePedido | paginate: {id: 'pagDetPed', itemsPerPage: 5, currentPage: pageActualDetalle}; let i = index">
                         <td>{{detallepedido.FkRepuesto}} - {{detallepedido.Repuesto}} </td>
                         <td>{{detallepedido.Cantidad}}</td>
+                        <td>{{detallepedido.Precio}}</td>
                         <td>{{detallepedido.Observacion}}</td>
                         <td class="text-nowrap">
                             <a data-toggle="tooltip" data-original-title="Edit"> <i (click)="modificarDetalle(detallepedido);" class="fa fa-pencil text-inverse m-r-10"></i> </a>
@@ -156,6 +158,12 @@
                             <div class="form-group">
                                 <label class="control-label">Cantidad:</label>
                                 <input type="number" [min]="1" value="0" [ngModelOptions]="{standalone:true}" class="form-control" required [(ngModel)]="detallePedido.Cantidad">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Precio:</label>
+                                <input type="number" [min]="0" value="0" [ngModelOptions]="{standalone:true}" class="form-control" required [(ngModel)]="detallePedido.Precio">
                             </div>
                         </div>
                     </div>

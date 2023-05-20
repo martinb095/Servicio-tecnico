@@ -10,7 +10,11 @@ import { RepuestoService } from 'src/app/services/repuesto.service';
 import { TipoRepuesto } from 'src/app/models/tiporepuesto';
 import { TipoRepuestoService } from 'src/app/services/tiporepuesto.service';
 
-//Tipo repuesto
+//Repuesto historia
+import { RepuestoHist } from 'src/app/models/repuestoHist';
+import { RepuestoHistService } from 'src/app/services/repuestoHist.service';
+
+//Marca
 import { Marca } from 'src/app/models/marca';
 import { MarcaService } from 'src/app/services/marca.service';
 
@@ -48,9 +52,13 @@ export class MenurepuestoComponent implements OnInit {
   listRepuesto: Repuesto[] = [];
   listTipoRep: TipoRepuesto[] = [];
   listMarca: Marca[] = [];
+  listRepuestoHist: RepuestoHist[] = [];
+
   idTipoRepuesto: 0;
   idMarca: 0;
   pageActual: number = 1;
+  pagRepHist: number = 1;
+  pagActRepHist: number = 1;
 
   //Valor que toma el input de buscar
   repuestoBuscar: string;
@@ -61,7 +69,8 @@ export class MenurepuestoComponent implements OnInit {
     private repuestoService: RepuestoService,
     private tipoRepuestoService: TipoRepuestoService,
     private marcaService: MarcaService,
-    private router: Router
+    private router: Router,
+    private repuestoHistService: RepuestoHistService
   ) { }
 
   ngOnInit() {
@@ -221,6 +230,19 @@ export class MenurepuestoComponent implements OnInit {
     this.repuesto.FkMarca= 0,   
     this.repuesto.Activo=true   
   }
+
+  verHistorial(id: number) {
+      this.listRepuestoHist = [];
+      this.repuestoHistService.obtenerHistorialRep(id).subscribe(
+        (res: any) => {
+          this.listRepuestoHist = res;      
+        },
+        err => console.error(err)
+      );
+    
+    this.modalService.open("modalHistorialRep");
+  }
+
 
   openModal(id: string) {
     this.modalService.open(id);

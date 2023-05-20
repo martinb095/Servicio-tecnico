@@ -4,4 +4,5 @@ export interface DetallePedido {
     FkRepuesto: number;
     Observacion: string;
     Cantidad: number;
+    Precio: number;
 }

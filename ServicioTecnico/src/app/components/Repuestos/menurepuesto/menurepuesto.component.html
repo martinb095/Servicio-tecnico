@@ -55,6 +55,7 @@
             <td>{{repuesto.CantidadStock}}</td>
             <td>{{repuesto.TipoRepuesto}}</td>
             <td class="text-nowrap">
+                <a data-toggle="tooltip" data-original-title="Close"> <i (click)="verHistorial(repuesto.PkRepuesto)" class="fa fa-history m-r-10"></i> </a>
                 <a data-toggle="tooltip" (click)="SetValores(repuesto);openModal('ModalEditarRepuesto');"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Close"> <i (click)="EliminarRepuesto(repuesto.PkRepuesto)" class="fa fa-close text-danger"></i> </a>
             </td>
@@ -260,3 +261,40 @@
     </div>
 </jw-modal>
 <!----------------------- FIN MODAL -------------------------------------->
+
+<!-----------------/MODAL------------------->
+<jw-modal id="modalHistorialRep">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title h4-per">Historial repuesto</h4>
+                <button type="button" class="close" (click)="closeModal('modalHistorialRep')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" id="myTable">
+                    <thead>
+                        <tr>
+                            <th width="50%">Fecha</th>
+                            <th width="50%">Precio $</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="listRepuestoHist.length">
+                        <tr *ngFor="let repuestoHist of listRepuestoHist | paginate: {id: 'pagRepHist', itemsPerPage: 5, currentPage: pagActRepHist}; let i2 = index">
+                            <td>{{repuestoHist.Fecha | date:'dd/MM/yyyy'}} </td>
+                            <td>{{repuestoHist.Precio}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="dataTables_paginate paging_simple_numbers">
+                    <span>
+                        <pagination-controls id="pagRepHist" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pagActRepHist = $event"></pagination-controls>
+                    </span>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" (click)="closeModal('modalHistorialRep')" class="btn waves-effect waves-light btn-danger">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <jw-modal>
+        <!----------------------- FIN MODAL -------------------------------------->

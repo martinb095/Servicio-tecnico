@@ -82,6 +82,7 @@ export class ModificarPedidoComponent implements OnInit {
     this.detallePedido.FkRepuesto = detallePedidoMod.FkRepuesto;
     this.detallePedido.Observacion = detallePedidoMod.Observacion;
     this.detallePedido.FkPedProv = detallePedidoMod.FkPedProv;
+    this.detallePedido.Precio = detallePedidoMod.Precio;
     document.getElementById("lblNombreRepuesto").innerHTML = detallePedidoMod.Repuesto;
     this.openModal("ModalMov");
   }
@@ -92,6 +93,7 @@ export class ModificarPedidoComponent implements OnInit {
     this.detallePedido.FkRepuesto = null;
     this.detallePedido.Observacion = null;
     this.detallePedido.FkPedProv = null;
+    this.detallePedido.Precio = null;
     document.getElementById("lblNombreRepuesto").innerHTML = "";
   }
 
@@ -129,8 +131,10 @@ export class ModificarPedidoComponent implements OnInit {
     );
   }
 
-  repuestoSeleccionado(repuesto: any) {
+  repuestoSeleccionado(repuesto: Repuesto) {
     this.detallePedido.FkRepuesto = repuesto.PkRepuesto;
+    console.log(repuesto);
+    this.detallePedido.Precio = repuesto.PrecioVenta;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");
   }
@@ -165,6 +169,10 @@ export class ModificarPedidoComponent implements OnInit {
     }
     if (this.detallePedido.Cantidad == null || this.detallePedido.Cantidad == "" || this.detallePedido.Cantidad == "0") {
       Swal.fire({ title: "Debe seleccionar una cantidad valida.", icon: "warning" });
+      return;
+    }
+    if (this.detallePedido.Precio == null || this.detallePedido.Precio == "") {
+      Swal.fire({ title: "Debe seleccionar un precio valido.", icon: "warning" });
       return;
     }
     if (this.detallePedido.Observacion == null) {
