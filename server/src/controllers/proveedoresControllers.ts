@@ -47,8 +47,7 @@ class ProveedorController {
     }
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
-    public async create(req: Request, res: Response) {       
-       
+    public async create(req: Request, res: Response) {              
         await pool.query('INSERT INTO proveedor set ?', [req.body]);        
         res.json({ text: 'OK' });
     }

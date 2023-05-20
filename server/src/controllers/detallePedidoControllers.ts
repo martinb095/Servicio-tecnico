@@ -5,9 +5,7 @@ import { DetalleOrden } from '../Models/detalleorden';
 
 class DetallePedidoController {
     
-    public async getFindByPedido(req: Request, res: Response) {    
-        //const FkPedProv = [req.params.FkPedProv];     
-        //console.log(FkPedProv);
+    public async getFindByPedido(req: Request, res: Response) {          
         pool.query('Select dp.PkDetallePedido, dp.FkRepuesto, r.Nombre "Repuesto", dp.Observacion, dp.Cantidad from detallepedido dp left join Repuesto r on r.PkRepuesto=dp.FkRepuesto where FkPedProv = ?', req.params.FkPedProv, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "detalleorden no encontrado" });
@@ -39,9 +37,7 @@ class DetallePedidoController {
         res.json({ text: 'OK' });              
     }
     
-    public update(req: Request, res: Response) {        
-        console.log("req.body");   
-        console.log(req.body);      
+    public update(req: Request, res: Response) {     
         pool.query('update detallepedido set ? Where PkDetallePedido = ?', [req.body, req.body.PkDetallePedido]);
         res.json({ text: 'OK' });
     }

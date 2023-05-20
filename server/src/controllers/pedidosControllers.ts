@@ -5,7 +5,7 @@ import pool from '../database';
 class PedidoController {
    
     public async getPedidos(req: Request, res: Response) {       
-        pool.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor where fechacreacion between ? and ? order by p.PkPedProv;',[req.params.FechaDesde, req.params.FechaHasta], (err: any, results: any) => {
+        pool.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion, p.DiasEntrega from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor where fechacreacion between ? and ? order by p.PkPedProv;',[req.params.FechaDesde, req.params.FechaHasta], (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "pedidos no encontrado" });
             }
@@ -19,7 +19,7 @@ class PedidoController {
     }
 
     public async getOne(req: Request, res: Response) {       
-        pool.query('Select p.FkProveedor, prov.Firma, prov.Telefono, prov.Mail, p.FechaCreacion, p.Observacion from pedido p left join Proveedor prov on p.FkProveedor = prov.PkProveedor where PkPedProv=?;', req.params.PkPedProv, (err: any, results: any) => {
+        pool.query('Select p.FkProveedor, prov.Firma, prov.Telefono, prov.Mail, p.FechaCreacion, p.Observacion, p.DiasEntrega from pedido p left join Proveedor prov on p.FkProveedor = prov.PkProveedor where PkPedProv=?;', req.params.PkPedProv, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "pedido no encontrado" });
             }
@@ -60,7 +60,8 @@ class PedidoController {
         let pedido = {
             'FkProveedor': req.body.FkProveedor,
             'FechaCreacion': req.body.FechaCreacion,
-            'Observacion': req.body.Observacion,           
+            'Observacion': req.body.Observacion,     
+            'DiasEntrega': req.body.DiasEntrega,        
         }
         //Registro la orden          
         await pool.query('INSERT INTO pedido SET ?', [pedido], function (err: any, resultInser: any) {
@@ -72,7 +73,8 @@ class PedidoController {
 
     public async update(req: Request, res: Response) {  
         let pedido = {           
-            'Observacion': req.body.Observacion,        
+            'Observacion': req.body.Observacion,    
+            'DiasEntrega': req.body.DiasEntrega,      
         }        
         await pool.query('update pedido set ? Where PkPedProv = ?', [pedido, req.params.PkPedProv], function (err: Error, res: Response) {
             if (err) throw err;

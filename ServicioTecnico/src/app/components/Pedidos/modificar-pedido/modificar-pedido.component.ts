@@ -137,6 +137,10 @@ export class ModificarPedidoComponent implements OnInit {
 
 
   ModificarPedido() {
+    if (this.pedidoEdit.DiasEntrega == 0 || this.pedidoEdit.DiasEntrega == null) {
+      Swal.fire({ title: "Debe agregar la cantidad de dias de entrega.", icon: "warning" });
+      return;
+    }
     //Almacena datos orden
     this.pedidoService.ActualizarPedido(this.idPedido, this.pedidoEdit)
       .subscribe(
@@ -167,8 +171,7 @@ export class ModificarPedidoComponent implements OnInit {
       this.detallePedido.Observacion = "";
     }
     this.detallePedido.FkPedProv = this.idPedido;
-   
-  
+     
     if (this.detallePedido.PkDetallePedido != null) {
       this.detallePedidoService.ActualizarDetallePedido(this.detallePedido.PkDetallePedido, this.detallePedido).subscribe(
         res => {

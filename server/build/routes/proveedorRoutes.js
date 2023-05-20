@@ -23,6 +23,15 @@ class ProveedoresRoutes {
         this.router.put('/eliminar/:PkProveedor', proveedoresControllers_1.default.delete);
         //Actualizar
         this.router.put('/:PkProveedor', proveedoresControllers_1.default.update);
+        this.router.get('/descargarexcel/:PkProveedor', (req, res) => {
+            console.log(req.params.PkProveedor);
+            const rutaArchivo = 'C:\\Users\\Martin B\\Desktop\\ServicioTecnico-GIT\\ServicioTecnico\\src\\app\\ExcelProvedores\\ListaProv-' + req.params.PkProveedor + '.xls'; // Ruta física del archivo Excel          
+            res.download(rutaArchivo, 'ListaProv-' + req.params.PkProveedor + '.xls', (err) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        });
     }
 }
 const proveedoresRoutes = new ProveedoresRoutes();

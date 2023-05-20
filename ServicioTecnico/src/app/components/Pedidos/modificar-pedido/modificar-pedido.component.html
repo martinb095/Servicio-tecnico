@@ -25,17 +25,18 @@
                 <input type="text" readonly class="form-control" [(ngModel)]="pedidoEdit.Mail">
             </div>
         </div>
-        <!-- <div class="col-md-1">
-            <div class="form-group ">
-                <a style="margin-top: 30px;" (click)="openModal('ModalSelectProveedor');" aria-controls="example23" class="btn btn-block btn-outline-info"><span>Buscar</span></a>
-            </div>
-        </div> -->
     </div>
     <div class="row ">
-        <div class="col-md-12">
+        <div class="col-md-11">
             <div class="form-group ">
                 <label class="control-label ">Observación:</label>
                 <textarea class="form-control" [ngModelOptions]="{standalone:true} " [(ngModel)]="pedidoEdit.Observacion" name="textarea" rows="4" cols="50"></textarea>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="form-group ">
+                <label class="control-label ">Dias entrega:</label>
+                <input type="number" class="form-control" [(ngModel)]="pedidoEdit.DiasEntrega">
             </div>
         </div>
     </div>

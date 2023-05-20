@@ -148,12 +148,7 @@ export class MenuClienteComponent implements OnInit {
 
   GuardarCliente() {
     this.cliente.Activo = true;
-    if (this.cliente.Nombre == "" || this.cliente.Nombre == null) {
-      Swal.fire({ title: "El nombre del cliente no puede estar vacio.", icon: "warning" });
-      return;
-    }
-    if (this.cliente.Contrasenia != this.contraseniaRep) {
-      Swal.fire({ title: "La contraseñas no coinciden.", icon: "warning" });
+    if (this.validarDatosCliente() == false) {
       return;
     }
     //Almacena cliente   
@@ -172,7 +167,7 @@ export class MenuClienteComponent implements OnInit {
   }
 
   //Obtiene el cliente de la fila y la asigna al objeto que despues actualiza
-  SetValores(cliente: Cliente) {  
+  SetValores(cliente: Cliente) {
     this.cliente = {
       PkCliente: cliente.PkCliente,
       Nombre: cliente.Nombre,
@@ -193,15 +188,10 @@ export class MenuClienteComponent implements OnInit {
   }
 
   ModificarCliente() {
-    //Modifica cliente   
-    if (this.cliente.Nombre == "" || this.cliente.Nombre == null) {
-      Swal.fire({ title: "El nombre del cliente no puede estar vacio.", icon: "warning" });
+    if (this.validarDatosCliente() == false) {
       return;
     }
-    if (this.cliente.Contrasenia != this.contraseniaRep) {
-      Swal.fire({ title: "La contraseñas no coinciden.", icon: "warning" });
-      return;
-    }
+
     this.clienteService.ActualizarCliente(this.cliente.PkCliente, this.cliente).subscribe(
       res => {
         var result = Object.values(res);
@@ -214,6 +204,25 @@ export class MenuClienteComponent implements OnInit {
       },
       err => console.error(err)
     )
+  }
+  validarDatosCliente() {
+    if (this.cliente.Nombre == "" || this.cliente.Nombre == null) {
+      Swal.fire({ title: "El nombre del cliente no puede estar vacio.", icon: "warning" });
+      return false;
+    }
+    if (this.cliente.Telefono == "" || this.cliente.Telefono == null) {
+      Swal.fire({ title: "El teléfono del cliente no puede estar vacio.", icon: "warning" });
+      return false;
+    }
+    if (this.cliente.Contrasenia == "" || this.cliente.Contrasenia == null) {
+      Swal.fire({ title: "La contraseñas no pueden estar vacias.", icon: "warning" });
+      return false;
+    }
+    if (this.cliente.Contrasenia != this.contraseniaRep) {
+      Swal.fire({ title: "La contraseñas no coinciden.", icon: "warning" });
+      return false;
+    }
+    return true;
   }
 
   SetNull() {

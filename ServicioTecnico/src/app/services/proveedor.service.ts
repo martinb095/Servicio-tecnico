@@ -40,5 +40,7 @@ export class ProveedorService {
     return this.http.post(this.API_URI + "/proveedores/validar", proveedor);
   }
 
-
+  DescargarExcel(id: number) {
+    return this.http.get(this.API_URI + "/proveedores/descargarexcel/" + id,{ responseType: 'blob' });  
+  }
 }

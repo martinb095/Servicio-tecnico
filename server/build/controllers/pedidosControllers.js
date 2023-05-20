@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class PedidoController {
     getPedidos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor where fechacreacion between ? and ? order by p.PkPedProv;', [req.params.FechaDesde, req.params.FechaHasta], (err, results) => {
+            database_1.default.query('Select p.PkPedProv, p.FkProveedor, prov.Firma, p.FechaCreacion, p.Observacion, p.DiasEntrega from Pedido p left join proveedor prov on prov.PkProveedor=p.FkProveedor where fechacreacion between ? and ? order by p.PkPedProv;', [req.params.FechaDesde, req.params.FechaHasta], (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "pedidos no encontrado" });
                 }
@@ -31,7 +31,7 @@ class PedidoController {
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select p.FkProveedor, prov.Firma, prov.Telefono, prov.Mail, p.FechaCreacion, p.Observacion from pedido p left join Proveedor prov on p.FkProveedor = prov.PkProveedor where PkPedProv=?;', req.params.PkPedProv, (err, results) => {
+            database_1.default.query('Select p.FkProveedor, prov.Firma, prov.Telefono, prov.Mail, p.FechaCreacion, p.Observacion, p.DiasEntrega from pedido p left join Proveedor prov on p.FkProveedor = prov.PkProveedor where PkPedProv=?;', req.params.PkPedProv, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "pedido no encontrado" });
                 }
@@ -81,6 +81,7 @@ class PedidoController {
                 'FkProveedor': req.body.FkProveedor,
                 'FechaCreacion': req.body.FechaCreacion,
                 'Observacion': req.body.Observacion,
+                'DiasEntrega': req.body.DiasEntrega,
             };
             //Registro la orden          
             yield database_1.default.query('INSERT INTO pedido SET ?', [pedido], function (err, resultInser) {
@@ -95,6 +96,7 @@ class PedidoController {
         return __awaiter(this, void 0, void 0, function* () {
             let pedido = {
                 'Observacion': req.body.Observacion,
+                'DiasEntrega': req.body.DiasEntrega,
             };
             yield database_1.default.query('update pedido set ? Where PkPedProv = ?', [pedido, req.params.PkPedProv], function (err, res) {
                 if (err)

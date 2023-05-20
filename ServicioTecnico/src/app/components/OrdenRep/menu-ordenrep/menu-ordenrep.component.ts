@@ -72,8 +72,8 @@ export class MenuOrdenrepComponent implements OnInit {
   PkOrden = 0;
   idEstado = 2;
   pkCliente = 0;
-  idEstadoActual = 2;
-  idEstadoPosible = 2;
+  idEstadoActual: number = 2;
+  idEstadoPosible: number = 2;
   cliTel = "";
   estadoWsp = "";
   CantidadActual = 0;
@@ -151,8 +151,6 @@ export class MenuOrdenrepComponent implements OnInit {
       this.listOrdenRep = [];
       this.ordenesRepService.ObtenerORsegunCliEstado(FkEstado, PkCliente).subscribe((res: any) => {
         this.listOrdenRep = res;
-        //cambiar el valor de la fila
-        // this.idEstadoActual = this.listOrdenRep[0].FkEstado;
       },
         err => console.error(err)
       );
@@ -207,13 +205,15 @@ export class MenuOrdenrepComponent implements OnInit {
   }
 
   estadosPosibles() {
-    this.listEstadoPosible = [];
-    for (var i = 1; i < this.listEstado.length; i++) {
-      if (this.listEstado[i].PkEstado > this.idEstadoActual) {
-        this.listEstadoPosible.push(this.listEstado[i]);
-      }
+    this.listEstadoPosible = [];   
+    //this.idEstadoPosible = 2;
+    if (this.idEstadoActual != 5) {
+      this.listEstadoPosible.push(this.listEstado[this.idEstadoActual]);
     }
-    this.idEstadoPosible = this.idEstadoActual + 1;
+    if (this.idEstadoActual == 1) {
+      this.listEstadoPosible.push(this.listEstado[4]);
+    }  
+    this.idEstadoPosible = Number(this.idEstadoActual) + Number(1);     
   }
 
   openModal(id: string) {
@@ -221,6 +221,10 @@ export class MenuOrdenrepComponent implements OnInit {
   }
 
   openModalEstados(id: string, orden: any) {
+    if (orden.FkEstado == 4 || orden.FkEstado == 5) {
+      Swal.fire({ title: "No puede cambiar el estado.", icon: "warning" });
+      return;
+    }
     this.idCambiarEstado = orden.Pkordenreparacion;
     this.cliTel = orden.CliTel;
     this.modalService.open(id);
@@ -482,6 +486,16 @@ export class MenuOrdenrepComponent implements OnInit {
       err => console.error(err)
     );
 
+  }
+
+  controlVencimiento(fechaRetiro: any, estado: number): boolean {
+    let date = new Date();
+    //if (this.datePipe.transform(fechaRetiro, "yyyy-MM-dd") < this.datePipe.transform(date, "yyyy-MM-dd") && estado == 1) {
+    if (this.datePipe.transform(fechaRetiro, "yyyy-MM-dd") < this.datePipe.transform(date, "yyyy-MM-dd")) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

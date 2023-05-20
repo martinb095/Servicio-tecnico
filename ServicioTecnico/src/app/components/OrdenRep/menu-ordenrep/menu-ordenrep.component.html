@@ -60,7 +60,7 @@
         </tr>
     </thead>
     <tbody *ngIf="listOrdenRep">
-        <tr *ngFor="let orden of listOrdenRep | paginate: { id: 'pagOrRep', itemsPerPage: 7, currentPage: pageActual}; let i = index">
+        <tr *ngFor="let orden of listOrdenRep | paginate: { id: 'pagOrRep', itemsPerPage: 7, currentPage: pageActual}; let i = index" [ngClass]="{'table-danger': controlVencimiento(orden.FecRetiroEstimado, orden.FkEstado)}">
             <td>{{orden.Pkordenreparacion}} </td>
             <td>{{orden.Cliente}}</td>
             <td>{{orden.FechaInicio | date:'dd/MM/yyyy'}}</td>

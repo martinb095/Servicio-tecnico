@@ -34,7 +34,8 @@ export class NuevoPedidoComponent implements OnInit {
     PkPedProv: 0,
     FkProveedor: 0,
     Observacion: "",
-    FechaCreacion: ""
+    FechaCreacion: "",
+    DiasEntrega: 0
   };
   proveedor: Proveedor = {
     PkProveedor: 0,
@@ -196,6 +197,10 @@ export class NuevoPedidoComponent implements OnInit {
   GuardarPedido() {
     if (this.pedido.FkProveedor == null || this.pedido.FkProveedor == 0) {
       Swal.fire({ title: "Debe seleccionar un proveedor.", icon: "warning" });
+      return;
+    }
+    if (this.pedido.DiasEntrega == 0 || this.pedido.DiasEntrega == null) {
+      Swal.fire({ title: "Debe agregar la cantidad de dias de entrega.", icon: "warning" });
       return;
     }
     //Obtiene la fecha actual para el guardado    

@@ -12,8 +12,7 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-  ObtenerUsuario() {
-    // return this.http.get(this.API_URI + "/ordenrep");
+  ObtenerUsuario() {   
     return this.http.get(this.API_URI + "/usuarios");
   }
 

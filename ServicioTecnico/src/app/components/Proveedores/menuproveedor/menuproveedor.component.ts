@@ -70,6 +70,7 @@ export class MenuproveedorComponent implements OnInit {
     this.proveedorService.ObtenerProveedores().subscribe(
       (res: any) => {
         this.listProveedor = res;
+        
       },
       err => console.error(err)
     );
@@ -145,19 +146,7 @@ export class MenuproveedorComponent implements OnInit {
 
   GuardarProveedor() {
     this.proveedor.Activo = true;
-    if (this.proveedor.Nombre == "" || this.proveedor.Nombre == null) {
-      Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
-      return;
-    }
-    if (this.proveedor.Mail != "") {
-      const result: boolean = this.expression.test(this.proveedor.Mail);
-      if (result == false) {
-        Swal.fire({ title: "El formato del mail no es el correcto.", icon: "warning" });
-        return;
-      }
-    }
-    if (this.proveedor.Cuit.length != 11) {
-      Swal.fire({ title: "El formato del cuit no es valido.", icon: "warning" });
+    if (this.validarDatosProve() == false) {
       return;
     }
     //Almacena proveedor   
@@ -198,23 +187,38 @@ export class MenuproveedorComponent implements OnInit {
     this.onSelectCiudad(proveedor.FkCiudad);
   }
 
-  ModificarProveedor() {   
+  validarDatosProve() {
     if (this.proveedor.Nombre == "" || this.proveedor.Nombre == null) {
       Swal.fire({ title: "El nombre del proveedor no puede estar vacio.", icon: "warning" });
-      return;
+      return false;
+    }
+    if (this.proveedor.Telefono == "" || this.proveedor.Telefono == null) {
+      Swal.fire({ title: "El teléfono del proveedor no puede estar vacio.", icon: "warning" });
+      return false;
     }
     if (this.proveedor.Mail != "") {
       const result: boolean = this.expression.test(this.proveedor.Mail);
       if (result == false) {
         Swal.fire({ title: "El formato del mail no es válido.", icon: "warning" });
-        return;
+        return false;
       }
     }
     if (this.proveedor.Cuit != "") {
       if (this.proveedor.Cuit.length != 11) {
         Swal.fire({ title: "El formato del cuit no es válido.", icon: "warning" });
-        return;
+        return false;
       }
+    } 
+    if (this.proveedor.FkCiudad == 0 ) {
+      Swal.fire({ title: "La ciudad del proveedor no puede estar vacia.", icon: "warning" });
+      return false;
+    }
+    return true;
+  }
+
+  ModificarProveedor() {
+    if (this.validarDatosProve() == false) {
+      return;
     }
     this.proveedorService.ActualizarProveedor(this.proveedor.PkProveedor, this.proveedor).subscribe(
       res => {
@@ -266,5 +270,16 @@ export class MenuproveedorComponent implements OnInit {
       err => console.error(err)
     );
   }
+
+  DescargarExcel(idProvedor:number) {    
+    this.proveedorService.DescargarExcel(idProvedor).subscribe((blob: Blob) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'ListaProv-' + idProvedor + '.xls';
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+  }
+   
 
 }

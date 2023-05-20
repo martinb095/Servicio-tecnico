@@ -131,8 +131,7 @@ export class InformesComponent implements OnInit {
     let labels = [];
     let dataCant = [];
     this.informeService.repMasUtilizados(this.filtro).subscribe(
-      (res: any) => {
-        console.log(res);
+      (res: any) => {       
         for (let i = 0; i < res.length; i++) {
           labels.push(res[i].FkRepuesto + " - " + res[i].Nombre);
           dataCant.push(res[i].Cantidad);
@@ -174,7 +173,7 @@ export class InformesComponent implements OnInit {
     this.filtro.FechaHasta = this.fechahasta;
     this.list = [];
     let labels = [];
-    let totalCantidad = 0; 
+    let totalCantidad = 0;
     this.informeService.ordenesRepEstados(this.filtro).subscribe(
       (res: any) => {
         for (let i = 0; i < res.length; i++) {
@@ -202,11 +201,11 @@ export class InformesComponent implements OnInit {
             default:
               break;
           }
-          totalCantidad += res[i].Cantidad; 
+          totalCantidad += res[i].Cantidad;
         }
         const porcentajes = this.list.map(cantidad => (cantidad / totalCantidad) * 100);
         const data = {
-          labels: labels.map((label, index) => `${label} (${porcentajes[index].toFixed(2)}%)`), 
+          labels: labels.map((label, index) => `${label} (${porcentajes[index].toFixed(2)}%)`),
           datasets: [{
             data: this.list,
             backgroundColor: [
@@ -293,6 +292,7 @@ export class InformesComponent implements OnInit {
     this.listRepuesto = [];
     this.repuestoService.ObtenerRepuestos(0).subscribe(
       (res: any) => {
+        console.log(res);
         this.listRepuesto = res;
       },
       err => console.error(err)
@@ -301,8 +301,8 @@ export class InformesComponent implements OnInit {
 
   obtenerEstados() {
     this.estadoService.ObtenerEstado().subscribe(
-      (res: any) => {         
-        this.listEstado = res;          
+      (res: any) => {
+        this.listEstado = res;
       },
       err => console.error(err)
     );
@@ -340,17 +340,12 @@ export class InformesComponent implements OnInit {
   }
 
   async createpdfStock(list: any[], titulo: string, encabezado: string[]) {
-    var totalC=0;
-    var totalV=0;
-    var Diferencia=0;    
+    var totalC = 0;
+    var totalV = 0;
     for (let index = 0; index < list.length; index++) {
-       totalC =+ list[index][3];
-       console.log(index);
-       console.log(list[0]);
-       console.log(list[0][3]);
-       console.log(list[index][3]);
-    }  
-
+      totalC += list[index]["Precio Costo $"];
+      totalV += list[index]["Precio Venta $"];
+    }
 
     var dd = {
       styles: {
@@ -361,18 +356,18 @@ export class InformesComponent implements OnInit {
           alignment: 'center',
           margin: [20, 20],
         },
-      },   
+      },
       footer: function (currentPage, pageCount) {
         return {
-            table: {
-                widths: '*',
-                body: [
-                    [
-                        { text: "Página " + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'normalText', margin: [20, 20, 50, 20], aligment: 'left' }
-                    ]
-                ]
-            },
-            layout: 'noBorders'
+          table: {
+            widths: '*',
+            body: [
+              [
+                { text: "Página " + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'normalText', margin: [20, 20, 50, 20], aligment: 'left' }
+              ]
+            ]
+          },
+          layout: 'noBorders'
         };
       },
       content: [
@@ -385,16 +380,16 @@ export class InformesComponent implements OnInit {
               width: 'auto',
               text: "Fecha emisión: " + this.datePipe.transform(this.date, "dd-MM-yyyy"), alignment: 'right', bold: true,
             }
-          ],         
+          ],
         },
-        { text: titulo, style: 'header' },     
-        this.tableStoVal(list, encabezado),   
-      
+        { text: titulo, style: 'header' },
+        this.tableStoVal(list, encabezado),
+
         { canvas: [{ type: 'line', x1: 0, y1: 20, x2: 520, y2: 20, lineWidth: 2 }] },
-        { text: "Total Costo: $ " + totalC + "  ", alignment: 'right', margin: [5, 2, 65, 5] },       
-        { text: "Total Venta: $ " + 50 + "  ", alignment: 'right', margin: [5, 2, 65, 5] },   
-        { text: "Total Diferencia: $ " + 50 + "  ", alignment: 'right', margin: [5, 2, 65, 5] },   
-      ],     
+        { text: "Total Costo: $ " + totalC + "  ", alignment: 'right', margin: [5, 2, 45, 5] },
+        { text: "Total Venta: $ " + totalV + "  ", alignment: 'right', margin: [5, 2, 45, 5] },
+        { text: "Diferencia: $ " + (totalV - totalC) + "  ", alignment: 'right', margin: [5, 2, 45, 5] },
+      ],
     }
     pdfMake.createPdf(dd).open();
   }
@@ -420,18 +415,18 @@ export class InformesComponent implements OnInit {
           alignment: 'center',
           margin: [20, 20],
         },
-      },   
+      },
       footer: function (currentPage, pageCount) {
         return {
-            table: {
-                widths: '*',
-                body: [
-                    [
-                        { text: "Página " + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'normalText', margin: [20, 20, 50, 20], aligment: 'left' }
-                    ]
-                ]
-            },
-            layout: 'noBorders'
+          table: {
+            widths: '*',
+            body: [
+              [
+                { text: "Página " + currentPage.toString() + ' de ' + pageCount, alignment: 'right', style: 'normalText', margin: [20, 20, 50, 20], aligment: 'left' }
+              ]
+            ]
+          },
+          layout: 'noBorders'
         };
       },
       content: [
@@ -464,7 +459,7 @@ export class InformesComponent implements OnInit {
         dataRow.push(row[column].toString());
       })
       body.push(dataRow);
-    });    
+    });
     return body;
   }
 

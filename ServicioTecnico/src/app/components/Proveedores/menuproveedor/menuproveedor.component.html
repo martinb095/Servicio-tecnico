@@ -39,6 +39,7 @@
             <td>{{proveedor.Telefono}}</td>
             <td>{{proveedor.Mail}}</td>
             <td class="text-nowrap">
+                <a data-toggle="tooltip" (click)="DescargarExcel(proveedor.PkProveedor);"> <i name="Descargar lista de precio" class="fa fa-download m-r-10"></i> </a>
                 <a data-toggle="tooltip" (click)="SetValores(proveedor);openModal('ModalEditarProveedor');"> <i name="Modificar" class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a data-toggle="tooltip" data-original-title="Eliminar"> <i (click)="EliminarProveedor(proveedor.PkProveedor)" class="fa fa-close text-danger"></i> </a>
             </td>
@@ -66,7 +67,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre/Razón social: <span class="spanBold">*</span></label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="proveedor.Nombre">
                         </div>
                     </div>
@@ -82,7 +83,7 @@
                 <div class="row">
                     <div class="col-md-6 ">
                         <div class="form-group ">
-                            <label class="control-label ">Teléfono:</label>
+                            <label class="control-label ">Teléfono:<span class="spanBold">*</span></label>
                             <input type="number" class="form-control" [(ngModel)]="proveedor.Telefono">
                         </div>
                     </div>
@@ -113,7 +114,7 @@
                     </div>
                     <div class="col-md-6 ">
                         <div class="form-group ">
-                            <label class="control-label ">Ciudad:</label>
+                            <label class="control-label ">Ciudad:<span class="spanBold">*</span></label>
                             <select [(ngModel)]="proveedor.FkCiudad" class="form-control ">  
                                     <option ngValue="null "></option>   
                                     <option *ngFor="let ciudad of listCiudades " value={{ciudad.PkCiudad}}>{{ciudad.Nombre}}</option>           
@@ -185,7 +186,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Nombre/Razón social: <span class="spanBold">*</span></label>
+                            <label class="control-label">Nombre: <span class="spanBold">*</span></label>
                             <input type="text" class="form-control" required [(ngModel)]="proveedor.Nombre">
                         </div>
                     </div>
@@ -201,7 +202,7 @@
                 <div class="row">
                     <div class="col-md-6 ">
                         <div class="form-group ">
-                            <label class="control-label ">Teléfono:</label>
+                            <label class="control-label ">Teléfono:<span class="spanBold">*</span></label>
                             <input type="number" class="form-control" [(ngModel)]="proveedor.Telefono">
                         </div>
                     </div>
@@ -233,7 +234,7 @@
                     </div>
                     <div class="col-md-6 ">
                         <div class="form-group ">
-                            <label class="control-label ">Ciudad:</label>
+                            <label class="control-label ">Ciudad:<span class="spanBold">*</span></label>
                             <select [(ngModel)]="proveedor.FkCiudad" class="form-control ">  
                                     <option ngValue="null "></option>   
                                     <option *ngFor="let ciudad of listCiudades " value={{ciudad.PkCiudad}}>{{ciudad.Nombre}}</option>           
