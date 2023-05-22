@@ -231,7 +231,8 @@
                     <table class="table table-bordered table-striped" id="tableRepuestos">
                         <thead>
                             <tr>
-                                <th width="70%">Nombre</th>
+                                <th width="8%">Nro.</th>
+                                <th width="62%">Nombre</th>
                                 <th width="14%">Precio $</th>
                                 <th width="10%">Cant.disp.</th>
                                 <th width="10%">Marca</th>
@@ -240,6 +241,7 @@
                         </thead>
                         <tbody *ngIf="listRepuesto.length">
                             <tr *ngFor="let repuesto of listRepuesto | paginate: {itemsPerPage: 5, currentPage: pageActualRep}; let i = index">
+                                <td>{{repuesto.PkRepuesto}} </td>
                                 <td>{{repuesto.Nombre}} </td>
                                 <td>{{repuesto.PrecioVenta}}</td>
                                 <td>{{repuesto.CantidadStock}}</td>
@@ -274,14 +276,16 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th width="80%">Nombre</th>
+                                <th width="8%">Nro</th>
+                                <th width="72%">Nombre</th>
                                 <th width="20%">Precio $</th>
                                 <th width="1%">*</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="listTarea.length">
                             <tr *ngFor="let tarea of listTarea | paginate: {itemsPerPage: 5, currentPage: pageActualTarea}; let i = index">
-                                <td>{{tarea.Nombre}} </td>
+                                <td>{{tarea.PkTarea}}</td>
+                                <td>{{tarea.Nombre}}</td>
                                 <td>{{tarea.Costo}}</td>
                                 <i (click)="tareaSeleccionada(tarea)" class="fa fa-check"></i>
                             </tr>

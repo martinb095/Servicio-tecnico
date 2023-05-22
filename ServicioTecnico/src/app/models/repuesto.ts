@@ -9,4 +9,5 @@ export interface Repuesto {
     FkTipoRepuesto: number;
     FkMarca: number; 
     Activo: Boolean;    
+    FechaActualizacion: Date;
 }

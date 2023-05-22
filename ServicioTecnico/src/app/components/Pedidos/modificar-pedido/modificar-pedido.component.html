@@ -150,7 +150,8 @@
                     <table class="table table-bordered table-striped" id="tableRepuestos">
                         <thead>
                             <tr>
-                                <th width="70%">Nombre</th>
+                                <th width="8%">Nro.</th>
+                                <th width="62%">Nombre</th>
                                 <th width="14%">Precio $</th>
                                 <th width="10%">Cant.disp.</th>
                                 <th width="10%">Marca</th>
@@ -159,6 +160,7 @@
                         </thead>
                         <tbody *ngIf="listRepuesto.length">
                             <tr *ngFor="let repuesto of listRepuesto | paginate: {itemsPerPage: 5, currentPage: pageActualRep}; let i = index">
+                                <td>{{repuesto.PkRepuesto}} </td>
                                 <td>{{repuesto.Nombre}} </td>
                                 <td>{{repuesto.PrecioVenta}}</td>
                                 <td>{{repuesto.CantidadStock}}</td>

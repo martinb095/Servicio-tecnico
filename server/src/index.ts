@@ -27,6 +27,7 @@ import presupuestosRoutes from './routes/presupuestosRoutes';
 import detallePresupuestoRoutes from './routes/detallepresupuesto';
 import excelRoutes from './routes/excelRoutes';
 import repuestosHistRoutes from './routes/repuestosHistRoutes';
+import tareasHistRoutes from './routes/tareasHistRoutes';
 
 class Server {
 
@@ -75,7 +76,7 @@ class Server {
         this.app.use('/detallepresupuesto/', detallePresupuestoRoutes);  
         this.app.use('/excel/', excelRoutes); 
         this.app.use('/repuestoshist/', repuestosHistRoutes); 
-         
+        this.app.use('/tareashist/', tareasHistRoutes); 
     }
 
     start(): void {

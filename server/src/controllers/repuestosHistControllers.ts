@@ -16,9 +16,7 @@ class RepuestoHistController {
             }
         });
     }   
-
 }
-
 
 const repuestoHistController = new RepuestoHistController();
 export default repuestoHistController;

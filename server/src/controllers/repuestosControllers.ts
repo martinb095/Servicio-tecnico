@@ -7,7 +7,7 @@ class RepuestoController {
 
     public async getRepuestos(req: Request, res: Response) {
         if (req.params.FkTipoRepuesto > 0) {
-            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err: any, results: any) => {
+            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -19,7 +19,7 @@ class RepuestoController {
             });
         }
         else {
-            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err: any, results: any) => {
+            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -32,7 +32,7 @@ class RepuestoController {
         }
     }
     public async getRepuestosFindByNombre(req: Request, res: Response) {
-        pool.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err: any, results: any) => {
+        pool.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "repuesto no encontrado" });
             }
@@ -94,6 +94,9 @@ class RepuestoController {
     }
 
     public async update(req: Request, res: Response) {
+        
+        var date = new Date();
+        
         let repuesto: Repuesto = {
             'PkRepuesto': req.body.PkRepuesto,
             'Nombre': req.body.Nombre,
@@ -104,7 +107,8 @@ class RepuestoController {
             'FkTipoRepuesto': req.body.FkTipoRepuesto,
             'FkMarca': req.body.FkMarca,
             'NroSerie': req.body.NroSerie,
-            'Activo': true
+            'Activo': true,
+            'FechaActualizacion':  date,
         }
         await pool.query('update repuesto set ? Where PkRepuesto = ?', [repuesto, req.params.PkRepuesto]);
         res.json({ text: 'OK' });

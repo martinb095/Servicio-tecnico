@@ -1,4 +1,4 @@
-import { Component, OnInit,VERSION } from '@angular/core';
+import { Component, OnInit, VERSION } from '@angular/core';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/_modal';
@@ -45,9 +45,10 @@ export class MenurepuestoComponent implements OnInit {
     Observacion: "",
     NroSerie: 0,
     FkTipoRepuesto: 0,
-    FkMarca: 0,   
-    Activo:null   
-  };       
+    FkMarca: 0,
+    Activo: null,
+    FechaActualizacion: null
+  };
 
   listRepuesto: Repuesto[] = [];
   listTipoRep: TipoRepuesto[] = [];
@@ -57,13 +58,13 @@ export class MenurepuestoComponent implements OnInit {
   idTipoRepuesto: 0;
   idMarca: 0;
   pageActual: number = 1;
-  pagRepHist: number = 1;
+  //pagRepHist: number = 1;
   pagActRepHist: number = 1;
 
   //Valor que toma el input de buscar
   repuestoBuscar: string;
 
-  constructor(    
+  constructor(
     private http: HttpClient,
     private modalService: ModalService,
     private repuestoService: RepuestoService,
@@ -136,7 +137,7 @@ export class MenurepuestoComponent implements OnInit {
         //Mensaje informando el eliminado             
         Swal.fire({ icon: 'success', title: "Repuesto Nro. " + id + " eliminado correctamente." })
 
-      } 
+      }
     })
   }
 
@@ -176,7 +177,7 @@ export class MenurepuestoComponent implements OnInit {
             this.closeModal('ModalNuevoRepuesto');
             Swal.fire({ title: "Repuesto guardado correctamente.", icon: "success" });
             this.ObtenerRepuestos();
-          }    
+          }
         },
         err => console.error(err)
       )
@@ -188,24 +189,25 @@ export class MenurepuestoComponent implements OnInit {
       PkRepuesto: repuesto.PkRepuesto,
       Nombre: repuesto.Nombre,
       PrecioCosto: repuesto.PrecioCosto,
-      PrecioVenta: repuesto.PrecioVenta,      
+      PrecioVenta: repuesto.PrecioVenta,
       CantidadStock: repuesto.CantidadStock,
       Observacion: repuesto.Observacion,
       NroSerie: repuesto.NroSerie,
       FkTipoRepuesto: repuesto.FkTipoRepuesto,
-      FkMarca: repuesto.FkMarca,     
+      FkMarca: repuesto.FkMarca,
       Activo: repuesto.Activo,
-    };  
+      FechaActualizacion: repuesto.FechaActualizacion
+    };
   }
 
   ModificarRepuesto() {
     if (this.repuesto.Nombre == "" || this.repuesto.Nombre == null) {
       Swal.fire({ title: "El nombre del repuesto no puede estar vacio.", icon: "warning" });
       return;
-    }  
+    }
     //Almacena repuesto   
     this.repuestoService.ActualizarRepuesto(this.repuesto.PkRepuesto, this.repuesto).subscribe(
-      res => {       
+      res => {
         var result = Object.values(res);
         if (result[0] == "OK") {
           //Mensaje informando el almacenado
@@ -219,27 +221,28 @@ export class MenurepuestoComponent implements OnInit {
   }
 
   SetNull() {
-    this.repuesto.PkRepuesto= 0,
-    this.repuesto.Nombre = "",
-    this.repuesto.PrecioCosto = 0,
-    this.repuesto.PrecioVenta= 0,
-    this.repuesto.CantidadStock= 0,
-    this.repuesto.Observacion= "",
-    this.repuesto.NroSerie= 0,
-    this.repuesto.FkTipoRepuesto= 0,
-    this.repuesto.FkMarca= 0,   
-    this.repuesto.Activo=true   
+    this.repuesto.PkRepuesto = 0,
+      this.repuesto.Nombre = "",
+      this.repuesto.PrecioCosto = 0,
+      this.repuesto.PrecioVenta = 0,
+      this.repuesto.CantidadStock = 0,
+      this.repuesto.Observacion = "",
+      this.repuesto.NroSerie = 0,
+      this.repuesto.FkTipoRepuesto = 0,
+      this.repuesto.FkMarca = 0,
+      this.repuesto.Activo = true,
+      this.repuesto.FechaActualizacion= null
   }
 
   verHistorial(id: number) {
-      this.listRepuestoHist = [];
-      this.repuestoHistService.obtenerHistorialRep(id).subscribe(
-        (res: any) => {
-          this.listRepuestoHist = res;      
-        },
-        err => console.error(err)
-      );
-    
+    this.listRepuestoHist = [];
+    this.repuestoHistService.obtenerHistorialRep(id).subscribe(
+      (res: any) => {
+        this.listRepuestoHist = res;
+      },
+      err => console.error(err)
+    );
+
     this.modalService.open("modalHistorialRep");
   }
 
@@ -261,7 +264,7 @@ export class MenurepuestoComponent implements OnInit {
   //   var formData = new FormData();
   //   Array.from(files).forEach((f) => formData.append('file', f));
   //   this.http.post('https://file.io', formData).subscribe((event) => {
- 
+
   //     console.log('done');
   //     console.log(event);
   //   });
@@ -281,5 +284,5 @@ export class MenurepuestoComponent implements OnInit {
   //   })
   // }
 
-  
+
 }

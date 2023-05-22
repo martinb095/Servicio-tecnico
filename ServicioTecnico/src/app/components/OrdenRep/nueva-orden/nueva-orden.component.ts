@@ -78,6 +78,7 @@ export class NuevaOrdenComponent implements OnInit {
     FkTipoRepuesto: null,
     FkMarca: null,
     Activo: true,
+    FechaActualizacion:null,
   };
 
   tarea: Tarea = {
@@ -85,6 +86,7 @@ export class NuevaOrdenComponent implements OnInit {
     Nombre: "",
     Costo: null,
     Observacion: "",
+    FechaActualizacion: null,
   };
 
   date = new Date();

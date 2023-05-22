@@ -61,27 +61,39 @@ class TareaController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO tarea set ?', [req.body], function (err, resultInserTarea) {
+            const stringSQL = "call crearTarea(?,?,?);";
+            database_1.default.query(stringSQL, [req.body.Nombre, req.body.Costo, req.body.Observacion], function (err, results) {
                 if (err)
                     throw err;
-                //const ultimaTarea = resultInserTarea.insertId;
-                //return res.json(ultimaTarea);
-                res.json({ text: 'OK' });
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
             });
         });
     }
     //Para ver q nro esta eliminando
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.params.PkTarea, "req.params.PkTarea");
             yield database_1.default.query('UPDATE tarea set Activo = 0 WHERE PkTarea = ?', req.params.PkTarea);
             res.json({ text: 'OK' });
         });
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('update tarea set ? Where PkTarea = ?', [req.body, req.params.PkTarea]);
-            res.json({ text: 'OK' });
+            const stringSQL = "call actualizarTarea(?,?,?,?);";
+            database_1.default.query(stringSQL, [req.body.PkTarea, req.body.Nombre, req.body.Costo, req.body.Observacion], function (err, results) {
+                if (err)
+                    throw err;
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
+            });
         });
     }
 }

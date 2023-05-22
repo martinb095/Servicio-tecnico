@@ -16,7 +16,7 @@ class RepuestoController {
     getRepuestos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (req.params.FkTipoRepuesto > 0) {
-                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err, results) => {
+                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err, results) => {
                     if (err) {
                         res.status(404).json({ text: "repuesto no encontrado" });
                     }
@@ -29,7 +29,7 @@ class RepuestoController {
                 });
             }
             else {
-                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err, results) => {
+                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err, results) => {
                     if (err) {
                         res.status(404).json({ text: "repuesto no encontrado" });
                     }
@@ -45,7 +45,7 @@ class RepuestoController {
     }
     getRepuestosFindByNombre(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err, results) => {
+            database_1.default.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -109,6 +109,7 @@ class RepuestoController {
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var date = new Date();
             let repuesto = {
                 'PkRepuesto': req.body.PkRepuesto,
                 'Nombre': req.body.Nombre,
@@ -119,7 +120,8 @@ class RepuestoController {
                 'FkTipoRepuesto': req.body.FkTipoRepuesto,
                 'FkMarca': req.body.FkMarca,
                 'NroSerie': req.body.NroSerie,
-                'Activo': true
+                'Activo': true,
+                'FechaActualizacion': date,
             };
             yield database_1.default.query('update repuesto set ? Where PkRepuesto = ?', [repuesto, req.params.PkRepuesto]);
             res.json({ text: 'OK' });

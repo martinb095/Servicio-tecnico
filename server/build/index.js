@@ -30,6 +30,7 @@ const presupuestosRoutes_1 = __importDefault(require("./routes/presupuestosRoute
 const detallepresupuesto_1 = __importDefault(require("./routes/detallepresupuesto"));
 const excelRoutes_1 = __importDefault(require("./routes/excelRoutes"));
 const repuestosHistRoutes_1 = __importDefault(require("./routes/repuestosHistRoutes"));
+const tareasHistRoutes_1 = __importDefault(require("./routes/tareasHistRoutes"));
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -72,6 +73,7 @@ class Server {
         this.app.use('/detallepresupuesto/', detallepresupuesto_1.default);
         this.app.use('/excel/', excelRoutes_1.default);
         this.app.use('/repuestoshist/', repuestosHistRoutes_1.default);
+        this.app.use('/tareashist/', tareasHistRoutes_1.default);
     }
     start() {
         this.app.disable('etag');

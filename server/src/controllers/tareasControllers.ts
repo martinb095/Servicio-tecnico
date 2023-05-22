@@ -45,25 +45,34 @@ class TareaController {
     }
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
-    public async create(req: Request, res: Response) {       
-        await pool.query('INSERT INTO tarea set ?', [req.body], function (err: any, resultInserTarea: any) {
+    public async create(req: Request, res: Response) {
+        const stringSQL = "call crearTarea(?,?,?);";
+        pool.query(stringSQL, [req.body.Nombre, req.body.Costo, req.body.Observacion], function (err: any, results: any) {
             if (err) throw err;
-            //const ultimaTarea = resultInserTarea.insertId;
-            //return res.json(ultimaTarea);
-            res.json({ text: 'OK' });
-        });
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });       
     }
 
     //Para ver q nro esta eliminando
     public async delete(req: Request, res: Response) {
-        console.log(req.params.PkTarea, "req.params.PkTarea")
         await pool.query('UPDATE tarea set Activo = 0 WHERE PkTarea = ?', req.params.PkTarea);
         res.json({ text: 'OK' });
     }
 
-    public async update(req: Request, res: Response) {
-        await pool.query('update tarea set ? Where PkTarea = ?', [req.body, req.params.PkTarea]);
-        res.json({ text: 'OK' });
+    public async update(req: Request, res: Response) {      
+        const stringSQL = "call actualizarTarea(?,?,?,?);";
+        pool.query(stringSQL, [req.body.PkTarea, req.body.Nombre, req.body.Costo, req.body.Observacion], function (err: any, results: any) {
+            if (err) throw err;
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });
     }
 }
 

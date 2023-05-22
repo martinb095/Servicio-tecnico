@@ -66,13 +66,15 @@ export class ModificarOrdenComponent implements OnInit {
     FkTipoRepuesto: null,
     FkMarca: null,
     Activo: true,
+    FechaActualizacion: null,
   };
 
   tarea: Tarea = {
     PkTarea: 0,
     Nombre: "",
     Costo: null,
-    Observacion: ""
+    Observacion: "",
+    FechaActualizacion: null,
   };
 
   pageActualRep: number = 1;

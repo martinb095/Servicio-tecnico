@@ -6,6 +6,9 @@ import Swal from 'sweetalert2'
 import { Tarea } from 'src/app/models/tarea';
 import { TareaService } from 'src/app/services/tarea.service';
 
+import { TareaHist } from 'src/app/models/tareaHist';
+import { TareaHistService } from 'src/app/services/tareaHist.service';
+
 @Component({
   selector: 'app-menutareas',
   templateUrl: './menutareas.component.html',
@@ -14,19 +17,23 @@ import { TareaService } from 'src/app/services/tarea.service';
 export class MenutareasComponent implements OnInit {
 
   listTarea: Tarea[] = [];
+  listTareaHist: TareaHist[] = [];
 
   tarea: Tarea = {
     PkTarea: 0,
     Nombre: "",
     Costo: null,
     Observacion: "",
+    FechaActualizacion: null,
   };
 
+  pagActTareaHist: number = 1;
   pageActual: number = 1;
 
   constructor(
     private modalService: ModalService,
     private tareaService: TareaService,
+    private TareaHistService: TareaHistService,
     private router: Router
   ) { }
 
@@ -54,6 +61,7 @@ export class MenutareasComponent implements OnInit {
       Swal.fire({ title: "La tarea no puede estar vacia.", icon: "warning" });
       return;
     }
+
     //Almacena tarea   
     this.tareaService.GuardarTarea(this.tarea).subscribe(
       res => {
@@ -75,6 +83,7 @@ export class MenutareasComponent implements OnInit {
       Nombre: tarea.Nombre,
       Costo: tarea.Costo,
       Observacion: tarea.Observacion,
+      FechaActualizacion: tarea.FechaActualizacion,
     };
   }
 
@@ -83,6 +92,7 @@ export class MenutareasComponent implements OnInit {
     this.tarea.Nombre = null;
     this.tarea.Costo = null;
     this.tarea.Observacion = null;
+    this.tarea.FechaActualizacion = null;
   }
 
   ModificarTarea() {
@@ -90,6 +100,7 @@ export class MenutareasComponent implements OnInit {
       Swal.fire({ title: "La tarea no puede estar vacia.", icon: "warning" });
       return;
     }
+
     //Almacena tarea   
     this.tareaService.ActualizarTarea(this.tarea.PkTarea, this.tarea).subscribe(
       res => {
@@ -123,9 +134,22 @@ export class MenutareasComponent implements OnInit {
         },
           err => console.error(err)
         );
-      } 
+      }
     })
   }
+
+  verHistorial(id: number) {
+    this.listTareaHist = [];
+    this.TareaHistService.obtenerHistorialTarea(id).subscribe(
+      (res: any) => {
+        this.listTareaHist = res;
+      },
+      err => console.error(err)
+    );
+
+    this.modalService.open("modalHistTarea");
+  }
+
 
   openModal(id: string) {
     this.modalService.open(id);
