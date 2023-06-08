@@ -16,7 +16,7 @@ class RepuestoController {
     getRepuestos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (req.params.FkTipoRepuesto > 0) {
-                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err, results) => {
+                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err, results) => {
                     if (err) {
                         res.status(404).json({ text: "repuesto no encontrado" });
                     }
@@ -29,7 +29,7 @@ class RepuestoController {
                 });
             }
             else {
-                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err, results) => {
+                database_1.default.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err, results) => {
                     if (err) {
                         res.status(404).json({ text: "repuesto no encontrado" });
                     }
@@ -45,7 +45,7 @@ class RepuestoController {
     }
     getRepuestosFindByNombre(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err, results) => {
+            database_1.default.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -59,7 +59,7 @@ class RepuestoController {
         });
     }
     GetOne(req, res) {
-        database_1.default.query('SELECT * FROM repuesto WHERE PkRepuesto = ?', req.params.PkMarca, (err, results) => {
+        database_1.default.query('SELECT * FROM repuesto WHERE PkRepuesto = ? and CantidadStock > 0 and Activo = 1', req.params.PkRepuesto, (err, results) => {
             if (err) {
                 res.status(404).json({ text: "repuesto no encontrada." });
             }
@@ -71,33 +71,19 @@ class RepuestoController {
             }
         });
     }
-    //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
-    // public async create(req: Request, res: Response) {
-    //     console.log([req.body],"aaaaaaaa")        
-    //     await pool.query('INSERT INTO repuesto set ?', [req.body]);    
-    // }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // let repuesto = {
-            //     'Nombre': req.body.Nombre,
-            //     'PrecioCosto': req.body.PrecioCosto,
-            //     'PrecioVenta': req.body.PrecioVenta,
-            //     'CantidadStock': req.body.CantidadStock,
-            //     'Observacion': req.body.Observacion,
-            //     'NroSerie': req.body.NroSerie,
-            //     'FkTipoRepuesto': req.body.FkTipoRepuesto,
-            // }
-            // console.log([repuesto]);
-            yield database_1.default.query('INSERT INTO repuesto set ?', [req.body], function (err, resultInserOrd) {
+            const stringSQL = "call insertRepuesto(?,?,?,?,?,?,?,?);";
+            database_1.default.query(stringSQL, [req.body.Nombre, req.body.PrecioCosto, req.body.PrecioVenta, req.body.Observacion, req.body.CantidadStock, req.body.FkTipoRepuesto, req.body.FkMarca, req.body.NroSerie], function (err, results) {
                 if (err)
                     throw err;
-                const ultimoRep = resultInserOrd.insertId;
-                res.json({ text: 'OK' });
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
             });
-            // await pool.query('INSERT INTO repuesto set ?', [req.body]);   
-            // const ultimoRep = res.insertId; 
-            // return ultimoRep;
-            // res.json({ message: 'repeusto guardado' });
         });
     }
     //Para ver q nro esta eliminando
@@ -109,22 +95,17 @@ class RepuestoController {
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var date = new Date();
-            let repuesto = {
-                'PkRepuesto': req.body.PkRepuesto,
-                'Nombre': req.body.Nombre,
-                'PrecioCosto': req.body.PrecioCosto,
-                'PrecioVenta': req.body.PrecioVenta,
-                'Observacion': req.body.Observacion,
-                'CantidadStock': req.body.CantidadStock,
-                'FkTipoRepuesto': req.body.FkTipoRepuesto,
-                'FkMarca': req.body.FkMarca,
-                'NroSerie': req.body.NroSerie,
-                'Activo': true,
-                'FechaActualizacion': date,
-            };
-            yield database_1.default.query('update repuesto set ? Where PkRepuesto = ?', [repuesto, req.params.PkRepuesto]);
-            res.json({ text: 'OK' });
+            const stringSQL = "call actualizarRepuesto(?,?,?,?,?,?,?,?,?);";
+            database_1.default.query(stringSQL, [req.body.PkRepuesto, req.body.Nombre, req.body.PrecioCosto, req.body.PrecioVenta, req.body.Observacion, req.body.CantidadStock, req.body.FkTipoRepuesto, req.body.FkMarca, req.body.NroSerie], function (err, results) {
+                if (err)
+                    throw err;
+                try {
+                    return res.json({ text: 'OK' });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
+            });
         });
     }
     getRepuestosSinAsignar(req, res) {

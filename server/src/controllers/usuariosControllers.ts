@@ -32,10 +32,16 @@ class UsuarioController {
     }
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
-    public async create(req: Request, res: Response) {
-        console.log(req.body);
-        await pool.query('INSERT INTO usuario set ?', [req.body]);
-        res.json({ message: 'usuario guardada' });
+    public async create(req: Request, res: Response) {        
+        const stringSQL = "CALL insertUsuario(?, ?, ?, ?);";
+        pool.query(stringSQL, [req.body.Nombre, req.body.Contrasenia, req.body.FkTipoUsuario, req.body.Mail], function (err: any, results: any) {
+            if (err) throw err;
+            try {
+                return res.json({ text: results[0] });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });
     }
 
     //Para ver q nro esta eliminando
@@ -44,11 +50,18 @@ class UsuarioController {
         res.json({ text: 'OK' });
     }
 
-    public async update(req: Request, res: Response) {     
+    public async update(req: Request, res: Response) {
         console.log(req.body, req.params.PkUsuario);
-        await pool.query('update usuario set ? Where PkUsuario = ?',[req.body, req.params.PkUsuario]);       
-        res.json({ text: 'OK' });
-        
+        const stringSQL = "CALL actualizarUsuario(?, ?, ?, ?, ?);";
+        pool.query(stringSQL, [req.params.PkUsuario,req.body.Nombre, req.body.Contrasenia, req.body.FkTipoUsuario, req.body.Mail], function (err: any, results: any) {
+            if (err) throw err;
+            try {
+                return res.json({ text: results[0] });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });
+
     }
 }
 

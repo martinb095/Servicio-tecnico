@@ -167,6 +167,7 @@ export class NuevopresupuestoComponent implements OnInit {
 
   obtenerTareas() {
     //Carga las tareas
+    this.listTarea = [];
     this.tareaService.ObtenerTareas().subscribe(
       (res: any) => {
         this.listTarea = res;
@@ -252,6 +253,43 @@ export class NuevopresupuestoComponent implements OnInit {
     })
   }
 
+  validarTarea() {
+    this.tareaService.SelectTarea(this.detallePresupuesto.FkTarea).subscribe(
+      (res: any) => {      
+        if (res != null) {
+          this.detallePresupuesto.FkTarea = res.PkTarea;
+          this.detallePresupuesto.Costo = res.Costo;
+          document.getElementById("lblNombreTarea").innerHTML = res.Nombre;
+        } else {
+          Swal.fire({ title: "La tarea ingresada no existe.", icon: "warning" });
+          this.detallePresupuesto.FkTarea = null;
+          this.detallePresupuesto.Costo = 0;
+          document.getElementById("lblNombreTarea").innerHTML = "";
+          return;
+        }
+      },
+      err => console.error(err)
+    );
+  }
+  validarRepuesto() {
+    this.repuestoService.SelectRepuesto(this.detallePresupuesto.FkRepuesto).subscribe(
+      (res: any) => {      
+        if (res != null) {       
+          this.detallePresupuesto.FkRepuesto = res.PkRepuesto;
+          this.detallePresupuesto.Precio = res.PrecioVenta;
+          document.getElementById("lblNombreRepuesto").innerHTML = res.Nombre;
+        } else {
+          Swal.fire({ title: "El repuesto ingresado no existe.", icon: "warning" });
+          this.detallePresupuesto.FkRepuesto = null;
+          this.detallePresupuesto.Precio = 0;
+          document.getElementById("lblNombreRepuesto").innerHTML = "";
+          return;
+        }
+      },
+      err => console.error(err)
+    );
+  }
+  
   openModal(id: string) {
     this.modalService.open(id);
   }

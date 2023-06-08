@@ -29,8 +29,8 @@ class UsuarioController {
             subject: 'Software Marbal',
             html: "<html>" +
                 "<h3></h3>" +
-                "<h3>Recientemente has solicitado la contraseña de ingreso la misma es:</h3>" +
-                "<h3>" + req.body.contrasenia + "</h3>" +
+                "<h3>Recientemente has solicitado la contraseña de ingreso, la misma es:</h3>" +
+                "<h2>" + req.body.contrasenia + "</h2>" +
                 "</html>",
         };
         //Envía el correo con el objeto de transporte definido anteriormente

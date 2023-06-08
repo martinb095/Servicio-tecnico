@@ -5,7 +5,6 @@ export interface OrdenReparacion {
     DescripProblema?: string;
     FkModelo?: number;
     FkCliente?: number;
-    FkEstado: number;
-    FkUsuario?: number;
+    FkEstado: number;   
     Observacion?: string;     
 }

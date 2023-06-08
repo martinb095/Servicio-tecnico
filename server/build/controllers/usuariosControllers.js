@@ -45,9 +45,17 @@ class UsuarioController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
-            yield database_1.default.query('INSERT INTO usuario set ?', [req.body]);
-            res.json({ message: 'usuario guardada' });
+            const stringSQL = "CALL insertUsuario(?, ?, ?, ?);";
+            database_1.default.query(stringSQL, [req.body.Nombre, req.body.Contrasenia, req.body.FkTipoUsuario, req.body.Mail], function (err, results) {
+                if (err)
+                    throw err;
+                try {
+                    return res.json({ text: results[0] });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
+            });
         });
     }
     //Para ver q nro esta eliminando
@@ -60,8 +68,17 @@ class UsuarioController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(req.body, req.params.PkUsuario);
-            yield database_1.default.query('update usuario set ? Where PkUsuario = ?', [req.body, req.params.PkUsuario]);
-            res.json({ text: 'OK' });
+            const stringSQL = "CALL actualizarUsuario(?, ?, ?, ?, ?);";
+            database_1.default.query(stringSQL, [req.params.PkUsuario, req.body.Nombre, req.body.Contrasenia, req.body.FkTipoUsuario, req.body.Mail], function (err, results) {
+                if (err)
+                    throw err;
+                try {
+                    return res.json({ text: results[0] });
+                }
+                catch (error) {
+                    return res.status(200).json({ exist: false });
+                }
+            });
         });
     }
 }

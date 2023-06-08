@@ -18,11 +18,11 @@ export class TareaService {
   }
 
   SelectTarea(id: number) {
-    return this.http.get(this.API_URI + "/tareas/" +  id );//{}
+    return this.http.get(this.API_URI + "/tareas/" +  id );
   }
 
   SelectTareaSinAsignar(idOrden: number) {
-    return this.http.get(this.API_URI + "/tareas/sinasignar/" +  idOrden );//{}
+    return this.http.get(this.API_URI + "/tareas/sinasignar/" +  idOrden );
   }
 
   EliminarTarea(id: number) {

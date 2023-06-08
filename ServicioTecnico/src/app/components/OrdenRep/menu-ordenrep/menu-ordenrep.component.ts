@@ -490,8 +490,8 @@ export class MenuOrdenrepComponent implements OnInit {
 
   controlVencimiento(fechaRetiro: any, estado: number): boolean {
     let date = new Date();
-    //if (this.datePipe.transform(fechaRetiro, "yyyy-MM-dd") < this.datePipe.transform(date, "yyyy-MM-dd") && estado == 1) {
-    if (this.datePipe.transform(fechaRetiro, "yyyy-MM-dd") < this.datePipe.transform(date, "yyyy-MM-dd")) {
+    if (this.datePipe.transform(fechaRetiro, "yyyy-MM-dd") < this.datePipe.transform(date, "yyyy-MM-dd") && (estado == 1 || estado == 2 ||estado == 3 )) {
+    //if (this.datePipe.transform(fechaRetiro, "yyyy-MM-dd") < this.datePipe.transform(date, "yyyy-MM-dd")) {
       return true;
     } else {
       return false;

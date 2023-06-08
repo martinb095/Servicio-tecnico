@@ -176,7 +176,6 @@ class OrdenesRepController {
                 'FkModelo': req.body.FkModelo,
                 'FkCliente': req.body.FkCliente,
                 'FkEstado': req.body.FkEstado,
-                'FkUsuario': req.body.FkUsuario,
                 'Observacion': req.body.Observacion,
             };
             //Registro la orden          
@@ -213,7 +212,6 @@ class OrdenesRepController {
                 'FkModelo': req.body.FkModelo,
                 'FkCliente': req.body.FkCliente,
                 'FkEstado': req.body.FkEstado,
-                'FkUsuario': req.body.FkUsuario,
                 'Observacion': req.body.Observacion,
             };
             yield database_1.default.query('update ordenreparacion set ? Where PkOrdenreparacion = ?', [ordenRep, req.params.PkOrdenRep], function (err, res) {

@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import pool from '../database';
 import { Repuesto } from '../Models/repuesto';
-import { any } from 'bluebird';
 
 class RepuestoController {
 
     public async getRepuestos(req: Request, res: Response) {
-        if (req.params.FkTipoRepuesto > 0) {
-            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err: any, results: any) => {
+        if (req.params.FkTipoRepuesto > 0) {            
+            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 and r.FkTipoRepuesto = ? order by nombre', req.params.FkTipoRepuesto, (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -18,8 +17,8 @@ class RepuestoController {
                 }
             });
         }
-        else {
-            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err: any, results: any) => {
+        else {            
+            pool.query('SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.Observacion, r.NroSerie,  r.FkTipoRepuesto, tr.Nombre as "TipoRepuesto", r.FkMarca, m.Nombre as "Marca", r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Activo = 1 order by nombre', (err: any, results: any) => {
                 if (err) {
                     res.status(404).json({ text: "repuesto no encontrado" });
                 }
@@ -32,7 +31,7 @@ class RepuestoController {
         }
     }
     public async getRepuestosFindByNombre(req: Request, res: Response) {
-        pool.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.Imagen, r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err: any, results: any) => {
+        pool.query("SELECT r.PkRepuesto, r.Nombre, r.PrecioCosto, r.PrecioVenta, r.CantidadStock, r.FkTipoRepuesto, r.Observacion, r.NroSerie, tr.Nombre as 'TipoRepuesto', m.Nombre as 'Marca', r.FechaActualizacion FROM repuesto r left join tiporepuesto tr on tr.PkTipoRepuesto=r.FkTipoRepuesto left join marca m on m.PkMarca=r.FkMarca where CantidadStock > 0 and r.Nombre like '%" + req.params.Valor + "%' and r.Activo = 1 order by r.nombre", (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "repuesto no encontrado" });
             }
@@ -45,7 +44,7 @@ class RepuestoController {
     }
 
     public GetOne(req: Request, res: Response) {
-        pool.query('SELECT * FROM repuesto WHERE PkRepuesto = ?', req.params.PkMarca, (err: any, results: any) => {
+        pool.query('SELECT * FROM repuesto WHERE PkRepuesto = ? and CantidadStock > 0 and Activo = 1', req.params.PkRepuesto, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "repuesto no encontrada." });
             }
@@ -57,34 +56,16 @@ class RepuestoController {
         });
     }
 
-    //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
-    // public async create(req: Request, res: Response) {
-    //     console.log([req.body],"aaaaaaaa")        
-    //     await pool.query('INSERT INTO repuesto set ?', [req.body]);    
-    // }
-
-    public async create(req: Request, res: Response) {
-
-        // let repuesto = {
-        //     'Nombre': req.body.Nombre,
-        //     'PrecioCosto': req.body.PrecioCosto,
-        //     'PrecioVenta': req.body.PrecioVenta,
-        //     'CantidadStock': req.body.CantidadStock,
-        //     'Observacion': req.body.Observacion,
-        //     'NroSerie': req.body.NroSerie,
-        //     'FkTipoRepuesto': req.body.FkTipoRepuesto,
-        // }
-        // console.log([repuesto]);
-
-        await pool.query('INSERT INTO repuesto set ?', [req.body], function (err: any, resultInserOrd: any) {
+    public async create(req: Request, res: Response) {        
+        const stringSQL = "call insertRepuesto(?,?,?,?,?,?,?,?);";    
+        pool.query(stringSQL, [req.body.Nombre, req.body.PrecioCosto, req.body.PrecioVenta, req.body.Observacion, req.body.CantidadStock, req.body.FkTipoRepuesto, req.body.FkMarca, req.body.NroSerie], function (err: any, results: any) {
             if (err) throw err;
-            const ultimoRep = resultInserOrd.insertId;
-            res.json({ text: 'OK' });
-        });
-        // await pool.query('INSERT INTO repuesto set ?', [req.body]);   
-        // const ultimoRep = res.insertId; 
-        // return ultimoRep;
-        // res.json({ message: 'repeusto guardado' });
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });              
     }
 
     //Para ver q nro esta eliminando
@@ -93,25 +74,16 @@ class RepuestoController {
         res.json({ text: 'OK' });
     }
 
-    public async update(req: Request, res: Response) {
-        
-        var date = new Date();
-        
-        let repuesto: Repuesto = {
-            'PkRepuesto': req.body.PkRepuesto,
-            'Nombre': req.body.Nombre,
-            'PrecioCosto': req.body.PrecioCosto,
-            'PrecioVenta': req.body.PrecioVenta,
-            'Observacion': req.body.Observacion,
-            'CantidadStock': req.body.CantidadStock,
-            'FkTipoRepuesto': req.body.FkTipoRepuesto,
-            'FkMarca': req.body.FkMarca,
-            'NroSerie': req.body.NroSerie,
-            'Activo': true,
-            'FechaActualizacion':  date,
-        }
-        await pool.query('update repuesto set ? Where PkRepuesto = ?', [repuesto, req.params.PkRepuesto]);
-        res.json({ text: 'OK' });
+    public async update(req: Request, res: Response) {     
+        const stringSQL = "call actualizarRepuesto(?,?,?,?,?,?,?,?,?);";
+        pool.query(stringSQL, [req.body.PkRepuesto, req.body.Nombre, req.body.PrecioCosto, req.body.PrecioVenta, req.body.Observacion, req.body.CantidadStock, req.body.FkTipoRepuesto, req.body.FkMarca, req.body.NroSerie], function (err: any, results: any) {
+            if (err) throw err;
+            try {
+                return res.json({ text: 'OK' });
+            } catch (error) {
+                return res.status(200).json({ exist: false });
+            }
+        });              
     }
 
 
@@ -128,8 +100,6 @@ class RepuestoController {
             }
         });
     }
-
-
 }
 
 

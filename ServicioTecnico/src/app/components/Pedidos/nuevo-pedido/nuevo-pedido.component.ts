@@ -206,10 +206,10 @@ export class NuevoPedidoComponent implements OnInit {
       Swal.fire({ title: "Debe seleccionar un proveedor.", icon: "warning" });
       return;
     }
-    if (this.pedido.DiasEntrega == 0 || this.pedido.DiasEntrega == null) {
-      Swal.fire({ title: "Debe agregar la cantidad de dias de entrega.", icon: "warning" });
-      return;
-    }
+    // if (this.pedido.DiasEntrega == 0 || this.pedido.DiasEntrega == null) {
+    //   Swal.fire({ title: "Debe agregar la cantidad de dias de entrega.", icon: "warning" });
+    //   return;
+    // }
     //Obtiene la fecha actual para el guardado    
     this.pedido.FechaCreacion = this.datePipe.transform(this.date, "yyyy-MM-dd");
 
@@ -234,6 +234,25 @@ export class NuevoPedidoComponent implements OnInit {
     this.detallePedidoService.ObtenerDetallePedidoDePed(this.idUltimoPed).subscribe(
       (res: any) => {
         this.listDetallePedido = res;
+      },
+      err => console.error(err)
+    );
+  }
+
+  validarRepuesto() {
+    this.repuestoService.SelectRepuesto(this.detallePedido.FkRepuesto).subscribe(
+      (res: any) => {      
+        if (res != null) {       
+          this.detallePedido.FkRepuesto = res.PkRepuesto;
+          this.detallePedido.Precio = res.PrecioVenta;
+          document.getElementById("lblNombreRepuesto").innerHTML = res.Nombre;
+        } else {
+          Swal.fire({ title: "El repuesto ingresado no existe.", icon: "warning" });
+          this.detallePedido.FkRepuesto = null;
+          this.detallePedido.Precio = 0;
+          document.getElementById("lblNombreRepuesto").innerHTML = "";
+          return;
+        }
       },
       err => console.error(err)
     );

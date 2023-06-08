@@ -149,8 +149,7 @@ class OrdenesRepController {
             'DescripProblema': req.body.DescripProblema,
             'FkModelo': req.body.FkModelo,
             'FkCliente': req.body.FkCliente,
-            'FkEstado': req.body.FkEstado,
-            'FkUsuario': req.body.FkUsuario,
+            'FkEstado': req.body.FkEstado,           
             'Observacion': req.body.Observacion,
         }
         //Registro la orden          
@@ -183,8 +182,7 @@ class OrdenesRepController {
             'DescripProblema': req.body.DescripProblema,
             'FkModelo': req.body.FkModelo,
             'FkCliente': req.body.FkCliente,
-            'FkEstado': req.body.FkEstado,
-            'FkUsuario': req.body.FkUsuario,
+            'FkEstado': req.body.FkEstado,         
             'Observacion': req.body.Observacion,
         }        
         await pool.query('update ordenreparacion set ? Where PkOrdenreparacion = ?', [ordenRep, req.params.PkOrdenRep], function (err: Error, res: Response) {

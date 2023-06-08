@@ -9,8 +9,7 @@ class PedidoController {
             if (err) {
                 res.status(404).json({ text: "pedidos no encontrado" });
             }
-            if (results) {
-                //return res.json(results[0]);
+            if (results) {                
                 return res.json(results);
             } else {
                 return res.status(404).json({ text: "pedidos no encontrado" });

@@ -149,7 +149,7 @@
                             <div class="form-group">
                                 <label class="control-label">Repuesto:</label>
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control col-md-2" [ngModelOptions]="{standalone:true}" required [(ngModel)]="detalleOrden.FkRepuesto">
+                                    <input type="text" (change)="validarRepuesto()" class="form-control col-md-2" [ngModelOptions]="{standalone:true}" required [(ngModel)]="detalleOrden.FkRepuesto">
                                     <button (click)="obtenerRepuestos();openModal('ModalSelectRepuesto');" type="button" class="btn btn-info">
                                         <i class="fa fa-search"></i>
                                     </button>
@@ -178,7 +178,7 @@
                             <div class="form-group">
                                 <label class="control-label">Tarea:</label>
                                 <div class="col-md-12">
-                                    <input type="text" [ngModelOptions]="{standalone:true}" class="form-control col-md-2" required [(ngModel)]="detalleOrden.FkTarea">
+                                    <input type="text" (change)="validarTarea()" [ngModelOptions]="{standalone:true}" class="form-control col-md-2" required [(ngModel)]="detalleOrden.FkTarea">
                                     <button (click)="obtenerTareas();openModal('ModalSelectTarea');" type="button" class="btn btn-info">
                                                 <i class="fa fa-search"></i>
                                             </button>
@@ -221,31 +221,33 @@
                     <button type="button" (click)="closeModal('ModalSelectRepuesto');" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-bordered table-striped" id="tableRepuestos">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th width="8%">Nro.</th>
-                                <th width="62%">Nombre</th>
+                                <th width="52%">Nombre</th>
                                 <th width="14%">Precio $</th>
                                 <th width="10%">Cant.disp.</th>
                                 <th width="10%">Marca</th>
+                                <th width="10%">Fecha Act.</th>
                                 <th width="1%">*</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="listRepuesto.length">
-                            <tr *ngFor="let repuesto of listRepuesto | paginate: {itemsPerPage: 5, currentPage: pageActualRep}; let i = index">
+                            <tr *ngFor="let repuesto of listRepuesto | paginate: {id: 'pagRep', itemsPerPage: 5, currentPage: pageActualRep}">
                                 <td>{{repuesto.PkRepuesto}} </td>
                                 <td>{{repuesto.Nombre}} </td>
                                 <td>{{repuesto.PrecioVenta}}</td>
                                 <td>{{repuesto.CantidadStock}}</td>
                                 <td>{{repuesto.Marca}}</td>
+                                <td>{{repuesto.FechaActualizacion | date:'dd/MM/yyyy'}}</td>
                                 <i (click)="repuestoSeleccionado(repuesto)" class="fa fa-check"></i>
                             </tr>
                         </tbody>
                     </table>
                     <div class="dataTables_paginate paging_simple_numbers">
                         <span>
-                            <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualRep = $event"></pagination-controls>
+                            <pagination-controls id="pagRep" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualRep = $event"></pagination-controls>
                         </span>
                     </div>
                 </div>
@@ -267,25 +269,27 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th width="8%">Nro</th>
-                                <th width="72%">Nombre</th>
-                                <th width="20%">Precio $</th>
+                                <th width="5%">Nro.</th>
+                                <th width="55%">Nombre</th>
+                                <th width="12%">Precio $</th>
+                                <th width="15%">Fecha Act.</th>
                                 <th width="1%">*</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="listTarea.length">
-                            <tr *ngFor="let tarea of listTarea | paginate: {itemsPerPage: 5, currentPage: pageActualTarea}; let i = index">
-                                <td>{{tarea.PkTarea}}</td>
-                                <td>{{tarea.Nombre}}</td>
+                            <tr *ngFor="let tarea of listTarea | paginate: {id: 'pagTar',itemsPerPage: 5, currentPage: pageActualTar}">
+                                <td>{{tarea.PkTarea}} </td>
+                                <td>{{tarea.Nombre}} </td>
                                 <td>{{tarea.Costo}}</td>
+                                <td>{{tarea.FechaActualizacion | date:'dd/MM/yyyy'}}</td>
                                 <i (click)="tareaSeleccionada(tarea)" class="fa fa-check"></i>
                             </tr>
                         </tbody>
                     </table>
                     <div class="dataTables_paginate paging_simple_numbers">
                         <span>
-                                <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualTarea = $event"></pagination-controls>
-                            </span>
+                              <pagination-controls id="pagTar" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualTar = $event"></pagination-controls>
+                        </span>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">

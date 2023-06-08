@@ -141,10 +141,10 @@ export class ModificarPedidoComponent implements OnInit {
 
 
   ModificarPedido() {
-    if (this.pedidoEdit.DiasEntrega == 0 || this.pedidoEdit.DiasEntrega == null) {
-      Swal.fire({ title: "Debe agregar la cantidad de dias de entrega.", icon: "warning" });
-      return;
-    }
+    // if (this.pedidoEdit.DiasEntrega == 0 || this.pedidoEdit.DiasEntrega == null) {
+    //   Swal.fire({ title: "Debe agregar la cantidad de dias de entrega.", icon: "warning" });
+    //   return;
+    // }
     //Almacena datos orden
     this.pedidoService.ActualizarPedido(this.idPedido, this.pedidoEdit)
       .subscribe(
@@ -207,6 +207,25 @@ export class ModificarPedidoComponent implements OnInit {
     }    
   }
 
+  validarRepuesto() {
+    this.repuestoService.SelectRepuesto(this.detallePedido.FkRepuesto).subscribe(
+      (res: any) => {      
+        if (res != null) {       
+          this.detallePedido.FkRepuesto = res.PkRepuesto;
+          this.detallePedido.Precio = res.PrecioVenta;
+          document.getElementById("lblNombreRepuesto").innerHTML = res.Nombre;
+        } else {
+          Swal.fire({ title: "El repuesto ingresado no existe.", icon: "warning" });
+          this.detallePedido.FkRepuesto = null;
+          this.detallePedido.Precio = 0;
+          document.getElementById("lblNombreRepuesto").innerHTML = "";
+          return;
+        }
+      },
+      err => console.error(err)
+    );
+  }
+  
   openModal(id: string) {
     this.modalService.open(id);
   }

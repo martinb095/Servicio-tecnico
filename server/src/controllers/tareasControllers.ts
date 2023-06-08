@@ -32,7 +32,7 @@ class TareaController {
 
     //funciona
     public GetOne(req: Request, res: Response) {
-        pool.query('SELECT * FROM tarea WHERE PkTarea = ?', req.params.PkMarca, (err: any, results: any) => {
+        pool.query('SELECT * FROM tarea WHERE PkTarea = ? and Activo=1', req.params.PkTarea, (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "tarea no encontrada." });
             }
@@ -46,7 +46,7 @@ class TareaController {
 
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     public async create(req: Request, res: Response) {
-        const stringSQL = "call crearTarea(?,?,?);";
+        const stringSQL = "call insertTarea(?,?,?);";
         pool.query(stringSQL, [req.body.Nombre, req.body.Costo, req.body.Observacion], function (err: any, results: any) {
             if (err) throw err;
             try {

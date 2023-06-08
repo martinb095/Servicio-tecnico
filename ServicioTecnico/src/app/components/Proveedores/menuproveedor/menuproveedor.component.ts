@@ -95,6 +95,7 @@ export class MenuproveedorComponent implements OnInit {
       (res: any) => {
         this.listCiudades = res;
         this.idProvincia = res[0].FkProvincia;
+        this.onSelectProv(this.idProvincia);
       },
       err => console.error(err)
     );

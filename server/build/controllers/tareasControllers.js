@@ -46,7 +46,7 @@ class TareaController {
     }
     //funciona
     GetOne(req, res) {
-        database_1.default.query('SELECT * FROM tarea WHERE PkTarea = ?', req.params.PkMarca, (err, results) => {
+        database_1.default.query('SELECT * FROM tarea WHERE PkTarea = ? and Activo=1', req.params.PkTarea, (err, results) => {
             if (err) {
                 res.status(404).json({ text: "tarea no encontrada." });
             }
@@ -61,7 +61,7 @@ class TareaController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const stringSQL = "call crearTarea(?,?,?);";
+            const stringSQL = "call insertTarea(?,?,?);";
             database_1.default.query(stringSQL, [req.body.Nombre, req.body.Costo, req.body.Observacion], function (err, results) {
                 if (err)
                     throw err;

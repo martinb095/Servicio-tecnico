@@ -95,8 +95,8 @@ export class MenuClienteComponent implements OnInit {
         this.listCiudades = res;
         if (res[0].FkProvincia != null) {
           this.idProvincia = res[0].FkProvincia;
+          this.onSelectProv(this.idProvincia);
         }
-
       },
       err => console.error(err)
     );
@@ -238,8 +238,8 @@ export class MenuClienteComponent implements OnInit {
       this.cliente.Mail = null,
       this.cliente.Contrasenia = null,
       this.cliente.Activo = null
-    this.idProvincia = null;
-    this.contraseniaRep = "";
+      this.idProvincia = null;
+      this.contraseniaRep = "";
   }
 
   openModal(id: string) {

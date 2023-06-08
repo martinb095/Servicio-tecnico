@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
   }
 
   obtenerContrasenia() {
-    this.mailRecuperar = "martin_ballaman@hotmail.com";
+    //this.mailRecuperar = "martin_ballaman@hotmail.com";
     if (this.mailRecuperar == "") {
       Swal.fire({ title: "Debe ingresar un mail.", icon: "warning" });
       return;
@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
       Swal.fire({ title: "Debe ingresar un mail valido.", icon: "warning" });
       return;
     }
-    this.mailRecuperar = "martin_ballaman@hotmail.com";
+    //this.mailRecuperar = "martin_ballaman@hotmail.com";
     this.loginService.getPass(this.mailRecuperar).subscribe(
       res => {
         if (res != null) {

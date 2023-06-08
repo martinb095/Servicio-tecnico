@@ -61,7 +61,6 @@ export class NuevaOrdenComponent implements OnInit {
     FkModelo: null,
     FkCliente: null,
     FkEstado: 2,
-    FkUsuario: null,
     Observacion: ""
   };
 
@@ -370,4 +369,40 @@ export class NuevaOrdenComponent implements OnInit {
     })
   }
 
+  validarTarea() {
+    this.tareaService.SelectTarea(this.detalleOrden.FkTarea).subscribe(
+      (res: any) => {      
+        if (res != null) {
+          this.detalleOrden.FkTarea = res.PkTarea;
+          this.detalleOrden.Costo = res.Costo;
+          document.getElementById("lblNombreTarea").innerHTML = res.Nombre;
+        } else {
+          Swal.fire({ title: "La tarea ingresada no existe.", icon: "warning" });
+          this.detalleOrden.FkTarea = null;
+          this.detalleOrden.Costo = 0;
+          document.getElementById("lblNombreTarea").innerHTML = "";
+          return;
+        }
+      },
+      err => console.error(err)
+    );
+  }
+  validarRepuesto() {
+    this.repuestoService.SelectRepuesto(this.detalleOrden.FkRepuesto).subscribe(
+      (res: any) => {      
+        if (res != null) {       
+          this.detalleOrden.FkRepuesto = res.PkRepuesto;
+          this.detalleOrden.Precio = res.PrecioVenta;
+          document.getElementById("lblNombreRepuesto").innerHTML = res.Nombre;
+        } else {
+          Swal.fire({ title: "El repuesto ingresado no existe.", icon: "warning" });
+          this.detalleOrden.FkRepuesto = null;
+          this.detalleOrden.Precio = 0;
+          document.getElementById("lblNombreRepuesto").innerHTML = "";
+          return;
+        }
+      },
+      err => console.error(err)
+    );
+  }
 }
