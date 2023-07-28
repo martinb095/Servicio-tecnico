@@ -54,7 +54,7 @@ export class MenurepuestoComponent implements OnInit {
   listTipoRep: TipoRepuesto[] = [];
   listMarca: Marca[] = [];
   listRepuestoHist: RepuestoHist[] = [];
-
+  nroRepuesto: number = 0;
   idTipoRepuesto: 0;
   idMarca: 0;
   pageActual: number = 1;
@@ -239,6 +239,7 @@ export class MenurepuestoComponent implements OnInit {
     this.repuestoHistService.obtenerHistorialRep(id).subscribe(
       (res: any) => {
         this.listRepuestoHist = res;
+        this.nroRepuesto = id;
       },
       err => console.error(err)
     );

@@ -19,6 +19,7 @@ export class DetalleestadoordenComponent implements OnInit {
 
   pageActualDetalle = 0;
   total = 0;
+  totalOrden = 0;
 
   idOrden = 0;
   listDetalleOrden: any = {};
@@ -84,6 +85,10 @@ export class DetalleestadoordenComponent implements OnInit {
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
       (res: any) => {
         this.listDetalleOrden = res;
+        this.totalOrden = 0;
+        for (let i = 0; i < this.listDetalleOrden.length; i++) {
+          this.totalOrden += this.listDetalleOrden[i].Total;
+        }
       },
       err => console.error(err)
     );

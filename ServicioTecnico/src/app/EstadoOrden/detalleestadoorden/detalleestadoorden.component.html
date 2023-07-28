@@ -10,13 +10,13 @@
                         <div class="row" *ngIf="ordenreparacion">
                             <div class="col-md-6 ">
                                 <div class="form-group ">
-                                    <h4 class="box-title m-b-20">Fecha comienzo:</h4>
+                                    <h4 class="box-title m-b-20"><b>Fecha comienzo:</b></h4>
                                     <input type="text" readonly class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="ordenreparacion.FechaInicio">
                                 </div>
                             </div>
                             <div class="col-md-6 ">
                                 <div class="form-group ">
-                                    <h4 class="box-title m-b-20">Fecha retiro estimado:</h4>
+                                    <h4 class="box-title m-b-20"><b>Fecha retiro estimado:</b></h4>
                                     <input type="text" readonly class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="ordenreparacion.FecRetiroEstimado">
                                 </div>
                             </div>
@@ -24,8 +24,8 @@
 
                         <div class="row" *ngIf="ordenreparacion">
 
-                            <div class="card-body">
-                                <h4 class="card-title">Estado: {{ordenreparacion.Estado}}
+                            <div class="card-body" style="padding: 5px;">
+                                <h4 class="card-title"><b>Estado:</b> {{ordenreparacion.Estado}}
                                     <a class="get-code" data-toggle="collapse" href="#pgr2" aria-expanded="true"></a>
                                 </h4>
                                 <div class="progress m-t-20">
@@ -37,13 +37,13 @@
                         <div class="row" *ngIf="ordenreparacion">
                             <div class="col-md-6">
                                 <div class="form-group ">
-                                    <h4 class="box-title m-b-20">Marca:</h4>
+                                    <h4 class="box-title m-b-20"><b>Marca:</b></h4>
                                     <input type="text" readonly class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="ordenreparacion.Marca">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group ">
-                                    <h4 class="box-title m-b-20">Modelo:</h4>
+                                    <h4 class="box-title m-b-20"><b>Modelo:</b></h4>
                                     <input type="text" readonly class="form-control" [ngModelOptions]="{standalone:true}" [(ngModel)]="ordenreparacion.Modelo">
                                 </div>
                             </div>
@@ -74,6 +74,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <h4 class="text-right"><b>Total orden:</b> $ {{totalOrden}}</h4>
                                 <div class="dataTables_paginate paging_simple_numbers">
                                     <span>
                                             <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageActualDetalle = $event"></pagination-controls>

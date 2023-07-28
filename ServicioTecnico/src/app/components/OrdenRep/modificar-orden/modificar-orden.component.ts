@@ -139,7 +139,7 @@ export class ModificarOrdenComponent implements OnInit {
         this.ordenRep.FecRetiroEstimado = this.datepipe.transform(this.ordenRep.FecRetiroEstimado, 'yyyy-MM-dd');
         this.ordenRep.FechaInicio = this.datepipe.transform(this.ordenRep.FechaInicio, 'yyyy-MM-dd');
         this.onSelectMarca(this.ordenRep.FkMarca);
-        
+
         if (this.ordenRep.FkEstado == "5" || this.ordenRep.FkEstado == "4" || this.ordenRep.FkEstado == "3") {
           document.getElementById("btnNuevoMov").style.display = 'none';
         }
@@ -158,10 +158,10 @@ export class ModificarOrdenComponent implements OnInit {
     this.listDetalleOrden = {};
     //Trae los datos detalle de la orden
     this.detalleOrdenService.ObtenerDetalleOrdenDeOR(this.idOrdeRep).subscribe(
-      (res: any) => {     
+      (res: any) => {
         this.listDetalleOrden = res;
-        this.totalOrden=0;
-        for (let i = 0; i < this.listDetalleOrden.length; i++) {     
+        this.totalOrden = 0;
+        for (let i = 0; i < this.listDetalleOrden.length; i++) {
           this.totalOrden += this.listDetalleOrden[i].Total;
         }
       },
@@ -344,14 +344,14 @@ export class ModificarOrdenComponent implements OnInit {
 
   validarTarea() {
     this.tareaService.SelectTarea(this.detalleOrden.FkTarea).subscribe(
-      (res: any) => {      
+      (res: any) => {
         if (res != null) {
           this.detalleOrden.FkTarea = res.PkTarea;
           this.detalleOrden.Costo = res.Costo;
           document.getElementById("lblNombreTarea").innerHTML = res.Nombre;
         } else {
           Swal.fire({ title: "La tarea ingresada no existe.", icon: "warning" });
-          this.detalleOrden.FkTarea =null;
+          this.detalleOrden.FkTarea = null;
           this.detalleOrden.Costo = 0;
           document.getElementById("lblNombreTarea").innerHTML = "";
           return;
@@ -362,8 +362,8 @@ export class ModificarOrdenComponent implements OnInit {
   }
   validarRepuesto() {
     this.repuestoService.SelectRepuesto(this.detalleOrden.FkRepuesto).subscribe(
-      (res: any) => {      
-        if (res != null) {       
+      (res: any) => {
+        if (res != null) {
           this.detalleOrden.FkRepuesto = res.PkRepuesto;
           this.detalleOrden.Precio = res.PrecioVenta;
           document.getElementById("lblNombreRepuesto").innerHTML = res.Nombre;

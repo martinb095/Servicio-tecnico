@@ -18,6 +18,7 @@ export class MenutareasComponent implements OnInit {
 
   listTarea: Tarea[] = [];
   listTareaHist: TareaHist[] = [];
+  nroTarea: number = 0;
 
   tarea: Tarea = {
     PkTarea: 0,
@@ -143,6 +144,7 @@ export class MenutareasComponent implements OnInit {
     this.TareaHistService.obtenerHistorialTarea(id).subscribe(
       (res: any) => {
         this.listTareaHist = res;
+        this.nroTarea = id;
       },
       err => console.error(err)
     );
