@@ -111,6 +111,7 @@ export class MenuOrdenrepComponent implements OnInit {
     );
     this.OrdenesSegunEstado(1);
 
+    this.ObtenerClientes();
   };
 
   OrdenesSegunEstado(id: number) {
@@ -138,8 +139,8 @@ export class MenuOrdenrepComponent implements OnInit {
       err => console.error(err)
     );
   }
-
-  getCliente(cliente: Cliente) {
+  
+  clienteSeleccionado(cliente: Cliente) {
     this.cliente = cliente;
     this.closeModal('modalSeleccionarCliente');
   }
@@ -188,8 +189,8 @@ export class MenuOrdenrepComponent implements OnInit {
       if (result.value) {
         this.cliente = {
           PkCliente: 0,
-          Nombre: "",
-          Apellido: "",
+          Nombre: null,
+          Apellido: null,
           Telefono: null,
           FkCiudad: null,
           Calle: null,
@@ -387,7 +388,6 @@ export class MenuOrdenrepComponent implements OnInit {
     for (var i = 0; i < this.listArray.length; i++) {
       totalOrden += this.listArray[i]['Total $'];
     }
-
     let docDefinition = {
       styles: {
         header: {
@@ -496,6 +496,16 @@ export class MenuOrdenrepComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  ObtenerClientes() {
+    this.listCliente = [];
+    this.clienteService.ObtenerClientes().subscribe(
+      (res: any) => {
+        this.listCliente = res;
+      },
+      err => console.error(err)
+    );
   }
 
 }

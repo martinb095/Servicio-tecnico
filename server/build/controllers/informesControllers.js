@@ -81,7 +81,7 @@ class InformesController {
     getDetalleOrden(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const fkOrden = [req.params.FkOrdenRep];
-            database_1.default.query('Select deo.PkDetalleOrden, deo.Cantidad, deo.FkRepuesto, r.Nombre "Repuesto", deo.Precio as "Precio $", deo.Observacion, deo.FkTarea, t.Nombre "Tarea", deo.Costo "Costo $", ((deo.Precio * deo.Cantidad) + deo.Costo) as "Total $" from detalleorden deo left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err, results) => {
+            database_1.default.query('Select deo.PkDetalleOrden, IFNULL(deo.Cantidad, 0) AS Cantidad, IFNULL(deo.FkRepuesto, 0) AS FkRepuesto, IFNULL(r.Nombre, "") AS "Repuesto", IFNULL(deo.Precio, 0) AS "Precio $", IFNULL(deo.Observacion, "") AS Observacion, IFNULL(deo.FkTarea, 0) AS FkTarea, IFNULL(t.Nombre, "") AS "Tarea", IFNULL(deo.Costo, 0) AS "Costo $", ((IFNULL(deo.Precio, 0) * IFNULL(deo.Cantidad, 0)) + IFNULL(deo.Costo, 0)) AS "Total $" from detalleorden deo left join repuesto r on r.PkRepuesto = deo.FkRepuesto left join tarea t on t.PkTarea = deo.FkTarea where FkOrden = ?', fkOrden, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "detalleorden no encontrado" });
                 }

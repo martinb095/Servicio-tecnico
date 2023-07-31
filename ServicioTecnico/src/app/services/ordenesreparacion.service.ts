@@ -50,7 +50,6 @@ export class OrdenesReparacionService {
     return this.http.put(this.API_URI + "/ordenesreparacion/eliminar/" + id, null);
   }
 
-
   GuardarOrdenRep(ordenrep: OrdenReparacion) {
     return this.http.post(this.API_URI + "/ordenesreparacion/nuevaorden", ordenrep);
   }

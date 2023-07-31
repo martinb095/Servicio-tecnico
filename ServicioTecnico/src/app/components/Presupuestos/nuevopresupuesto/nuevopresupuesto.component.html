@@ -66,7 +66,7 @@
                         <th width="7%">Costo $</th>
                         <th width="31%">Repuesto</th>
                         <th width="10%">Cantidad</th>
-                        <th width="10%">Precio $</th>
+                        <th width="8%">Precio $</th>
                         <th width="13%">Subtotal $</th>
                         <th width="1%">Acción</th>
                     </tr>
@@ -117,7 +117,7 @@
                         </thead>
                         <tbody *ngIf="listCliente.length">
                             <tr *ngFor="let cliente of listCliente | paginate: {itemsPerPage: 5, currentPage: pageActualCliente}; let i = index">
-                                <td>{{cliente.Nombre}} - {{cliente.Apellido}}</td>
+                                <td>{{cliente.Nombre}} {{cliente.Apellido}}</td>
                                 <td>{{cliente.Telefono}}</td>
                                 <i (click)="clienteSeleccionado(cliente)" class="fa fa-check"></i>
                             </tr>

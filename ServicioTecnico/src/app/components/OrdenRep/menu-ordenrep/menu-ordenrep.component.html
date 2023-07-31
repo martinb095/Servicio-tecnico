@@ -28,7 +28,7 @@
                         <span class="input-group-btn">
                             <button class="btn btn-info" type="button" (click)="OrdenesSegunClienteEstado(cliente.PkCliente, idEstado);">Buscar</button>
                         </span>
-                        <input readonly type="text" class="form-control" placeholder="Buscar por cliente..." [(ngModel)]="cliente.Nombre" [ngModelOptions]="{standalone:true}">
+                        <input readonly type="text" class="form-control" placeholder="Buscar por cliente..." [(ngModel)]="cliente.Nombre + ' ' + cliente.Apellido" [ngModelOptions]="{standalone:true}">
                         <span type="button" class="input-group-addon"><i class="icon-close" (click)="VaciarCliente($event.target.value);" ></i></span>
                         <span type="button" class="input-group-addon"><i class="icon-magnifier" (click)="openModal('modalSeleccionarCliente')" data-toggle="modal" data-target="#SeleccionarCliente"></i></span>
                     </div>
@@ -146,10 +146,10 @@
                             <tbody *ngIf="listCliente.length">
                                 <tr *ngFor="let cliente of listCliente | paginate: {id: 'pagCli', itemsPerPage: 5, currentPage: pageActualCliente}; let i2 = index">
                                     <td>{{cliente.PkCliente}} </td>
-                                    <td>{{cliente.Nombre}} </td>
+                                    <td>{{cliente.Nombre}} {{cliente.Apellido}}</td>
                                     <td>{{cliente.Telefono}}</td>
                                     <td>
-                                        <a aria-controls="example23" (click)="getCliente(cliente)" class="mdi mdi-check" data-dismiss="modal"></a>
+                                        <a aria-controls="example23" (click)="clienteSeleccionado(cliente)" class="mdi mdi-check" data-dismiss="modal"></a>
                                     </td>
                                 </tr>
                             </tbody>

@@ -130,6 +130,7 @@ export class NuevaOrdenComponent implements OnInit {
     }
     //Obtiene la fecha actual para el guardado    
     this.ordenRep.FechaInicio = this.datePipe.transform(this.date, "yyyy-MM-dd");
+    this.ordenRep.FecRetiroEstimado = this.datePipe.transform(this.date.setDate(this.date.getDate() + 1), "yyyy-MM-dd");
 
     //Obtiene el idcliente de la URL
     this.idCliente = +this.route.snapshot.paramMap.get('idcliente');
@@ -222,6 +223,7 @@ export class NuevaOrdenComponent implements OnInit {
       err => console.error(err)
     );
   }
+  
   tareaSeleccionada(tarea: any) {
     this.detalleOrden.FkTarea = tarea.PkTarea;
     this.detalleOrden.Costo = tarea.Costo;

@@ -26,7 +26,7 @@ class UsuarioController {
         var mailOptions = {
             from: 'softwaremarbal_soporte@outlook.com',
             to: req.body.mail,
-            subject: 'Software Marbal',
+            subject: 'Olvido contraseña',
             html: "<html>" +
                 "<h3></h3>" +
                 "<h3>Recientemente has solicitado la contraseña de ingreso, la misma es:</h3>" +
@@ -61,13 +61,13 @@ class UsuarioController {
         //     'Nro': req.body.Nro,
         //     'Mensaje': req.body.FecRetiroEstimado,
         // }       
-        //body: req.body.Mensaje,
-        console.log(req.body);
+        //body: req.body.Mensaje,        
         client.messages
             .create({
             from: 'whatsapp:+14155238886',
             body: req.body.Mensaje,
-            to: 'whatsapp:+5493537665239' // + req.body.Nro
+            //to: 'whatsapp:+5493537665239'// + req.body.Nro
+            to: 'whatsapp:+549' + req.body.Nro
         }).then();
     }
 }

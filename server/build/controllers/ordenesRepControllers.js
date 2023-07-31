@@ -16,7 +16,7 @@ class OrdenesRepController {
     //listado de ordenes para mostrar en el menu ordenes
     getOrdenes(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, estado.nombre as "Estado" from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente inner join estado on estado.PkEstado = ordenreparacion.FkEstado order by FecRetiroEstimado', (err, results) => {
+            database_1.default.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, estado.nombre as "Estado" from ordenreparacion inner join cliente c on c.PkCliente = ordenreparacion.FkCliente inner join estado on estado.PkEstado = ordenreparacion.FkEstado order by FecRetiroEstimado', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -87,7 +87,7 @@ class OrdenesRepController {
     }
     getOrdenesFindByNro(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('Select OrR.Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado inner join cliente on cliente.PkCliente = OrR.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err, results) => {
+            database_1.default.query('Select OrR.Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) Cliente, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion OrR left join estado e on e.PKestado = OrR.FkEstado inner join cliente c on c.PkCliente = OrR.FkCliente WHERE Pkordenreparacion = ? ', req.params.PkOrdenRep, (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "OR no encontrado" });
                 }
@@ -107,8 +107,8 @@ class OrdenesRepController {
             let FkEstado = parseInt(req.params.FkEstado);
             let FkCliente = parseInt(req.params.FkCliente);
             if (req.params.FkCliente > 0 && req.params.FkEstado > 0) {
-                //En caso de que exista cliente y estado
-                database_1.default.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion ore inner join cliente c on c.PkCliente = ore.FkCliente WHERE ordenreparacion.FkCliente = ? and ordenreparacion.FkEstado = ? ', [FkCliente, FkEstado], (err, results) => {
+                //En caso de que exista cliente y estado                       
+                database_1.default.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion ore inner join cliente c on c.PkCliente = ore.FkCliente left join estado e on e.PKestado = ore.FkEstado WHERE ore.FkCliente = ? and ore.FkEstado = ? ', [FkCliente, FkEstado], (err, results) => {
                     if (err) {
                         res.status(404).json({ text: "OR no encontrado" });
                     }
@@ -122,7 +122,7 @@ class OrdenesRepController {
             }
             else if (req.params.FkCliente > 0) {
                 //En caso de que exista cliente
-                database_1.default.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) as "Cliente", FecRetiroEstimado, FkEstado from ordenreparacion inner join cliente on cliente.PkCliente = ordenreparacion.FkCliente WHERE ordenreparacion.FkCliente = ?; ', FkCliente, (err, results) => {
+                database_1.default.query('Select Pkordenreparacion, concat(c.Nombre, " ", c.Apellido) Cliente, c.Telefono CliTel, FechaInicio, FecRetiroEstimado, FkEstado, e.NOMBRE Estado from ordenreparacion inner join cliente c on c.PkCliente = ordenreparacion.FkCliente left join estado e on e.PKestado = ordenreparacion.FkEstado WHERE ordenreparacion.FkCliente = ?; ', FkCliente, (err, results) => {
                     if (err) {
                         res.status(404).json({ text: "OR no encontrado" });
                     }
@@ -169,20 +169,11 @@ class OrdenesRepController {
     //Await espera que se ejecute la consulta para continuar con la siguiente ya que se demora
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let ordenRep = {
-                'FechaInicio': req.body.FechaInicio,
-                'FecRetiroEstimado': req.body.FecRetiroEstimado,
-                'DescripProblema': req.body.DescripProblema,
-                'FkModelo': req.body.FkModelo,
-                'FkCliente': req.body.FkCliente,
-                'FkEstado': req.body.FkEstado,
-                'Observacion': req.body.Observacion,
-            };
-            //Registro la orden          
-            yield database_1.default.query('INSERT INTO ordenreparacion SET ?', [ordenRep], function (err, resultInserOrd) {
+            const stringSQL = "call insertOrdenrep(?,?,?,?,?);";
+            yield database_1.default.query(stringSQL, [req.body.FecRetiroEstimado, req.body.DescripProblema, req.body.Observacion, req.body.FkModelo, req.body.FkCliente], function (err, resultInserOrd) {
                 if (err)
                     throw err;
-                const ultimaOrden = resultInserOrd.insertId;
+                const ultimaOrden = resultInserOrd[0][0].last_insert_id;
                 res.json({ message: ultimaOrden });
             });
         });
@@ -223,7 +214,6 @@ class OrdenesRepController {
     }
     //Actuliza unicamente el estado
     updateEstado(req, res) {
-        console.log([req.body.PkOrdenRep, req.body.FkEstado, req.body.Observacion]);
         const stringSQL = "call actualizarEstadoOrden(?,?,?);";
         database_1.default.query(stringSQL, [req.body.PkOrdenRep, req.body.FkEstado, req.body.Observacion], function (err, results) {
             if (err)
