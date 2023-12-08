@@ -255,7 +255,7 @@ export class NuevaOrdenComponent implements OnInit {
           this.idUltimaOR = result[0];
           document.getElementById("btnGuardar").style.display = "none";
           document.getElementById("btnNuevoMov").style.display = "inline-block";
-          Swal.fire({ title: "Orden de reparación guardada correctamente.", icon: "success" })
+          Swal.fire({ title: "Orden de reparación Nro. " + this.idUltimaOR + " guardada correctamente.", icon: "success" })
         }
       },
       err => console.error(err)
@@ -361,8 +361,8 @@ export class NuevaOrdenComponent implements OnInit {
           var rest = Object.values(res);
           if (rest[0] == "OK") {
             //Mensaje informando el eliminado     
-            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })
-            this.obtenerDetallesOrden();
+            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })           
+            window.setTimeout(() => this.obtenerDetallesOrden(), 500);
           }
         },
           err => console.error(err)

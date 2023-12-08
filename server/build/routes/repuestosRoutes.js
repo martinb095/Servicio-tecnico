@@ -13,6 +13,8 @@ class RepuestosRoutes {
     config() {
         //Lista repuestos
         this.router.get('/listar/:FkTipoRepuesto', repuestosControllers_1.default.getRepuestos);
+        //Lista repuestos completo
+        this.router.get('/listarcompleto/:FkTipoRepuesto', repuestosControllers_1.default.getRepuestosCompleto);
         //Lista un repuesto
         this.router.get('/:PkRepuesto', repuestosControllers_1.default.GetOne);
         //Lista  repuesto sin asignar

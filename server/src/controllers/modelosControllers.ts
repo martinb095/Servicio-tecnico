@@ -4,7 +4,7 @@ import pool from '../database';
 class ModeloController {
 
     public async getModelos(req: Request, res: Response) {
-        pool.query('SELECT m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, m.Nombre as "Marca", m.FkRubro, r.Nombre as "Rubro" FROM modelo m inner join marca on marca.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro where m.Activo=1 order by nombre', (err: any, results: any) => {
+        pool.query('SELECT m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, mar.Nombre as "Marca", m.FkRubro, r.Nombre as "Rubro" FROM modelo m inner join marca mar on mar.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro where m.Activo=1 order by M.nombre', (err: any, results: any) => {
             if (err) {
                 res.status(404).json({ text: "modelo no encontrado" });
             }

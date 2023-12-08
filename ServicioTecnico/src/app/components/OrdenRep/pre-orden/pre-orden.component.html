@@ -16,7 +16,7 @@
         <tbody *ngIf="listCliente.length">
             <tr *ngFor="let cliente of listCliente | paginate: {itemsPerPage: 7, currentPage: pageActual}; let i = index">
                 <td>{{cliente.PkCliente}} </td>
-                <td>{{cliente.Nombre}}</td>
+                <td>{{cliente.Nombre}} {{cliente.Apellido}}</td>
                 <td>{{cliente.Telefono}}</td>
                 <td>{{cliente.Mail}}</td>
                 <td><a [routerLink]="['/menuordenrep/nuevaorden', cliente.PkCliente]" href="/menuordenrep/nuevaorden" aria-controls="example23" class="btn btn-block btn-outline-info"><span>Seleccionar</span></a></td>

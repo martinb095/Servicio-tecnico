@@ -222,6 +222,11 @@ export class MenuOrdenrepComponent implements OnInit {
   }
 
   openModalEstados(id: string, orden: any) {
+    let cbEnviarMail = document.getElementById("cbEnviarMail") as HTMLInputElement;
+    let cbEnviarWsp = document.getElementById("cbEnviarWsp") as HTMLInputElement;
+    cbEnviarMail.checked = false;
+    cbEnviarWsp.checked = false;
+    this.observacion="";
     if (orden.FkEstado == 4 || orden.FkEstado == 5) {
       Swal.fire({ title: "No puede cambiar el estado.", icon: "warning" });
       return;
@@ -314,21 +319,21 @@ export class MenuOrdenrepComponent implements OnInit {
     );
   }
 
-  estadoSegunId() {
+  estadoSegunId() {    
     //Define valor de la progress bar
-    if (this.idEstadoActual == 1) {
+    if (Number(this.idEstadoActual) + 1 == 1) {
       this.estadoWsp = "pendiente.";
     }
-    else if (this.idEstadoActual == 2) {
+    else if (Number(this.idEstadoActual) + 1 == 2) {
       this.estadoWsp = "reparando.";
     }
-    else if (this.idEstadoActual == 3) {
+    else if (Number(this.idEstadoActual) + 1 == 3) {
       this.estadoWsp = "reparado.";
     }
-    else if (this.idEstadoActual == 4) {
+    else if (Number(this.idEstadoActual) + 1 == 4) {
       this.estadoWsp = "entregado.";
     }
-    else if (this.idEstadoActual == 5) {
+    else if (Number(this.idEstadoActual) + 1 == 5) {
       this.estadoWsp = "cancelado.";
     }
   }
@@ -384,7 +389,7 @@ export class MenuOrdenrepComponent implements OnInit {
 
   async generarPdf(nroOrden: number) {
     var encabezado: string[] = ['Tarea', 'Costo $', 'Repuesto', 'Precio $', 'Cantidad', 'Total $'];
-    var totalOrden = 0;
+    var totalOrden = 0;  
     for (var i = 0; i < this.listArray.length; i++) {
       totalOrden += this.listArray[i]['Total $'];
     }
@@ -415,7 +420,7 @@ export class MenuOrdenrepComponent implements OnInit {
           columns: [
             [
               {
-                text: "Cliente: " + this.list.Nombre + "  -  Mail: " + this.list.Mail + "  -  Teléfono: " + this.list.Telefono,
+                text: "Cliente: " + this.list.Nombre + " " + this.list.Apellido + " -  Mail: " + this.list.Mail + "  -  Teléfono: " + this.list.Telefono,
                 heights: 160,
                 alignment: 'left',
                 margin: [5, 5]
@@ -467,8 +472,8 @@ export class MenuOrdenrepComponent implements OnInit {
     this.listArray = [];
     //Trae los datos detalle de la orden
     this.informenService.ObtenerDetalleOrdenDeOR(nroOrden).subscribe(
-      (res: any) => {
-        this.listArray = res;
+      (res: any) => {      
+        this.listArray = res;       
         this.generarPdf(nroOrden);
       },
       err => console.error(err)

@@ -12,13 +12,14 @@ class RepuestosRoutes {
     config(): void {
         //Lista repuestos
         this.router.get('/listar/:FkTipoRepuesto', repuestosControllers.getRepuestos);
+        //Lista repuestos completo
+        this.router.get('/listarcompleto/:FkTipoRepuesto', repuestosControllers.getRepuestosCompleto);
         //Lista un repuesto
         this.router.get('/:PkRepuesto', repuestosControllers.GetOne);
         //Lista  repuesto sin asignar
         this.router.get('/sinasignar/:PkOrdenRep', repuestosControllers.getRepuestosSinAsignar);
         //Lista repuestos filtrados por nombre
         this.router.get('/filtro/:Valor', repuestosControllers.getRepuestosFindByNombre);
-        
         //crear
         this.router.post('/nuevorepuesto', repuestosControllers.create);
         //Eliminar

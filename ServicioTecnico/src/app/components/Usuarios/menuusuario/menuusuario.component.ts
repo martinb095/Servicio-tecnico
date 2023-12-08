@@ -98,8 +98,8 @@ export class MenuusuarioComponent implements OnInit {
         const results = result[0][0];                
         if (results.OK == "OK") {
           Swal.fire({ title: "Usuario guardado correctamente.", icon: "success" });
-          this.closeModal('ModalNuevoUsuario');
-          this.ObtenerUsuarios();
+          this.closeModal('ModalNuevoUsuario');          
+          window.setTimeout(() => this.ObtenerUsuarios(), 500);
         }
         else {
           Swal.fire({ title: "El mail o nombre ingresado ya esta asignado a otro usuario.", icon: "warning" });
@@ -121,7 +121,7 @@ export class MenuusuarioComponent implements OnInit {
         if (results.OK == "OK") {
           Swal.fire({ title: "Usuario modificado correctamente.", icon: "success" });
           this.closeModal('ModalEditarUsuario');
-          this.ObtenerUsuarios();
+          window.setTimeout(() => this.ObtenerUsuarios(), 500);
         }
         else {
           Swal.fire({ title: "El mail o nombre ingresado ya esta asignado a otro usuario.", icon: "warning" });
@@ -169,7 +169,7 @@ export class MenuusuarioComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.usuarioService.EliminarUsuario(id).subscribe(res => {
-          this.ObtenerUsuarios();
+          window.setTimeout(() => this.ObtenerUsuarios(), 500);
         },
           err => console.error(err)
         );
@@ -178,7 +178,6 @@ export class MenuusuarioComponent implements OnInit {
       }
     })
   }
-
 
   exportexcel() {
     this.listExcel = [];

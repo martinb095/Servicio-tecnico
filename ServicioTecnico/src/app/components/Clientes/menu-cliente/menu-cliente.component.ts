@@ -134,8 +134,8 @@ export class MenuClienteComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-        this.clienteService.EliminarCliente(id).subscribe(res => {
-          this.ObtenerClientes();
+        this.clienteService.EliminarCliente(id).subscribe(res => {         
+          window.setTimeout(() => this.ObtenerClientes(), 500);
         },
           err => console.error(err)
         );
@@ -158,8 +158,8 @@ export class MenuClienteComponent implements OnInit {
         if (result[0] == "OK") {
           //Mensaje informando el almacenado
           this.closeModal('ModalNuevoCliente');
-          Swal.fire({ title: "Cliente guardado correctamente.", icon: "success" });
-          this.ObtenerClientes();
+          Swal.fire({ title: "Cliente guardado correctamente.", icon: "success" });  
+          window.setTimeout(() => this.ObtenerClientes(), 500);
         }
       },
       err => console.error(err)
@@ -199,7 +199,7 @@ export class MenuClienteComponent implements OnInit {
           //Mensaje informando el almacenado
           this.closeModal('ModalEditarCliente');
           Swal.fire({ title: "Cliente modificado correctamente.", icon: "success" });
-          this.ObtenerClientes();
+          window.setTimeout(() => this.ObtenerClientes(), 500);
         }
       },
       err => console.error(err)

@@ -87,7 +87,7 @@ export class MenurepuestoComponent implements OnInit {
 
   ObtenerRepuestos() {
     this.listRepuesto = [];
-    this.repuestoService.ObtenerRepuestos(this.idTipoRepuesto).subscribe(
+    this.repuestoService.ObtenerRepuestosCompleto(this.idTipoRepuesto).subscribe(
       (res: any) => {
         this.listRepuesto = res;
       },
@@ -127,10 +127,8 @@ export class MenurepuestoComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-
-        this.repuestoService.EliminarRepuesto(id).subscribe(res => {
-          //Recarga los repuestos       
-          this.ObtenerRepuestos();
+        this.repuestoService.EliminarRepuesto(id).subscribe(res => {     
+          window.setTimeout(() => this.ObtenerRepuestos(), 500);
         },
           err => console.error(err)
         );
@@ -162,6 +160,7 @@ export class MenurepuestoComponent implements OnInit {
       err => console.error(err)
     );
   }
+
   GuardarRepuesto() {
     if (this.repuesto.Nombre == "" || this.repuesto.Nombre == null) {
       Swal.fire({ title: "El nombre del repuesto no puede estar vacio.", icon: "warning" });
@@ -175,8 +174,9 @@ export class MenurepuestoComponent implements OnInit {
           if (result[0] == "OK") {
             //Mensaje informando el almacenado
             this.closeModal('ModalNuevoRepuesto');
-            Swal.fire({ title: "Repuesto guardado correctamente.", icon: "success" });
-            this.ObtenerRepuestos();
+            Swal.fire({ title: "Repuesto guardado correctamente.", icon: "success" });     
+            window.setTimeout(() => this.ObtenerRepuestos(), 500);
+
           }
         },
         err => console.error(err)
@@ -213,7 +213,7 @@ export class MenurepuestoComponent implements OnInit {
           //Mensaje informando el almacenado
           this.closeModal('ModalNuevoRepuesto');
           Swal.fire({ title: "Repuesto modificado correctamente.", icon: "success" });
-          this.ObtenerRepuestos();
+          window.setTimeout(() => this.ObtenerRepuestos(), 500);
         }
       },
       err => console.error(err)
@@ -255,35 +255,5 @@ export class MenurepuestoComponent implements OnInit {
   closeModal(id: string) {
     this.modalService.close(id);
   }
-
-
-  // uploadImage(files: File[]) {
-  //   this.basicUploadImage(files);
-  // }
-
-  // basicUploadImage(files: File[]) {
-  //   var formData = new FormData();
-  //   Array.from(files).forEach((f) => formData.append('file', f));
-  //   this.http.post('https://file.io', formData).subscribe((event) => {
-
-  //     console.log('done');
-  //     console.log(event);
-  //   });
-  // }
-  // fileChange(element){
-  //   this.uploadedFiles = element.target.files;
-  // }
-
-  // upload(){
-  //   let formData = new FormData();
-  //   for(var i = 0; i < this.uploadedFiles.length; i++) {
-  //       formData.append("uploads[]", this.uploadedFiles[i], this.uploadedFiles[i].name);
-  //   }
-  //   this.http.post('/api/upload', formData)
-  //   .subscribe((response)=>{
-  //     console.log('response receved is ', response);
-  //   })
-  // }
-
 
 }

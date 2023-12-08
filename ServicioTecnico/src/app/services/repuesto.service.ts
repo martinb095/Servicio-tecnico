@@ -17,6 +17,10 @@ export class RepuestoService {
     return this.http.get(this.API_URI + "/repuestos/listar/" + idTipo);
   }
 
+  ObtenerRepuestosCompleto(idTipo: number) {
+    return this.http.get(this.API_URI + "/repuestos/listarcompleto/" + idTipo);
+  }
+
   SelectRepuesto(id: number) {
     return this.http.get(this.API_URI + "/repuestos/" + id);
   }

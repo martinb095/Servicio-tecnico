@@ -229,7 +229,7 @@ export class ModificarpresupuestoComponent implements OnInit {
           if (rest[0] == "OK") {
             //Mensaje informando el eliminado     
             Swal.fire({ icon: 'success', title: "Eliminado correctamente." })
-            this.obtenerDetallePresupuesto();
+            window.setTimeout(() => this.obtenerDetallePresupuesto(), 500);            
           }
         },
           err => console.error(err)

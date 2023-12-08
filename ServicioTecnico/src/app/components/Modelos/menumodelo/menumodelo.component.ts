@@ -87,6 +87,7 @@ export class MenumodeloComponent implements OnInit {
     this.modeloService.ObtenerModelos().subscribe(
       (res: any) => {
         this.listModelo = res;
+        console.log(this.listModelo);
       },
       err => console.error(err)
     );
@@ -101,8 +102,8 @@ export class MenumodeloComponent implements OnInit {
       cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.value) {
-        this.modeloService.EliminarModelo(id).subscribe(res => {
-          this.ObtenerModelo();
+        this.modeloService.EliminarModelo(id).subscribe(res => {        
+          window.setTimeout(() => this.ObtenerModelo(), 500);
         },
           err => console.error(err)
         );
@@ -125,7 +126,7 @@ export class MenumodeloComponent implements OnInit {
           //Mensaje informando el almacenado
           this.closeModal('ModalNuevoModelo');
           Swal.fire({ title: "Modelo guardado correctamente.", icon: "success" });
-          this.ObtenerModelo();
+          window.setTimeout(() => this.ObtenerModelo(), 500);
         }
       },
       err => console.error(err)
@@ -145,7 +146,7 @@ export class MenumodeloComponent implements OnInit {
           this.closeModal('ModalEditarModelo');
           //Mensaje informando el almacenado
           Swal.fire({ title: "Modelo modificado correctamente.", icon: "success" });
-          this.ObtenerModelo();
+          window.setTimeout(() => this.ObtenerModelo(), 500);
         }
       },
       err => console.error(err)

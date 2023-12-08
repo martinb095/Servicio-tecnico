@@ -71,8 +71,8 @@ export class MenutiporepuestoComponent implements OnInit {
         if (result[0] == "OK") {
           //Mensaje informando el almacenado
           this.closeModal('ModalNuevoTipoRep');
-          Swal.fire({ title: "Tipo de repuesto guardado correctamente.", icon: "success" });
-          this.ObtenerTiposRepuesto();
+          Swal.fire({ title: "Tipo de repuesto guardado correctamente.", icon: "success" });         
+          window.setTimeout(() => this.ObtenerTiposRepuesto(), 500);
         }
       },
       err => console.error(err)
@@ -91,7 +91,7 @@ export class MenutiporepuestoComponent implements OnInit {
           //Mensaje informando el almacenado
           this.closeModal('ModalEditarTipoRep');
           Swal.fire({ title: "Tipo repuesto modificado correctamente.", icon: "success" });
-          this.ObtenerTiposRepuesto();
+          window.setTimeout(() => this.ObtenerTiposRepuesto(), 500);
         }
       },
       err => console.error(err)
@@ -109,7 +109,7 @@ export class MenutiporepuestoComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
           this.tiporepuestoService.EliminarTipoRepuesto(id).subscribe(res => {
-          this.ObtenerTiposRepuesto();
+            window.setTimeout(() => this.ObtenerTiposRepuesto(), 500);
         },
           err => console.error(err)
         );

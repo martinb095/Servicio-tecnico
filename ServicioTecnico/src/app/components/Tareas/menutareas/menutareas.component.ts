@@ -70,7 +70,7 @@ export class MenutareasComponent implements OnInit {
         if (result[0] == "OK") {
           this.closeModal('ModalNuevaTarea');
           Swal.fire({ title: "Tarea guardada correctamente.", icon: "success" });
-          this.ObtenerTareas();
+          window.setTimeout(() => this.ObtenerTareas(), 500);
         }
       },
       err => console.error(err)
@@ -109,7 +109,7 @@ export class MenutareasComponent implements OnInit {
         if (result[0] == "OK") {
           this.closeModal('ModalEditarTarea');
           Swal.fire({ title: "Tarea modificada correctamente.", icon: "success" });
-          this.ObtenerTareas();
+          window.setTimeout(() => this.ObtenerTareas(), 500);
         }
       },
       err => console.error(err)
@@ -129,8 +129,8 @@ export class MenutareasComponent implements OnInit {
           var result = Object.values(res);
           if (result[0] == "OK") {
             //Mensaje informando el eliminado     
-            Swal.fire({ icon: 'success', title: "Tarea Nro. " + id + " eliminada correctamente." })
-            this.ObtenerTareas();
+            Swal.fire({ icon: 'success', title: "Tarea Nro. " + id + " eliminada correctamente." })            
+            window.setTimeout(() => this.ObtenerTareas(), 500);
           }
         },
           err => console.error(err)
@@ -152,7 +152,6 @@ export class MenutareasComponent implements OnInit {
     this.modalService.open("modalHistTarea");
   }
 
-
   openModal(id: string) {
     this.modalService.open(id);
   }
@@ -160,5 +159,4 @@ export class MenutareasComponent implements OnInit {
   closeModal(id: string) {
     this.modalService.close(id);
   }
-
 }

@@ -134,7 +134,7 @@ export class MenuproveedorComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.proveedorService.EliminarProveedor(id).subscribe(res => {
-          this.ObtenerProveedores();
+          window.setTimeout(() => this.ObtenerProveedores(), 500);
         },
           err => console.error(err)
         );
@@ -158,7 +158,7 @@ export class MenuproveedorComponent implements OnInit {
           //Mensaje informando el almacenado
           this.closeModal('ModalNuevoProveedor');
           Swal.fire({ title: "Proveedor guardado correctamente.", icon: "success" });
-          this.ObtenerProveedores();
+          window.setTimeout(() => this.ObtenerProveedores(), 500);
         }
       },
       err => console.error(err)
@@ -227,8 +227,8 @@ export class MenuproveedorComponent implements OnInit {
         if (result[0] == "OK") {
           //Mensaje informando el almacenado
           this.closeModal('ModalEditarProveedor');
-          Swal.fire({ title: "Proveedor modificado correctamente.", icon: "success" });
-          this.ObtenerProveedores();
+          Swal.fire({ title: "Proveedor modificado correctamente.", icon: "success" });          
+          window.setTimeout(() => this.ObtenerProveedores(), 500);
         }
       },
       err => console.error(err)
@@ -282,5 +282,4 @@ export class MenuproveedorComponent implements OnInit {
       });
   }
    
-
 }

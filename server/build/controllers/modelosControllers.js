@@ -15,7 +15,7 @@ const database_1 = __importDefault(require("../database"));
 class ModeloController {
     getModelos(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            database_1.default.query('SELECT m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, m.Nombre as "Marca", m.FkRubro, r.Nombre as "Rubro" FROM modelo m inner join marca on marca.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro where m.Activo=1 order by nombre', (err, results) => {
+            database_1.default.query('SELECT m.PkModelo, m.Nombre, m.Observacion, m.FkMarca, mar.Nombre as "Marca", m.FkRubro, r.Nombre as "Rubro" FROM modelo m inner join marca mar on mar.PkMarca=m.FkMarca left join rubro r on r.PkRubro=m.FkRubro where m.Activo=1 order by M.nombre', (err, results) => {
                 if (err) {
                     res.status(404).json({ text: "modelo no encontrado" });
                 }

@@ -111,7 +111,8 @@ export class ModificarPedidoComponent implements OnInit {
           if (rest[0] == "OK") {
             //Mensaje informando el eliminado     
             Swal.fire({ icon: 'success', title: "Eliminado correctamente." })
-            this.obtenerDetallesPedido();
+            //this.obtenerDetallesPedido();
+            window.setTimeout(() => this.obtenerDetallesPedido(), 500);
           }
         },
           err => console.error(err)
@@ -123,7 +124,7 @@ export class ModificarPedidoComponent implements OnInit {
   obtenerRepuestos() {
     //Carga los repuestos con stock
     this.listRepuesto = [];
-    this.repuestoService.ObtenerRepuestos(0).subscribe(
+    this.repuestoService.ObtenerRepuestosCompleto(0).subscribe(
       (res: any) => {
         this.listRepuesto = res;
       },
@@ -132,8 +133,7 @@ export class ModificarPedidoComponent implements OnInit {
   }
 
   repuestoSeleccionado(repuesto: Repuesto) {
-    this.detallePedido.FkRepuesto = repuesto.PkRepuesto;
-    console.log(repuesto);
+    this.detallePedido.FkRepuesto = repuesto.PkRepuesto;    
     this.detallePedido.Precio = repuesto.PrecioVenta;
     document.getElementById("lblNombreRepuesto").innerHTML = repuesto.Nombre;
     this.closeModal("ModalSelectRepuesto");

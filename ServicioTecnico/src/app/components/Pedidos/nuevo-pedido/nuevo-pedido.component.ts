@@ -166,8 +166,8 @@ export class NuevoPedidoComponent implements OnInit {
           var rest = Object.values(res);
           if (rest[0] == "OK") {
             //Mensaje informando el eliminado     
-            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })
-            this.obtenerDetallesPedido();
+            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })          
+            window.setTimeout(() => this.obtenerDetallesPedido(), 500);
           }
         },
           err => console.error(err)

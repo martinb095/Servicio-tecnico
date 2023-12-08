@@ -243,8 +243,8 @@ export class NuevopresupuestoComponent implements OnInit {
           var rest = Object.values(res);
           if (rest[0] == "OK") {
             //Mensaje informando el eliminado     
-            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })
-            this.obtenerDetallePresupuesto();
+            Swal.fire({ icon: 'success', title: "Eliminado correctamente." })     
+            window.setTimeout(() => this.obtenerDetallePresupuesto(), 500);
           }
         },
           err => console.error(err)
